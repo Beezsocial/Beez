@@ -521,14 +521,37 @@ export default  function OnboardingPage() {
   const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState('')
 
-  // On mount: if a session already exists (e.g. returning from OAuth),
-  // skip the auth step and jump straight to the profile form.
+  // On mount: check session, then check for an existing profile.
+  // - No session        → show auth buttons
+  // - Session, no profile → show onboarding from step 1
+  // - Session + profile   → redirect to /profile (already onboarded)
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setPhase(1)
+    async function checkSessionAndProfile() {
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session) {
+        setSessionChecked(true)
+        return
+      }
+
+      const { data: profile } = await (supabase as any)
+        .from('profiles')
+        .select('user_id')
+        .eq('user_id', session.user.id)
+        .maybeSingle()
+
+      if (profile) {
+        router.replace('/profile')
+        // keep sessionChecked false — hold the null render while navigating
+        return
+      }
+
+      setPhase(1)
       setSessionChecked(true)
-    })
-  // supabase is stable — created once outside the effect
+    }
+
+    checkSessionAndProfile()
+  // supabase and router are stable references
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
