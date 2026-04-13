@@ -651,14 +651,14 @@ export default  function OnboardingPage() {
         city: data.city,
         bio: data.bio,
         avatar_url: avatarUrl,
-      })
+      } as any)
 
       if (profileError) throw profileError
 
       // Insert profile types
       if (data.types.length > 0) {
         const { error: typesError } = await supabase.from('profile_types').insert(
-          data.types.map((type) => ({ user_id: user.id, type }))
+          data.types.map((type) => ({ user_id: user.id, type })) as any
         )
         if (typesError) throw typesError
       }
@@ -669,7 +669,7 @@ export default  function OnboardingPage() {
           data.seeking.map((seeking_type) => ({
             user_id: user.id,
             seeking_type,
-          }))
+          })) as any
         )
         if (seekingError) throw seekingError
       }
@@ -681,7 +681,7 @@ export default  function OnboardingPage() {
           await supabase.from('first_posts').insert({
             user_id: user.id,
             content: data.post.trim(),
-          })
+          } as any)
           // Non-critical — don't throw on post error
         }
       }
