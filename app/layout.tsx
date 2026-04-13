@@ -1,0 +1,58 @@
+import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Beez — La ruche des entrepreneurs',
+  description:
+    'Rejoins la première communauté française dédiée aux entrepreneurs qui construisent en public. Partage ton parcours, trouve ton co-fondateur, connecte avec la ruche.',
+  keywords: [
+    'entrepreneurs',
+    'startup',
+    'build in public',
+    'co-fondateur',
+    'réseau social entrepreneurs',
+    'communauté startup',
+  ],
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://joinbeez.com'
+  ),
+  openGraph: {
+    title: 'Beez — La ruche des entrepreneurs',
+    description:
+      'La communauté pour ceux qui construisent quelque chose. Zéro bullshit corporate.',
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: 'Beez',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Beez — La ruche des entrepreneurs',
+    description:
+      'La communauté pour ceux qui construisent quelque chose. Zéro bullshit corporate.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  return (
+    <html lang="fr" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body className="min-h-screen bg-navy antialiased">{children}</body>
+    </html>
+  )
+}
