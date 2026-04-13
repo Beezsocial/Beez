@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
+import { Resend } from 'resend'
 import { createClient } from '@/lib/supabase/server'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
   try {
@@ -14,18 +17,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
     }
 
-    // Verify the caller is authenticated — belt-and-suspenders check
+    // Verify the caller is authenticated
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })
     }
 
-    // Build email content
+    if (!process.env.RESEND_API_KEY) {
+      console.warn('[send-welcome-email] RESEND_API_KEY is not set — skipping email.')
+      return NextResponse.json({ ok: true, skipped: true })
+    }
+
+    // ── Email content ────────────────────────────────────────────────────────
     const memberLine =
       memberNumber != null
         ? `Tu es le membre fondateur #${memberNumber} de Beez. 🐝`
-        : "Tu fais partie des premiers membres de Beez."
+        : 'Tu fais partie des premiers membres de Beez.'
 
     const subject = `Bienvenue dans la ruche, ${firstName} 🐝`
 
@@ -88,60 +96,25 @@ export async function POST(request: Request) {
 
     const text = `Bienvenue dans la ruche, ${firstName} ✦\n\n${memberLine}\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
 
-    // Send via Supabase admin auth email (uses your configured SMTP)
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-
-    if (!serviceRoleKey || !supabaseUrl) {
-      // Log and skip — don't fail the registration flow
-      console.error('[send-welcome-email] Missing SUPABASE_SERVICE_ROLE_KEY or SUPABASE_URL')
-      return NextResponse.json({ ok: true, skipped: true })
-    }
-
-    // Use Supabase admin API to send a custom email
-    const res = await fetch(`${supabaseUrl}/auth/v1/admin/users/${user.id}`, {
-      method: 'GET',
-      headers: {
-        apikey: serviceRoleKey,
-        Authorization: `Bearer ${serviceRoleKey}`,
-      },
+    // ── Send ─────────────────────────────────────────────────────────────────
+    const { error: sendError } = await resend.emails.send({
+      from: 'Beez <onboarding@joinbeez.com>',
+      to: [email],
+      subject,
+      html,
+      text,
     })
 
-    if (!res.ok) {
-      console.error('[send-welcome-email] Could not verify user via admin API')
+    if (sendError) {
+      console.error('[send-welcome-email] Resend error:', sendError)
+      // Non-fatal — registration already succeeded
+      return NextResponse.json({ ok: true, warning: sendError.message })
     }
-
-    // Supabase does not expose a generic "send email" endpoint from admin API.
-    // Use your transactional email provider here (Resend, SendGrid, Postmark, etc.)
-    // Example with Resend:
-    //
-    // const resendKey = process.env.RESEND_API_KEY
-    // if (resendKey) {
-    //   await fetch('https://api.resend.com/emails', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${resendKey}`,
-    //     },
-    //     body: JSON.stringify({
-    //       from: 'Beez <noreply@joinbeez.com>',
-    //       to: [email],
-    //       subject,
-    //       html,
-    //       text,
-    //     }),
-    //   })
-    // }
-
-    // For now, log that we would have sent the email
-    console.log(`[send-welcome-email] Would send welcome email to ${email} — integrate your email provider above.`)
-    console.log(`[send-welcome-email] Subject: ${subject}`)
-    void html
-    void text
 
     return NextResponse.json({ ok: true })
   } catch (err) {
     console.error('[send-welcome-email] Unexpected error:', err)
-    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
+    // Never let an email failure surface to the client as a registration error
+    return NextResponse.json({ ok: true, warning: 'Email delivery failed.' })
   }
 }

@@ -54,22 +54,14 @@ Dans ton projet Supabase → **Settings → API** :
 
 ---
 
-## 3. Configurer Apple OAuth
+## 3. Configurer Resend (emails de bienvenue)
 
-1. Va sur [developer.apple.com](https://developer.apple.com) → **Certificates, Identifiers & Profiles**
-2. Crée un **App ID** avec la capability "Sign In with Apple"
-3. Crée un **Services ID** (utilisé comme Client ID)
-4. Configure le domain et la return URL :
-   ```
-   https://<ton-projet>.supabase.co/auth/v1/callback
-   ```
-5. Crée une **Key** avec "Sign In with Apple" activé, télécharge le `.p8`
-6. Dans Supabase → **Authentication → Providers → Apple** :
-   - Enable Apple
-   - Client ID = ton Services ID
-   - Secret Key = contenu du fichier `.p8`
-   - Key ID + Team ID depuis Apple Developer
-   - Save
+1. Crée un compte sur [resend.com](https://resend.com)
+2. Ajoute et vérifie ton domaine (`joinbeez.com`) dans **Domains**
+3. Crée une **API Key** dans **API Keys → Create API Key**
+4. Ajoute la clé en variable d'environnement : `RESEND_API_KEY`
+
+> Les emails sont envoyés depuis `onboarding@joinbeez.com`. Si tu n'as pas encore de domaine vérifié, tu peux utiliser le domaine sandbox Resend pour les tests.
 
 ---
 
@@ -114,6 +106,8 @@ vercel
    | `NEXT_PUBLIC_SUPABASE_URL` | `https://xxx.supabase.co` |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJ...` |
    | `NEXT_PUBLIC_SITE_URL` | `https://joinbeez.com` |
+   | `SUPABASE_SERVICE_ROLE_KEY` | clé `service_role` depuis Supabase → Settings → API |
+   | `RESEND_API_KEY` | clé API depuis [resend.com](https://resend.com) → API Keys |
 4. Deploy
 
 ---
@@ -186,3 +180,5 @@ beez/
 | `NEXT_PUBLIC_SUPABASE_URL` | ✅ | URL de ton projet Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Clé anon publique Supabase |
 | `NEXT_PUBLIC_SITE_URL` | ✅ | URL de l'app (localhost ou domaine prod) |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Clé service role Supabase (server-side uniquement) |
+| `RESEND_API_KEY` | ✅ | Clé API Resend — emails de bienvenue |
