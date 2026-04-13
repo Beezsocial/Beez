@@ -698,6 +698,31 @@ export default  function OnboardingPage() {
         }
       }
 
+      // Send welcome email (non-blocking — don't fail registration on email error)
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session?.user.email) {
+          // Fetch member number from the profile we just inserted
+          const { data: profileRow } = await (supabase as any)
+            .from('profiles')
+            .select('member_number')
+            .eq('user_id', user.id)
+            .single()
+
+          await fetch('/api/send-welcome-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: session.user.email,
+              firstName: data.firstName,
+              memberNumber: profileRow?.member_number ?? null,
+            }),
+          })
+        }
+      } catch {
+        // Non-critical — swallow silently
+      }
+
       router.push('/onboarding/success')
     } catch (err: unknown) {
       const msg =
@@ -726,10 +751,18 @@ export default  function OnboardingPage() {
     <div className="min-h-screen bg-navy flex flex-col">
       {/* Logo bar */}
       <header className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5">
-        <span className="font-heading font-extrabold text-xl tracking-tight">
-          <span className="text-white">B</span>
-          <span className="text-gold">eez</span>
-        </span>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          >
+            ← Accueil
+          </Link>
+          <span className="font-heading font-extrabold text-xl tracking-tight">
+            <span className="text-white">B</span>
+            <span className="text-gold">eez</span>
+          </span>
+        </div>
         {isOnboarding ? (
           <span className="text-white/30 text-xs">
             {stepLabels[(stepNumber as number) - 1]}

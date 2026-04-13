@@ -106,13 +106,21 @@ export default function SignInPage() {
     <div className="min-h-screen bg-navy flex flex-col">
       {/* Header */}
       <header className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5">
-        <Link
-          href="/"
-          className="font-heading font-extrabold text-xl tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-        >
-          <span className="text-white">B</span>
-          <span className="text-gold">eez</span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          >
+            ← Accueil
+          </Link>
+          <Link
+            href="/"
+            className="font-heading font-extrabold text-xl tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          >
+            <span className="text-white">B</span>
+            <span className="text-gold">eez</span>
+          </Link>
+        </div>
         <Link
           href="/onboarding"
           className="text-sm text-white/40 hover:text-gold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
