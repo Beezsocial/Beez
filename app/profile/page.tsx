@@ -44,8 +44,8 @@ async function getFullProfile() {
 
     return {
       profile: profileRes.data,
-      types: (typesRes.data ?? []).map((r) => r.type),
-      seeking: (seekingRes.data ?? []).map((r) => r.seeking_type),
+      types: (typesRes.data ?? []).map((r: any) => r.type),
+      seeking: (seekingRes.data ?? []).map((r: any) => r.seeking_type),
       firstPost: postRes.data?.content ?? null,
     }
   } catch {
