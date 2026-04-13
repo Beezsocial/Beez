@@ -189,7 +189,7 @@ export default async function ProfilePage() {
           {types.length > 0 && (
             <Section title="Je suis">
               <div className="flex flex-wrap gap-2">
-                {types.map((t) => {
+                {types.map((t: string) => {
                   const label = profileTypeLabels[t as keyof typeof profileTypeLabels] ?? t
                   return <Pill key={t} label={label} />
                 })}
@@ -201,7 +201,7 @@ export default async function ProfilePage() {
           {seeking.length > 0 && (
             <Section title="Je cherche">
               <div className="flex flex-wrap gap-2">
-                {seeking.map((s) => {
+                {seeking.map((s: string) => {
                   const label = seekingLabels[s as keyof typeof seekingLabels] ?? s
                   return <Pill key={s} label={label} />
                 })}
