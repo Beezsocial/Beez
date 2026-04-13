@@ -14,22 +14,24 @@ async function getFullProfile() {
     if (authError || !authData.user) return null
 
     const userId = authData.user.id
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabase as any
 
     const [profileRes, typesRes, seekingRes, postRes] = await Promise.all([
-      supabase
+      db
         .from('profiles')
         .select('first_name, last_name, city, bio, avatar_url, member_number')
         .eq('user_id', userId)
         .single(),
-      supabase
+      db
         .from('profile_types')
         .select('type')
         .eq('user_id', userId),
-      supabase
+      db
         .from('seeking')
         .select('seeking_type')
         .eq('user_id', userId),
-      supabase
+      db
         .from('first_posts')
         .select('content')
         .eq('user_id', userId)

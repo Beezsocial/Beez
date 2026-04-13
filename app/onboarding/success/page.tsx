@@ -10,7 +10,8 @@ async function getProfileData() {
 
     if (authError || !authData.user) return null
 
-    const { data: profile } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: profile } = await (supabase as any)
       .from('profiles')
       .select('first_name, member_number')
       .eq('user_id', authData.user.id)
