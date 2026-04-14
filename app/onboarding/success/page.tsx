@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import HexBadge from '@/components/ui/HexBadge'
+import Logo from '@/components/ui/Logo'
 
 async function getProfileData() {
   try {
@@ -38,17 +39,17 @@ export default async function SuccessPage() {
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-navy/80 via-transparent to-navy/90" />
 
       {/* Logo */}
-      <header className="relative shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5 z-10">
+      <header
+        className="relative shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md z-10"
+        style={{ background: 'rgba(8,43,68,0.92)' }}
+      >
         <Link
           href="/"
           className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         >
           ← Accueil
         </Link>
-        <span className="font-heading font-extrabold text-xl tracking-tight">
-          <span className="text-white">B</span>
-          <span className="text-gold">eez</span>
-        </span>
+        <Logo height={36} />
       </header>
 
       {/* Content */}

@@ -60,6 +60,13 @@ const config: Config = {
       clipPath: {
         hex: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
       },
+      borderRadius: {
+        beez: '10px',
+      },
+      boxShadow: {
+        card: '0 4px 24px rgba(0,0,0,0.2)',
+        'card-gold': '0 0 24px rgba(235,175,87,0.08)',
+      },
     },
   },
   plugins: [],

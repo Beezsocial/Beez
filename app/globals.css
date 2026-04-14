@@ -37,11 +37,104 @@
   }
 }
 
+@layer components {
+  /* ── Cards ─────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-navy-950 border border-white/8 rounded-beez;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-gold {
+    @apply border-gold/40;
+    box-shadow: 0 0 24px rgba(235, 175, 87, 0.08), 0 4px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ── Buttons ────────────────────────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-7 py-3 text-base;
+    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active:not(:disabled) {
+    filter: brightness(0.95);
+    transform: translateY(0);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-white/15 text-white/70 font-medium rounded-beez px-7 py-3 text-base;
+    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    @apply border-gold/50 text-white;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 border border-white/10 text-white/40 font-medium rounded-beez px-7 py-3 text-sm;
+    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    border-color: rgba(255, 0, 0, 0.3);
+    color: rgba(255, 100, 100, 0.8);
+  }
+
+  /* ── Inputs ─────────────────────────────────────────────────────── */
+  .input-beez {
+    @apply w-full rounded-beez border border-white/10 text-white placeholder-white/30;
+    @apply px-4 py-3 text-sm transition-all duration-200;
+    @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .input-beez:hover:not(:disabled) {
+    @apply border-white/20;
+  }
+
+  .input-beez:focus {
+    outline: none;
+    border-color: #ebaf57;
+    box-shadow: 0 0 0 3px rgba(235, 175, 87, 0.1);
+  }
+
+  .input-beez.error {
+    @apply border-red-500;
+  }
+
+  .input-beez.error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+
+  /* ── Pills ──────────────────────────────────────────────────────── */
+  .pill-selected {
+    @apply border font-semibold text-xs px-3 py-1.5;
+    background: rgba(235, 175, 87, 0.15);
+    border-color: rgba(235, 175, 87, 0.5);
+    color: #ebaf57;
+  }
+
+  .pill-unselected {
+    @apply border text-xs px-3 py-1.5;
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
 @layer utilities {
   /* Honeycomb background pattern */
   .honeycomb-bg {
-    background-color: #082b44;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zm0-8l20-11.5V22L28 10.5 8 22v24.5L28 58z' fill='%23ebaf57' fill-opacity='0.04'/%3E%3Cpath d='M28 100L0 84V50l28-16 28 16v34L28 100zm0-8l20-11.5V56L28 44.5 8 56v24.5L28 92z' fill='%23ebaf57' fill-opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48' viewBox='0 0 56 48'%3E%3Cpath d='M14 0 L28 8 L28 24 L14 32 L0 24 L0 8 Z' fill='none' stroke='%23ebaf57' stroke-width='0.4' opacity='0.12'/%3E%3Cpath d='M42 0 L56 8 L56 24 L42 32 L28 24 L28 8 Z' fill='none' stroke='%23ebaf57' stroke-width='0.4' opacity='0.12'/%3E%3Cpath d='M28 24 L42 32 L42 48 L28 56 L14 48 L14 32 Z' fill='none' stroke='%23ebaf57' stroke-width='0.4' opacity='0.12'/%3E%3C/svg%3E");
+    background-size: 56px 48px;
+    background-repeat: repeat;
   }
 
   /* Clip hex shape */

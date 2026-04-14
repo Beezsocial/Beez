@@ -19,13 +19,16 @@ export default function PillTag({
       onClick={onToggle}
       disabled={disabled}
       aria-pressed={selected}
-      className={[
-        'px-4 py-2 text-sm font-medium transition-all duration-200',
-        'border focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900',
-        'disabled:opacity-40 disabled:cursor-not-allowed',
+      style={
         selected
-          ? 'bg-gold text-navy-900 border-gold hover:bg-gold-400'
-          : 'bg-transparent text-white/80 border-white/20 hover:border-gold/60 hover:text-white',
+          ? { background: 'rgba(235,175,87,0.15)', borderColor: 'rgba(235,175,87,0.5)', color: '#ebaf57' }
+          : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }
+      }
+      className={[
+        'px-3 py-1.5 text-xs font-medium transition-all duration-200',
+        'border focus:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+        'disabled:opacity-40 disabled:cursor-not-allowed',
+        !selected ? 'hover:border-gold/40 hover:text-white/80' : '',
       ].join(' ')}
     >
       {label}

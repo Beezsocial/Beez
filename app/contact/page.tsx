@@ -1,10 +1,14 @@
 import Link from 'next/link'
+import Logo from '@/components/ui/Logo'
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
       {/* Header */}
-      <header className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5">
+      <header
+        className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
+        style={{ background: 'rgba(8,43,68,0.92)' }}
+      >
         <div className="flex items-center gap-4">
           <Link
             href="/"
@@ -12,12 +16,8 @@ export default function ContactPage() {
           >
             ← Accueil
           </Link>
-          <Link
-            href="/"
-            className="font-heading font-extrabold text-xl tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-          >
-            <span className="text-white">B</span>
-            <span className="text-gold">eez</span>
+          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+            <Logo height={36} />
           </Link>
         </div>
         <span className="text-white/30 text-xs">Contact</span>
@@ -36,7 +36,7 @@ export default function ContactPage() {
             </h1>
           </div>
 
-          <div className="bg-navy-950 border border-white/8 p-6 sm:p-8 space-y-6">
+          <div className="card p-6 sm:p-8 space-y-6">
 
             <div className="border-t border-white/8 pt-6 first:border-t-0 first:pt-0">
               <p className="text-sm text-white/60 leading-relaxed">
@@ -54,7 +54,7 @@ export default function ContactPage() {
             <div className="border-t border-white/8 pt-6">
               <a
                 href="mailto:contact@joinbeez.com"
-                className="inline-flex items-center justify-center gap-2 w-full bg-gold text-navy-900 font-bold px-6 py-4 text-base hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
+                className="inline-flex items-center justify-center gap-2 w-full bg-gold text-navy-900 font-bold rounded-beez px-6 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, type FormEvent, type ChangeEvent } from 'react'
 import Link from 'next/link'
+import Logo from '@/components/ui/Logo'
 import { useRouter } from 'next/navigation'
 import Button from '@/components/ui/Button'
 import { Input, Textarea } from '@/components/ui/Input'
@@ -47,9 +48,9 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
           {Math.round((step / total) * 100)}%
         </span>
       </div>
-      <div className="h-0.5 bg-white/10 w-full">
+      <div className="h-[3px] rounded-full bg-white/10 w-full overflow-hidden">
         <div
-          className="h-full bg-gold transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-gold transition-all duration-500 ease-out"
           style={{ width: `${(step / total) * 100}%` }}
         />
       </div>
@@ -747,9 +748,12 @@ export default  function OnboardingPage() {
   const stepNumber = isOnboarding ? (phase as number) : 0
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
       {/* Logo bar */}
-      <header className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5">
+      <header
+        className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
+        style={{ background: 'rgba(8,43,68,0.92)' }}
+      >
         <div className="flex items-center gap-4">
           <Link
             href="/"
@@ -757,10 +761,7 @@ export default  function OnboardingPage() {
           >
             ← Accueil
           </Link>
-          <span className="font-heading font-extrabold text-xl tracking-tight">
-            <span className="text-white">B</span>
-            <span className="text-gold">eez</span>
-          </span>
+          <Logo height={36} />
         </div>
         {isOnboarding ? (
           <span className="text-white/30 text-xs">

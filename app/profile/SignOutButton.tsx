@@ -20,7 +20,7 @@ export default function SignOutButton() {
       type="button"
       onClick={handleSignOut}
       disabled={loading}
-      className="w-full inline-flex items-center justify-center gap-2 border border-white/10 text-white/40 hover:text-white/70 hover:border-white/25 font-medium py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+      className="w-full inline-flex items-center justify-center gap-2 border border-white/10 text-white/40 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed hover:[border-color:rgba(255,0,0,0.3)] hover:[color:rgba(255,100,100,0.8)]"
     >
       {loading ? (
         <svg className="animate-spin h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">

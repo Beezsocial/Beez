@@ -153,11 +153,14 @@ function PillToggle({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={[
-        'px-3 py-1.5 text-xs font-medium border transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+      style={
         selected
-          ? 'border-gold bg-gold text-navy-900'
-          : 'border-white/20 text-white/50 hover:border-gold/50 hover:text-white/80',
+          ? { background: 'rgba(235,175,87,0.15)', borderColor: 'rgba(235,175,87,0.5)', color: '#ebaf57' }
+          : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }
+      }
+      className={[
+        'px-3 py-1.5 text-xs font-medium border rounded-sm transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+        !selected && !disabled ? 'hover:border-gold/40 hover:text-white/80' : '',
         disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
       ].join(' ')}
     >
@@ -197,8 +200,9 @@ function EditSection({ title, children }: { title: string; children: ReactNode }
   )
 }
 
+const inputBg = { background: 'rgba(255,255,255,0.04)' } as const
 const inputClass =
-  'w-full bg-navy border border-white/10 hover:border-white/20 text-white placeholder-white/25 px-3 py-2.5 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent'
+  'w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/25 px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)]'
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function ProfileClient({ profile, types, seeking, firstPost }: Props) {
@@ -438,7 +442,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
       </div>
 
       {/* Card body */}
-      <div className="bg-navy-950 border border-white/8 p-5 sm:p-6 space-y-5">
+      <div className="card p-5 sm:p-6 space-y-5">
 
         {isEditing ? (
           /* ── Edit mode ────────────────────────────────────────────── */
@@ -453,6 +457,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
                     onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
                     placeholder="Prénom"
                     disabled={saving}
+                    style={inputBg}
                     className={inputClass}
                   />
                 </Field>
@@ -463,6 +468,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
                     onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
                     placeholder="Nom"
                     disabled={saving}
+                    style={inputBg}
                     className={inputClass}
                   />
                 </Field>
@@ -487,6 +493,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
                   rows={4}
                   disabled={saving}
                   className={`${inputClass} resize-none`}
+                  style={inputBg}
                 />
               </Field>
             </div>
@@ -583,7 +590,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
               type="button"
               onClick={handleSave}
               disabled={saving}
-              className="w-full inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold py-3 text-sm hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez py-3 text-sm transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving && (
                 <svg className="animate-spin h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -597,7 +604,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
               type="button"
               onClick={handleCancel}
               disabled={saving}
-              className="w-full border border-white/10 text-white/50 hover:text-white/80 hover:border-white/20 font-medium py-3 text-sm transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full border border-white/15 text-white/50 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Annuler
             </button>
@@ -607,7 +614,7 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
             <button
               type="button"
               onClick={handleEdit}
-              className="w-full border border-white/15 text-white/60 hover:border-white/30 hover:text-white/90 font-medium py-3 text-sm transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="w-full border border-white/15 text-white/60 hover:border-gold/40 hover:text-white/90 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
               Modifier mon profil
             </button>

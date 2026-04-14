@@ -4,6 +4,7 @@ import { useState, useEffect, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import Logo from '@/components/ui/Logo'
 
 // ─── French error messages ────────────────────────────────────────────────────
 function friendlyError(message: string): string {
@@ -104,9 +105,12 @@ export default function SignInPage() {
   const anyLoading = oauthLoading || emailLoading
 
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
       {/* Header */}
-      <header className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5">
+      <header
+        className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
+        style={{ background: 'rgba(8,43,68,0.92)' }}
+      >
         <div className="flex items-center gap-4">
           <Link
             href="/"
@@ -114,12 +118,8 @@ export default function SignInPage() {
           >
             ← Accueil
           </Link>
-          <Link
-            href="/"
-            className="font-heading font-extrabold text-xl tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-          >
-            <span className="text-white">B</span>
-            <span className="text-gold">eez</span>
+          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+            <Logo height={36} />
           </Link>
         </div>
         <Link
@@ -145,14 +145,15 @@ export default function SignInPage() {
           </div>
 
           {/* Card */}
-          <div className="bg-navy-950 border border-white/8 p-6 sm:p-8 space-y-4">
+          <div className="card p-6 sm:p-8 space-y-4">
 
             {/* Google */}
             <button
               type="button"
               onClick={handleGoogle}
               disabled={anyLoading}
-              className="w-full flex items-center gap-3 border border-white/10 bg-navy-950 px-4 py-3.5 text-sm font-medium text-white hover:border-white/25 hover:bg-navy-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center gap-3 rounded-beez border border-white/10 px-4 py-3.5 text-sm font-medium text-white hover:border-white/25 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'rgba(255,255,255,0.04)' }}
             >
               {oauthLoading ? (
                 <svg className="animate-spin h-[18px] w-[18px] shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -186,7 +187,8 @@ export default function SignInPage() {
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   disabled={anyLoading}
-                  className="w-full bg-navy-950 border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent disabled:opacity-40"
+                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  className="w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)] disabled:opacity-40"
                 />
               </div>
 
@@ -202,7 +204,8 @@ export default function SignInPage() {
                   value={form.password}
                   onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
                   disabled={anyLoading}
-                  className="w-full bg-navy-950 border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent disabled:opacity-40"
+                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  className="w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)] disabled:opacity-40"
                 />
               </div>
 
@@ -216,7 +219,7 @@ export default function SignInPage() {
               <button
                 type="submit"
                 disabled={anyLoading}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold px-6 py-3.5 text-base hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+                className="w-full inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-6 py-3.5 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed mt-1"
               >
                 {emailLoading ? (
                   <svg className="animate-spin h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">

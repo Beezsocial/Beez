@@ -17,12 +17,13 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 }
 
 const baseInputClasses = [
-  'w-full bg-navy-950 border text-white placeholder-white/30',
-  'px-4 py-3 text-base',
-  'transition-colors duration-200',
-  'focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent',
+  'w-full rounded-beez border text-white placeholder-white/30',
+  'px-4 py-3 text-base transition-all duration-200',
+  'focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)]',
   'disabled:opacity-40 disabled:cursor-not-allowed',
 ].join(' ')
+
+const baseBg = { background: 'rgba(255,255,255,0.04)' } as const
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, hint, id, className = '', ...props }, ref) => {
@@ -46,10 +47,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
+          style={baseBg}
           className={[
             baseInputClasses,
             error
-              ? 'border-red-500 focus:ring-red-500'
+              ? 'border-red-500 focus:[box-shadow:0_0_0_3px_rgba(239,68,68,0.1)]'
               : 'border-white/10 hover:border-white/20',
             className,
           ].join(' ')}
@@ -97,11 +99,12 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           <textarea
             ref={ref}
             id={inputId}
+            style={baseBg}
             className={[
               baseInputClasses,
               'resize-none',
               error
-                ? 'border-red-500 focus:ring-red-500'
+                ? 'border-red-500 focus:[box-shadow:0_0_0_3px_rgba(239,68,68,0.1)]'
                 : 'border-white/10 hover:border-white/20',
               className,
             ].join(' ')}

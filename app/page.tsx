@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import Logo from '@/components/ui/Logo'
 
 // ─── Member count from Supabase ───────────────────────────────────────────────
 async function getMemberCount(): Promise<number> {
@@ -69,11 +70,11 @@ function FeatureCard({
   description: string
 }) {
   return (
-    <div className="group border border-white/8 bg-navy-950 p-6 hover:border-gold/30 transition-all duration-300">
-      <div className="mb-4 w-10 h-10 flex items-center justify-center border border-gold/20 bg-navy-900 group-hover:border-gold/50 transition-colors duration-300">
+    <div className="group card p-6 hover:border-gold/30 transition-all duration-300">
+      <div className="mb-4 w-10 h-10 flex items-center justify-center rounded-beez border border-gold/20 bg-navy-900 group-hover:border-gold/50 transition-colors duration-300">
         {icon}
       </div>
-      <h3 className="font-heading font-semibold text-white text-lg mb-2">{title}</h3>
+      <h3 className="font-heading font-semibold text-white text-xl mb-2">{title}</h3>
       <p className="text-white/55 text-sm leading-relaxed">{description}</p>
     </div>
   )
@@ -94,14 +95,12 @@ function PricingCard({
   return (
     <div
       className={[
-        'p-6 border transition-all duration-300',
-        highlighted
-          ? 'border-gold/50 bg-navy-950 relative'
-          : 'border-white/8 bg-navy-950 hover:border-white/20',
+        'relative p-6 card transition-all duration-300',
+        highlighted ? 'card-gold' : 'hover:border-white/20',
       ].join(' ')}
     >
       {highlighted && (
-        <span className="absolute -top-3 left-6 bg-gold text-navy-900 text-xs font-bold px-3 py-1 uppercase tracking-wider">
+        <span className="absolute -top-3 left-6 bg-gold text-navy-900 text-xs font-bold px-3 py-1 rounded-beez uppercase tracking-wider">
           Populaire
         </span>
       )}
@@ -132,14 +131,11 @@ export default async function LandingPage() {
   const memberCount=await getMemberCount()
 
   return (
-    <div className="min-h-screen bg-navy overflow-x-hidden">
+    <div className="min-h-screen bg-navy honeycomb-bg overflow-x-hidden">
       {/* ── NAV ── */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-navy/90 backdrop-blur-sm border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <span className="font-heading font-extrabold text-xl tracking-tight">
-            <span className="text-white">B</span>
-            <span className="text-gold">eez</span>
-          </span>
+      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b border-white/6" style={{ background: 'rgba(8,43,68,0.92)', height: 56 }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
+          <Logo height={36} />
           <div className="flex items-center gap-5">
             <Link
               href="/signin"
@@ -169,7 +165,7 @@ export default async function LandingPage() {
         </div>
 
         {/* Headline */}
-        <h1 className="font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.05] max-w-4xl mx-auto animate-slide-up">
+        <h1 className="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight max-w-4xl mx-auto animate-slide-up">
           LinkedIn pour les
           <br />
           <span className="text-gradient">entrepreneurs vrais.</span>
@@ -183,7 +179,7 @@ export default async function LandingPage() {
         <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 animate-slide-up delay-200">
           <Link
             href="#signup"
-            className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-semibold px-8 py-4 text-base hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             Rejoindre la ruche
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -420,7 +416,7 @@ export default async function LandingPage() {
 
           <Link
             href="/onboarding"
-            className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold px-10 py-4 text-lg hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-10 py-4 text-lg transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
           >
             Créer mon profil
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -437,10 +433,7 @@ export default async function LandingPage() {
       {/* ── FOOTER ── */}
       <footer className="py-8 px-4 sm:px-6 border-t border-white/5">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span className="font-heading font-extrabold text-base">
-            <span className="text-white/40">B</span>
-            <span className="text-gold/60">eez</span>
-          </span>
+          <Logo height={32} />
           <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>
           <div className="flex flex-wrap justify-center gap-6">
             <a href="/mentions-legales" className="hover:text-white/50 transition-colors">

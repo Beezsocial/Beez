@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
+import Logo from '@/components/ui/Logo'
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -14,9 +15,12 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-navy flex flex-col">
+    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
       {/* Header */}
-      <header className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/5">
+      <header
+        className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
+        style={{ background: 'rgba(8,43,68,0.92)' }}
+      >
         <div className="flex items-center gap-4">
           <Link
             href="/"
@@ -24,12 +28,8 @@ export default function PrivacyPage() {
           >
             ← Accueil
           </Link>
-          <Link
-            href="/"
-            className="font-heading font-extrabold text-xl tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-          >
-            <span className="text-white">B</span>
-            <span className="text-gold">eez</span>
+          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+            <Logo height={36} />
           </Link>
         </div>
         <span className="text-white/30 text-xs">Confidentialité</span>
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
         </div>
 
         {/* Content card */}
-        <div className="bg-navy-950 border border-white/8 p-6 sm:p-8 space-y-6">
+        <div className="card p-6 sm:p-8 space-y-6">
 
           <Section title="1. Qui sommes-nous ?">
             <p>
