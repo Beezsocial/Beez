@@ -322,12 +322,12 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
         const filePath = `${user.id}/${Date.now()}.${ext}`
 
         const { error: uploadError } = await supabase.storage
-          .from('avatars')
+          .from('Avatars')
           .upload(filePath, avatarFile, { upsert: true, contentType: avatarFile.type })
 
         if (uploadError) throw new Error(`Échec du téléversement : ${uploadError.message}`)
 
-        const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(filePath)
+        const { data: urlData } = supabase.storage.from('Avatars').getPublicUrl(filePath)
         newAvatarUrl = urlData.publicUrl
       }
 
