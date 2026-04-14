@@ -40,12 +40,13 @@
 @layer components {
   /* ── Cards ─────────────────────────────────────────────────────── */
   .card {
-    @apply bg-navy-950 border border-white/8 rounded-beez;
+    @apply bg-navy-950 rounded-beez;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   }
 
   .card-gold {
-    @apply border-gold/40;
+    border-color: rgba(235, 175, 87, 0.4);
     box-shadow: 0 0 24px rgba(235, 175, 87, 0.08), 0 4px 24px rgba(0, 0, 0, 0.2);
   }
 
@@ -67,19 +68,24 @@
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 border border-white/15 text-white/70 font-medium rounded-beez px-7 py-3 text-base;
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-beez px-7 py-3 text-base;
     @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
     @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .btn-ghost:hover:not(:disabled) {
-    @apply border-gold/50 text-white;
+    border-color: rgba(235, 175, 87, 0.5);
+    color: white;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 border border-white/10 text-white/40 font-medium rounded-beez px-7 py-3 text-sm;
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-beez px-7 py-3 text-sm;
     @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
     @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
   }
 
   .btn-danger:hover:not(:disabled) {
@@ -89,14 +95,19 @@
 
   /* ── Inputs ─────────────────────────────────────────────────────── */
   .input-beez {
-    @apply w-full rounded-beez border border-white/10 text-white placeholder-white/30;
+    @apply w-full rounded-beez text-white;
     @apply px-4 py-3 text-sm transition-all duration-200;
     @apply disabled:opacity-40 disabled:cursor-not-allowed;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.04);
   }
 
+  .input-beez::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
   .input-beez:hover:not(:disabled) {
-    @apply border-white/20;
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   .input-beez:focus {
