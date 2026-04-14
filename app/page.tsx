@@ -442,9 +442,15 @@ export default async function LandingPage() {
             <span className="text-gold/60">eez</span>
           </span>
           <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             <a href="#" className="hover:text-white/50 transition-colors">
               Mentions légales
+            </a>
+            <a href="/privacy" className="hover:text-white/50 transition-colors">
+              Politique de confidentialité
+            </a>
+            <a href="/terms" className="hover:text-white/50 transition-colors">
+              Conditions d'utilisation
             </a>
             <a href="#" className="hover:text-white/50 transition-colors">
               Contact
