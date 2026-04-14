@@ -443,7 +443,7 @@ export default async function LandingPage() {
           </span>
           <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>
           <div className="flex flex-wrap justify-center gap-6">
-            <a href="#" className="hover:text-white/50 transition-colors">
+            <a href="/mentions-legales" className="hover:text-white/50 transition-colors">
               Mentions légales
             </a>
             <a href="/privacy" className="hover:text-white/50 transition-colors">
@@ -452,7 +452,7 @@ export default async function LandingPage() {
             <a href="/terms" className="hover:text-white/50 transition-colors">
               Conditions d'utilisation
             </a>
-            <a href="#" className="hover:text-white/50 transition-colors">
+            <a href="/contact" className="hover:text-white/50 transition-colors">
               Contact
             </a>
           </div>
