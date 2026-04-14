@@ -65,15 +65,14 @@ function AuthStep({ onEmailAuth }: { onEmailAuth: () => void }) {
   const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState('')
   const supabase = createClient()
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
-
   const handleOAuth = async (provider: 'google') => {
     setLoading(true)
     setServerError('')
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.joinbeez.com'
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        redirectTo: `${siteUrl}/auth/callback`,
         ...(provider === 'google' && {
           queryParams: {
             access_type: 'offline',
@@ -110,7 +109,7 @@ function AuthStep({ onEmailAuth }: { onEmailAuth: () => void }) {
       email: form.email,
       password: form.password,
       options: {
-        emailRedirectTo: `${siteUrl}/auth/callback?next=/onboarding`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.joinbeez.com'}/auth/callback?next=/onboarding`,
       },
     })
 

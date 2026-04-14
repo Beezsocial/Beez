@@ -56,10 +56,11 @@ export default function SignInPage() {
   const handleGoogle = async () => {
     setOauthLoading(true)
     setError('')
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.joinbeez.com'
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/profile`,
+        redirectTo: `${siteUrl}/auth/callback?next=/profile`,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
