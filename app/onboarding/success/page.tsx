@@ -32,6 +32,7 @@ export default async function SuccessPage() {
   }
 
   const { first_name: firstName, member_number: memberNumber } = profile
+  const isFoundingMember = memberNumber != null && memberNumber <= 150
 
   return (
     <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
@@ -56,7 +57,7 @@ export default async function SuccessPage() {
       <main className="relative flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-16 z-10 text-center">
         {/* Hex badge */}
         <div className="mb-10 animate-fade-in">
-          <HexBadge number={memberNumber ?? undefined} size="lg" />
+          <HexBadge number={isFoundingMember ? memberNumber : undefined} size="lg" />
         </div>
 
         {/* Welcome message */}
@@ -70,9 +71,41 @@ export default async function SuccessPage() {
             <span className="text-gradient">{firstName}</span> ✦
           </h1>
 
-          <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
-            L'app arrive bientôt. Tu seras notifié en premier.
-          </p>
+          {isFoundingMember ? (
+            <>
+              <div
+                className="inline-flex items-center gap-2 mb-4 px-4 py-2"
+                style={{
+                  background: 'rgba(235,175,87,0.12)',
+                  border: '1px solid rgba(235,175,87,0.4)',
+                  borderRadius: 8,
+                }}
+              >
+                <span className="text-gold font-bold text-sm">✦ Founding Member #{memberNumber}</span>
+              </div>
+              <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
+                Tu fais partie des 150 Founding Members. Accès Pro gratuit à vie.
+              </p>
+            </>
+          ) : (
+            <>
+              {memberNumber != null && (
+                <div
+                  className="inline-flex items-center gap-2 mb-4 px-4 py-2"
+                  style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: 8,
+                  }}
+                >
+                  <span className="text-white/50 text-sm">Membre #{memberNumber}</span>
+                </div>
+              )}
+              <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
+                Bienvenue dans la ruche !
+              </p>
+            </>
+          )}
         </div>
 
         {/* CTA */}

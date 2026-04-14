@@ -1,63 +1,6 @@
-import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
 import Logo from '@/components/ui/Logo'
-
-// ─── Member count from Supabase ───────────────────────────────────────────────
-async function getMemberCount(): Promise<number> {
-  try {
-    const supabase = await createClient()
-    const { count } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
-    return count ?? 0
-  } catch {
-    return 0
-  }
-}
-
-// ─── Icons (inline SVG, no external dep) ─────────────────────────────────────
-function IconBolt() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" stroke="#ebaf57" strokeWidth="1.5" strokeLinejoin="round" />
-    </svg>
-  )
-}
-function IconTarget() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="9" stroke="#ebaf57" strokeWidth="1.5" />
-      <circle cx="12" cy="12" r="5" stroke="#ebaf57" strokeWidth="1.5" />
-      <circle cx="12" cy="12" r="1" fill="#ebaf57" />
-    </svg>
-  )
-}
-function IconUsers() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#ebaf57" strokeWidth="1.5" strokeLinecap="square" />
-      <circle cx="9" cy="7" r="4" stroke="#ebaf57" strokeWidth="1.5" />
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#ebaf57" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
-  )
-}
-function IconShield() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V7L12 2Z" stroke="#ebaf57" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M9 12l2 2 4-4" stroke="#ebaf57" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
-  )
-}
-function IconLock() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="11" width="18" height="11" rx="1" stroke="currentColor" strokeWidth="2" />
-      <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-    </svg>
-  )
-}
+import CarouselHero from '@/components/ui/CarouselHero'
 
 // ─── Feature Card ─────────────────────────────────────────────────────────────
 function FeatureCard({
@@ -65,75 +8,74 @@ function FeatureCard({
   title,
   description,
 }: {
-  icon: ReactNode
+  icon: string
   title: string
   description: string
 }) {
   return (
-    <div className="group card p-6 hover:border-gold/30 transition-all duration-300">
-      <div className="mb-4 w-10 h-10 flex items-center justify-center rounded-beez border border-gold/20 bg-navy-900 group-hover:border-gold/50 transition-colors duration-300">
+    <div className="card p-6 space-y-3" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+      <div
+        className="w-10 h-10 flex items-center justify-center text-xl"
+        style={{ background: 'rgba(235,175,87,0.1)', borderRadius: 8 }}
+      >
         {icon}
       </div>
-      <h3 className="font-heading font-semibold text-white text-xl mb-2">{title}</h3>
+      <h3 className="font-heading font-semibold text-white text-lg">{title}</h3>
       <p className="text-white/55 text-sm leading-relaxed">{description}</p>
     </div>
   )
 }
 
-// ─── Pricing Card ─────────────────────────────────────────────────────────────
-function PricingCard({
-  tier,
-  subtitle,
-  features,
-  highlighted = false,
-}: {
-  tier: string
-  subtitle: string
-  features: string[]
-  highlighted?: boolean
-}) {
+// ─── Mockup hex avatar ────────────────────────────────────────────────────────
+function MockHex({ initial, gradient }: { initial: string; gradient: string }) {
   return (
     <div
-      className={[
-        'relative p-6 card transition-all duration-300',
-        highlighted ? 'card-gold' : 'hover:border-white/20',
-      ].join(' ')}
+      style={{
+        width: 36,
+        height: 42,
+        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+        background: gradient,
+        flexShrink: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 13,
+        fontWeight: 700,
+        color: '#082b44',
+      }}
     >
-      {highlighted && (
-        <span className="absolute -top-3 left-6 bg-gold text-navy-900 text-xs font-bold px-3 py-1 rounded-beez uppercase tracking-wider">
-          Populaire
-        </span>
-      )}
-      <div className="mb-4">
-        <h3 className="font-heading font-bold text-white text-xl">{tier}</h3>
-        <p className="text-white/50 text-sm mt-1">{subtitle}</p>
-      </div>
-      <div className="my-4 border-t border-white/8" />
-      <ul className="space-y-2.5">
-        {features.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-sm text-white/70">
-            <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
-            {f}
-          </li>
-        ))}
-      </ul>
-      <div className="mt-6">
-        <span className="text-white/30 text-sm font-medium uppercase tracking-widest">
-          Prix · Bientôt
-        </span>
-      </div>
+      {initial}
+    </div>
+  )
+}
+
+// ─── Phone feed card ──────────────────────────────────────────────────────────
+function MockCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 10,
+        padding: '10px 12px',
+        marginBottom: 8,
+      }}
+    >
+      {children}
     </div>
   )
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
-export default async function LandingPage() {
-  const memberCount=await getMemberCount()
-
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-navy honeycomb-bg overflow-x-hidden">
+
       {/* ── NAV ── */}
-      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b border-white/6" style={{ background: 'rgba(8,43,68,0.92)', height: 56 }}>
+      <header
+        className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b border-white/6"
+        style={{ background: 'rgba(8,43,68,0.92)', height: 56 }}
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
           <Logo height={36} />
           <div className="flex items-center gap-5">
@@ -154,54 +96,163 @@ export default async function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="honeycomb-bg relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-16">
-        {/* Gradient fade bottom */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-16">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-navy to-transparent" />
 
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-medium text-gold uppercase tracking-widest mb-8 animate-fade-in">
-          <IconLock />
-          Early Access en cours
-        </div>
+        {/* Logo image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/logo-dark.png"
+          alt="Beez"
+          style={{ height: 80, width: 'auto', marginBottom: 16 }}
+        />
 
-        {/* Headline */}
-        <h1 className="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight max-w-4xl mx-auto animate-slide-up">
-          LinkedIn pour les
-          <br />
-          <span className="text-gradient">entrepreneurs vrais.</span>
+        {/* "Beez" wordmark */}
+        <h1
+          className="font-heading text-white leading-none mb-4"
+          style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: 800, letterSpacing: '-2px' }}
+        >
+          Beez
         </h1>
 
-        <p className="mt-6 text-white/60 text-lg sm:text-xl max-w-xl mx-auto leading-relaxed animate-slide-up delay-100">
-          Construis en public, connecte avec ceux qui peuvent vraiment t'aider,
-          trouve ton associé — sans le bullshit corporate.
+        {/* Main headline */}
+        <p
+          className="font-heading font-bold text-center mb-4 leading-tight"
+          style={{ fontSize: 'clamp(32px, 5vw, 52px)' }}
+        >
+          <span className="text-white">Construis. </span>
+          <span className="text-white">Partage. </span>
+          <span style={{ color: '#ebaf57' }}>Connecte.</span>
         </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 animate-slide-up delay-200">
-          <Link
-            href="#signup"
-            className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
-          >
-            Rejoindre la ruche
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
-            </svg>
-          </Link>
-          <span className="text-white/30 text-sm">
-            {memberCount > 0
-              ? `${memberCount.toLocaleString('fr-FR')} membres · accès gratuit`
-              : 'Accès gratuit · Founding Member'}
-          </span>
+        {/* Subtitle */}
+        <p className="text-white/60 text-xl text-center mb-6">
+          La ruche des entrepreneurs
+        </p>
+
+        {/* Auto-rotating carousel */}
+        <div className="mb-8 h-8 flex items-center justify-center">
+          <CarouselHero />
         </div>
 
-        {/* Hex decorations */}
-        <div className="pointer-events-none absolute left-4 top-32 w-12 h-[56px] clip-hex bg-gold/5 hidden md:block" aria-hidden="true" />
-        <div className="pointer-events-none absolute right-8 top-48 w-8 h-[37px] clip-hex bg-gold/8 hidden md:block" aria-hidden="true" />
-        <div className="pointer-events-none absolute left-16 bottom-32 w-16 h-[74px] clip-hex bg-gold/5 hidden lg:block" aria-hidden="true" />
-        <div className="pointer-events-none absolute right-24 bottom-24 w-20 h-[93px] clip-hex bg-gold/6 hidden lg:block" aria-hidden="true" />
+        {/* CTA button */}
+        <Link
+          href="#signup"
+          className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
+        >
+          Rejoindre la ruche →
+        </Link>
+
+        {/* Early access note */}
+        <p className="text-white/30 text-sm">
+          🔒 Early Access en cours · Founding Member garanti
+        </p>
+      </section>
+
+      {/* ── APP MOCKUP ── */}
+      <section className="py-12 px-4 flex items-center justify-center overflow-visible">
+        <div
+          style={{
+            maxWidth: 300,
+            width: '100%',
+            background: '#082b44',
+            borderRadius: 36,
+            border: '2px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 40px 80px rgba(0,0,0,0.5)',
+            padding: '20px 16px',
+            animation: 'float 3s ease-in-out infinite',
+          }}
+        >
+          {/* Status bar */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: 12,
+              padding: '0 4px',
+            }}
+          >
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>9:41</span>
+            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: 700, letterSpacing: -0.5 }}>
+              Beez
+            </span>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>●●●</span>
+          </div>
+
+          {/* Card 1 — Welcome */}
+          <MockCard>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+              <MockHex initial="M" gradient="linear-gradient(135deg,#ebaf57,#d4912a)" />
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
+                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Martin</span>
+                  <span style={{ background: 'rgba(235,175,87,0.15)', border: '1px solid rgba(235,175,87,0.4)', color: '#ebaf57', fontSize: 9, padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>
+                    ✦ Founding Member #001
+                  </span>
+                </div>
+                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10 }}>FlowDesk · À l'instant</span>
+              </div>
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, marginBottom: 6, lineHeight: 1.4 }}>
+              Vient de rejoindre la ruche 🐝
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, marginBottom: 6, lineHeight: 1.4 }}>
+              Souhaitez la bienvenue à Martin, fondateur de FlowDesk !
+            </p>
+            <div style={{ display: 'flex', gap: 12, color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>
+              <span>🍯 14</span>
+              <span>💬 6</span>
+            </div>
+          </MockCard>
+
+          {/* Card 2 — Milestone */}
+          <MockCard>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+              <MockHex initial="B" gradient="linear-gradient(135deg,#f472b6,#ef4444)" />
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Blop 🚀</span>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>· 1h</span>
+                </div>
+                <span style={{ background: 'rgba(235,175,87,0.12)', color: '#ebaf57', fontSize: 9, padding: '1px 6px', borderRadius: 3, fontWeight: 600 }}>
+                  250K€ levés
+                </span>
+              </div>
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, marginBottom: 4, lineHeight: 1.4 }}>
+              Première levée de fonds 🎉
+            </p>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, lineHeight: 1.4 }}>
+              250 000€ en pré-seed. Merci aux 3 business angels.
+            </p>
+          </MockCard>
+
+          {/* Card 3 — Help */}
+          <MockCard>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+              <MockHex initial="T" gradient="linear-gradient(135deg,#60a5fa,#3b82f6)" />
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Thibault</span>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>· Nexio</span>
+                </div>
+                <span style={{ background: 'rgba(251,146,60,0.15)', border: '1px solid rgba(251,146,60,0.3)', color: '#fb923c', fontSize: 9, padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>
+                  🙋 Aide
+                </span>
+              </div>
+            </div>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, marginBottom: 8, lineHeight: 1.4 }}>
+              Comment créer ma chaîne YouTube ?
+            </p>
+            <div style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', fontSize: 10, padding: '5px 10px', borderRadius: 6, textAlign: 'center' }}>
+              💬 Répondre
+            </div>
+          </MockCard>
+        </div>
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto" aria-labelledby="features-heading">
+      <section className="py-20 px-4 sm:px-6 max-w-4xl mx-auto" aria-labelledby="features-heading">
         <div className="mb-12 text-center">
           <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">
             Pourquoi Beez
@@ -214,131 +265,39 @@ export default async function LandingPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FeatureCard
-            icon={<IconBolt />}
+            icon="🏗️"
             title="Build in public"
-            description="Partage ton parcours — les wins ET les galères. La transparence crée la confiance et l'audience."
+            description="Partage ton parcours en temps réel. Wins, galères, pivots. La vraie vie d'un entrepreneur."
           />
           <FeatureCard
-            icon={<IconTarget />}
+            icon="🔔"
             title="Matching passif"
-            description="Déclare ce que tu cherches une fois. Beez te notifie quand quelqu'un correspond. Pas de prospection, juste de la pertinence."
+            description="Dis ce que tu cherches une fois. Beez te notifie quand le bon profil apparaît."
           />
           <FeatureCard
-            icon={<IconUsers />}
+            icon="🤝"
             title="Intelligence collective"
-            description="Des conseils de pairs qui ont vécu les mêmes problèmes. Mentors, investisseurs, co-fondateurs — tous là pour s'entraider."
+            description="Pose tes questions à ceux qui sont passés par là. Conseils vrais, pas de bullshit."
           />
           <FeatureCard
-            icon={<IconShield />}
-            title="Zéro bullshit"
-            description="Pas de personal branding vide, pas de posts formatés pour l'algorithme. Authentique, brut, direct."
+            icon="✦"
+            title="Founding Members"
+            description="Les 150 premiers inscrits obtiennent un statut permanent et des avantages Pro à vie."
           />
         </div>
-      </section>
-
-      {/* ── SOCIAL PROOF ── */}
-      <section className="py-16 px-4 sm:px-6 bg-navy-950 border-y border-white/5" aria-labelledby="proof-heading">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-12">
-            {/* Member count */}
-            <div>
-              <div className="font-heading font-extrabold text-5xl text-gradient">
-                {memberCount > 0
-                  ? memberCount.toLocaleString('fr-FR')
-                  : '—'}
-              </div>
-              <p className="text-white/50 text-sm mt-1">membres fondateurs</p>
-            </div>
-
-            <div className="hidden sm:block w-px h-16 bg-white/10" aria-hidden="true" />
-
-            {/* Founding member */}
-            <div className="text-left max-w-xs">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-gold text-sm font-bold" aria-hidden="true">✦</span>
-                <h2
-                  id="proof-heading"
-                  className="font-heading font-bold text-white text-lg"
-                >
-                  Founding Member
-                </h2>
-              </div>
-              <p className="text-white/50 text-sm leading-relaxed">
-                Les premiers inscrits obtiennent un statut permanent et des
-                avantages exclusifs à vie sur la plateforme.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS ── */}
-      <section className="py-20 px-4 sm:px-6 max-w-4xl mx-auto" aria-labelledby="how-heading">
-        <div className="mb-12 text-center">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">
-            Comment ça marche
-          </p>
-          <h2
-            id="how-heading"
-            className="font-heading font-bold text-3xl sm:text-4xl text-white"
-          >
-            Simple. Intentionnel. Efficace.
-          </h2>
-        </div>
-
-        <ol className="relative space-y-0" aria-label="Étapes pour rejoindre Beez">
-          {[
-            {
-              n: '01',
-              title: 'Crée ton profil',
-              desc: 'Qui tu es, où tu en es, ce que tu cherches. Deux minutes, pas un CV.',
-            },
-            {
-              n: '02',
-              title: 'Déclare tes intentions',
-              desc: "Co-fondateur ? Investisseur ? Dev ? Beta testeurs ? Beez s'occupe du matching en arrière-plan.",
-            },
-            {
-              n: '03',
-              title: 'Dis bonjour à la ruche',
-              desc: 'Ton premier post — où tu en es, ce que tu construis. La communauté répond.',
-            },
-            {
-              n: '04',
-              title: 'Construis en public',
-              desc: "Partage tes victoires, tes erreurs, tes questions. C'est ça qui crée de vraies connexions.",
-            },
-          ].map(({ n, title, desc }, i) => (
-            <li key={n} className="flex gap-6 pb-12 relative">
-              {i < 3 && (
-                <div
-                  className="absolute left-[23px] top-12 bottom-0 w-px bg-white/8"
-                  aria-hidden="true"
-                />
-              )}
-              <div className="shrink-0 w-12 h-12 border border-gold/30 flex items-center justify-center bg-navy">
-                <span className="font-mono text-gold font-bold text-sm">{n}</span>
-              </div>
-              <div className="pt-2">
-                <h3 className="font-heading font-semibold text-white text-lg mb-1">
-                  {title}
-                </h3>
-                <p className="text-white/50 text-sm leading-relaxed">{desc}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
       </section>
 
       {/* ── PRICING ── */}
-      <section className="py-20 px-4 sm:px-6 bg-navy-950 border-t border-white/5" aria-labelledby="pricing-heading">
-        <div className="max-w-5xl mx-auto">
+      <section
+        className="py-20 px-4 sm:px-6"
+        style={{ background: 'rgba(8,30,50,0.7)', borderTop: '1px solid rgba(255,255,255,0.05)' }}
+        aria-labelledby="pricing-heading"
+      >
+        <div className="max-w-3xl mx-auto">
           <div className="mb-12 text-center">
-            <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">
-              Tarifs
-            </p>
+            <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">Tarifs</p>
             <h2
               id="pricing-heading"
               className="font-heading font-bold text-3xl sm:text-4xl text-white mb-3"
@@ -346,44 +305,142 @@ export default async function LandingPage() {
               Commence gratuitement.
             </h2>
             <p className="text-white/40 text-sm">
-              Les prix arrivent bientôt. Les Founding Members gardent l'accès gratuit à vie.
+              Les Founding Members ont le Pro gratuit à vie.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/5">
-            <PricingCard
-              tier="Free"
-              subtitle="Pour commencer"
-              features={[
-                'Profil personnel',
-                'Accès au feed communauté',
-                'Matching de base',
-                'Premier post public',
-              ]}
-            />
-            <PricingCard
-              tier="Pro"
-              subtitle="Pour les projets sérieux"
-              features={[
-                'Profil startup complet',
-                'Vérification SIRET',
-                'Matching avancé débloqué',
-                'Notifications de matching',
-                'Badge Pro visible',
-              ]}
-              highlighted
-            />
-            <PricingCard
-              tier="Startup Certified"
-              subtitle="Pour les startups qui veulent être vues"
-              features={[
-                'Page startup premium',
-                'Placement featured',
-                'Analytics avancés',
-                'Support prioritaire',
-                'Tout ce qui est Pro',
-              ]}
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+
+            {/* Free */}
+            <div className="card p-6 space-y-5">
+              <div>
+                <h3 className="font-heading font-bold text-white text-xl mb-1">
+                  Starter ou Founder
+                </h3>
+                <p className="text-white/50 text-sm">Gratuit · Pour toujours</p>
+              </div>
+
+              {/* Profile type explainers */}
+              <div className="space-y-3">
+                <div
+                  style={{
+                    border: '1px solid rgba(235,175,87,0.2)',
+                    borderRadius: 8,
+                    padding: '10px 12px',
+                    background: 'rgba(235,175,87,0.04)',
+                  }}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span>🌱</span>
+                    <span className="text-white text-sm font-semibold">Starter</span>
+                  </div>
+                  <p className="text-white/50 text-xs leading-relaxed">
+                    Tu n'as pas encore de business mais tu veux partager, tester tes idées, apprendre.
+                  </p>
+                </div>
+                <div
+                  style={{
+                    border: '1px solid rgba(235,175,87,0.2)',
+                    borderRadius: 8,
+                    padding: '10px 12px',
+                    background: 'rgba(235,175,87,0.04)',
+                  }}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span>🐝</span>
+                    <span className="text-white text-sm font-semibold">Founder</span>
+                  </div>
+                  <p className="text-white/50 text-xs leading-relaxed">
+                    Tu as déjà un business avec SIRET. Tu veux de la visibilité et des connexions.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature list */}
+              <ul className="space-y-2.5">
+                {[
+                  { text: 'Profil entrepreneur (Starter ou Founder)', ok: true },
+                  { text: 'Accès à la communauté', ok: true },
+                  { text: 'Posts et interactions', ok: true },
+                  { text: 'Badge Founding Member (150 premiers)', ok: true },
+                  { text: 'Matching passif par IA', ok: false },
+                  { text: 'Page entreprise rattachée', ok: false },
+                  { text: 'Fonctionnalités Pro', ok: false },
+                ].map(({ text, ok }) => (
+                  <li key={text} className="flex items-start gap-2 text-sm">
+                    <span
+                      className={`shrink-0 mt-0.5 ${ok ? 'text-gold' : 'text-white/20'}`}
+                      aria-hidden="true"
+                    >
+                      {ok ? '✦' : '✗'}
+                    </span>
+                    <span className={ok ? 'text-white/70' : 'text-white/25 line-through'}>
+                      {text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href="/onboarding"
+                className="inline-flex items-center justify-center gap-2 w-full bg-gold text-navy-900 font-bold rounded-beez px-6 py-3.5 text-sm transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              >
+                Créer mon profil gratuit →
+              </Link>
+            </div>
+
+            {/* Pro */}
+            <div className="card p-6 space-y-5 relative" style={{ borderColor: 'rgba(235,175,87,0.4)' }}>
+              <div
+                className="absolute -top-3 left-6 text-gold text-xs font-bold px-3 py-1 uppercase tracking-wider"
+                style={{
+                  background: '#082b44',
+                  border: '1px solid rgba(235,175,87,0.4)',
+                  borderRadius: 6,
+                }}
+              >
+                Bientôt disponible
+              </div>
+
+              <div>
+                <h3 className="font-heading font-bold text-white text-xl mb-1">Pro</h3>
+                <p className="text-white/50 text-sm">4,99€/mois · Résiliable à tout moment</p>
+              </div>
+
+              <ul className="space-y-2.5">
+                {[
+                  'Tout ce qui est gratuit',
+                  'Matching passif par IA',
+                  'Création de page(s) entreprise',
+                  'Page entreprise liée à ton profil',
+                  'Notifications de matching avancées',
+                  'Badge Pro visible sur ton profil',
+                  'Accès prioritaire aux nouvelles features',
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm">
+                    <span className="text-gold shrink-0 mt-0.5" aria-hidden="true">✦</span>
+                    <span className="text-white/70">{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                disabled
+                className="w-full inline-flex items-center justify-center font-bold rounded-beez px-6 py-3.5 text-sm cursor-not-allowed opacity-40"
+                style={{
+                  background: 'rgba(235,175,87,0.12)',
+                  color: '#ebaf57',
+                  border: '1px solid rgba(235,175,87,0.3)',
+                }}
+              >
+                Bientôt disponible
+              </button>
+
+              <p className="text-white/30 text-xs text-center">
+                Les Founding Members ont le Pro gratuit à vie.
+              </p>
+            </div>
+
           </div>
         </div>
       </section>
@@ -395,25 +452,16 @@ export default async function LandingPage() {
         aria-labelledby="signup-heading"
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy via-transparent to-navy" />
-
         <div className="relative max-w-lg mx-auto text-center">
-          <div className="inline-flex items-center gap-2 border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-medium text-gold uppercase tracking-widest mb-6">
-            <IconLock />
-            Accès limité
-          </div>
-
           <h2
             id="signup-heading"
             className="font-heading font-extrabold text-3xl sm:text-4xl text-white mb-4 leading-tight"
           >
             Rejoins la ruche maintenant.
           </h2>
-
           <p className="text-white/50 mb-10 text-sm sm:text-base leading-relaxed">
-            Gratuit. Deux minutes. Tu seras notifié en premier quand l'app sera
-            disponible.
+            Deux minutes. Gratuit. Tu seras parmi les premiers.
           </p>
-
           <Link
             href="/onboarding"
             className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-10 py-4 text-lg transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
@@ -423,7 +471,6 @@ export default async function LandingPage() {
               <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
             </svg>
           </Link>
-
           <p className="mt-4 text-white/25 text-xs">
             Aucune CB requise · Founding Member garanti
           </p>
@@ -451,6 +498,7 @@ export default async function LandingPage() {
           </div>
         </div>
       </footer>
+
     </div>
   )
 }

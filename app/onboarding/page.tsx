@@ -382,33 +382,95 @@ function Step1({
 }
 
 // ─── Step 2 ───────────────────────────────────────────────────────────────────
+const PRIMARY_TYPE_CARDS = [
+  {
+    value: 'futur_entrepreneur' as const,
+    icon: '🌱',
+    title: 'Starter',
+    description: "Je n'ai pas encore de business mais je veux partager mes idées, apprendre et tester.",
+  },
+  {
+    value: 'entrepreneur_actif' as const,
+    icon: '🐝',
+    title: 'Founder',
+    description: "J'ai déjà un business avec SIRET. Je veux de la visibilité et des connexions.",
+  },
+]
+
+const SECONDARY_TYPES = profileTypeValues.filter(
+  (v) => v !== 'futur_entrepreneur' && v !== 'entrepreneur_actif'
+)
+
 function Step2({
   selected,
   onToggle,
+  onSetPrimary,
 }: {
   selected: (typeof profileTypeValues)[number][]
   onToggle: (value: (typeof profileTypeValues)[number]) => void
+  onSetPrimary: (value: 'futur_entrepreneur' | 'entrepreneur_actif') => void
 }) {
+  const primarySelected = selected.find(
+    (v) => v === 'futur_entrepreneur' || v === 'entrepreneur_actif'
+  ) ?? null
+
   return (
-    <div>
-      <p className="text-white/50 text-sm mb-5">
-        Sélectionne tout ce qui te correspond. Tu pourras modifier plus tard.
-      </p>
-      <div className="flex flex-wrap gap-2.5" role="group" aria-label="Type de profil">
-        {profileTypeValues.map((value) => (
-          <PillTag
-            key={value}
-            label={profileTypeLabels[value]}
-            selected={selected.includes(value)}
-            onToggle={() => onToggle(value)}
-          />
-        ))}
+    <div className="space-y-5">
+      {/* Primary cards */}
+      <div className="space-y-3" role="group" aria-label="Choix principal">
+        {PRIMARY_TYPE_CARDS.map(({ value, icon, title, description }) => {
+          const isSelected = primarySelected === value
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => onSetPrimary(value)}
+              style={
+                isSelected
+                  ? { borderColor: '#ebaf57', background: 'rgba(235,175,87,0.06)' }
+                  : { borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)' }
+              }
+              className="w-full text-left p-4 rounded-beez border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl shrink-0 leading-none mt-0.5">{icon}</span>
+                <div>
+                  <p className={`font-heading font-bold text-base mb-1 ${isSelected ? 'text-gold' : 'text-white'}`}>
+                    {title}
+                  </p>
+                  <p className="text-white/50 text-sm leading-relaxed">{description}</p>
+                </div>
+                {isSelected && (
+                  <span className="ml-auto shrink-0 text-gold text-sm mt-0.5" aria-hidden="true">✦</span>
+                )}
+              </div>
+            </button>
+          )
+        })}
       </div>
-      {selected.length === 0 && (
-        <p className="text-red-400 text-sm mt-3" role="alert">
-          Sélectionne au moins un profil.
+
+      {!primarySelected && (
+        <p className="text-red-400 text-xs" role="alert">
+          Sélectionne Starter ou Founder pour continuer.
         </p>
       )}
+
+      {/* Secondary pills */}
+      <div>
+        <p className="text-white/30 text-xs font-medium uppercase tracking-[0.12em] mb-3">
+          Tu peux aussi être…
+        </p>
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Profils secondaires">
+          {SECONDARY_TYPES.map((value) => (
+            <PillTag
+              key={value}
+              label={profileTypeLabels[value]}
+              selected={selected.includes(value)}
+              onToggle={() => onToggle(value)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -596,6 +658,21 @@ export default  function OnboardingPage() {
     []
   )
 
+  const setPrimaryType = useCallback(
+    (value: 'futur_entrepreneur' | 'entrepreneur_actif') => {
+      setData((prev) => ({
+        ...prev,
+        types: [
+          value,
+          ...prev.types.filter(
+            (t) => t !== 'futur_entrepreneur' && t !== 'entrepreneur_actif'
+          ),
+        ],
+      }))
+    },
+    []
+  )
+
   // Validate current step before advancing
   const validateAndAdvance = () => {
     if (phase === 1) {
@@ -612,6 +689,8 @@ export default  function OnboardingPage() {
       if (!result.success) return
       setPhase(2)
     } else if (phase === 2) {
+      const hasPrimary = data.types.includes('futur_entrepreneur') || data.types.includes('entrepreneur_actif')
+      if (!hasPrimary) return
       const result = step2Schema.safeParse({ types: data.types })
       if (!result.success) return
       setPhase(3)
@@ -824,7 +903,7 @@ export default  function OnboardingPage() {
                 <p className="text-white/40 text-sm mb-6">
                   Sélectionne ton ou tes profils.
                 </p>
-                <Step2 selected={data.types} onToggle={toggleType} />
+                <Step2 selected={data.types} onToggle={toggleType} onSetPrimary={setPrimaryType} />
               </>
             )}
 
