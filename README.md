@@ -54,7 +54,53 @@ Dans ton projet Supabase → **Settings → API** :
 
 ---
 
-## 3. Configurer Resend (emails de bienvenue)
+## 3. Configurer Supabase Storage (photos de profil)
+
+Les photos de profil sont stockées dans un bucket Supabase Storage appelé **`avatars`**.
+
+### Créer le bucket
+
+1. Dashboard Supabase → **Storage → New bucket**
+2. Nom : `avatars`
+3. Coche **Public bucket** (les URLs d'avatar sont publiques)
+4. Clique **Save**
+
+### Configurer les politiques RLS
+
+Dans **Storage → Policies → avatars**, ajoute deux politiques :
+
+**Lecture publique :**
+```sql
+CREATE POLICY "Public read access"
+ON storage.objects FOR SELECT
+USING ( bucket_id = 'avatars' );
+```
+
+**Upload par l'utilisateur dans son propre dossier :**
+```sql
+CREATE POLICY "Authenticated users can upload their own avatar"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (
+  bucket_id = 'avatars'
+  AND storage.foldername(name)[1] = auth.uid()::text
+);
+```
+
+**Mise à jour (upsert) :**
+```sql
+CREATE POLICY "Authenticated users can update their own avatar"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (
+  bucket_id = 'avatars'
+  AND storage.foldername(name)[1] = auth.uid()::text
+);
+```
+
+---
+
+## 4. Configurer Resend (emails de bienvenue)
 
 1. Crée un compte sur [resend.com](https://resend.com)
 2. Ajoute et vérifie ton domaine (`joinbeez.com`) dans **Domains**
