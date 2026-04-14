@@ -302,7 +302,7 @@ export default async function LandingPage() {
             {
               n: '02',
               title: 'Déclare tes intentions',
-              desc: 'Co-fondateur ? Investisseur ? Dev ? Beta testeurs ? Beez s&apos;occupe du matching en arrière-plan.',
+              desc: "Co-fondateur ? Investisseur ? Dev ? Beta testeurs ? Beez s'occupe du matching en arrière-plan.",
             },
             {
               n: '03',
@@ -312,7 +312,7 @@ export default async function LandingPage() {
             {
               n: '04',
               title: 'Construis en public',
-              desc: 'Partage tes victoires, tes erreurs, tes questions. C&apos;est ça qui crée de vraies connexions.',
+              desc: "Partage tes victoires, tes erreurs, tes questions. C'est ça qui crée de vraies connexions.",
             },
           ].map(({ n, title, desc }, i) => (
             <li key={n} className="flex gap-6 pb-12 relative">
