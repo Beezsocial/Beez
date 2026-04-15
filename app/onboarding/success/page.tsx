@@ -33,6 +33,7 @@ export default async function SuccessPage() {
 
   const { first_name: firstName, member_number: memberNumber } = profile
   const isFoundingMember = memberNumber != null && memberNumber <= 150
+  const paddedNumber = memberNumber != null ? String(memberNumber).padStart(3, '0') : null
 
   return (
     <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
@@ -81,7 +82,7 @@ export default async function SuccessPage() {
                   borderRadius: 8,
                 }}
               >
-                <span className="text-gold font-bold text-sm">✦ Founding Member #{memberNumber}</span>
+                <span className="text-gold font-bold text-sm">✦ Founding Member #{paddedNumber}</span>
               </div>
               <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
                 Tu fais partie des 150 Founding Members. Accès Pro gratuit à vie.
@@ -98,7 +99,7 @@ export default async function SuccessPage() {
                     borderRadius: 8,
                   }}
                 >
-                  <span className="text-white/50 text-sm">Membre #{memberNumber}</span>
+                  <span className="text-white/50 text-sm">Membre #{paddedNumber}</span>
                 </div>
               )}
               <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">

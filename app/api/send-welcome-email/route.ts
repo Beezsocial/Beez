@@ -31,23 +31,24 @@ export async function POST(request: Request) {
 
     // ── Email content ────────────────────────────────────────────────────────
     const isFoundingMember = memberNumber != null && memberNumber <= 150
+    const paddedNumber = memberNumber != null ? String(memberNumber).padStart(3, '0') : null
 
     const subject = isFoundingMember
-      ? `🐝 Bienvenue Founding Member #${memberNumber} !`
+      ? `🐝 Bienvenue Founding Member #${paddedNumber} !`
       : `Bienvenue dans la ruche, ${firstName} 🐝`
 
     const memberBadgeHtml = isFoundingMember
       ? `<div style="display:inline-block;margin:0 0 24px;padding:8px 16px;background:rgba(235,175,87,0.12);border:1px solid rgba(235,175,87,0.4);border-radius:6px;">
-          <span style="color:#ebaf57;font-weight:700;font-size:14px;">✦ Founding Member #${memberNumber}</span>
+          <span style="color:#ebaf57;font-weight:700;font-size:14px;">✦ Founding Member #${paddedNumber}</span>
         </div>`
       : memberNumber != null
         ? `<div style="display:inline-block;margin:0 0 24px;padding:6px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;">
-            <span style="color:rgba(255,255,255,0.5);font-size:13px;">Membre #${memberNumber}</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:13px;">Membre #${paddedNumber}</span>
           </div>`
         : ''
 
     const memberBodyText = isFoundingMember
-      ? `Tu fais partie des 150 premiers membres de Beez. Tu as l'accès Pro gratuit à vie. Ton badge : ✦ Founding Member #${memberNumber}`
+      ? `Tu fais partie des 150 premiers membres de Beez. Tu as l'accès Pro gratuit à vie. Ton badge : ✦ Founding Member #${paddedNumber}`
       : 'Bienvenue dans la ruche !'
 
     const html = `
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
               ${memberBadgeHtml}
               ${isFoundingMember ? `
               <p style="color:#ebaf57;font-weight:bold;margin:16px 0 8px;">🎉 Félicitations !</p>
-              <p style="color:#cccccc;margin:0 0 16px;font-size:15px;line-height:1.6;">Tu fais partie des 150 Founding Members de Beez. Ce statut est permanent et te donne accès à la version Pro gratuitement, à vie. Quoi qu'il arrive, tu ne paieras jamais pour Beez.</p>
+              <p style="color:#cccccc;margin:0 0 16px;font-size:15px;line-height:1.6;">Tu fais partie des 150 premiers membres fondateurs de Beez et ton badge porte le numéro <strong style="color:#ebaf57;">#${paddedNumber}</strong>.<br/>Beez Pro sera gratuit à vie pour toi !<br/>Merci de ta confiance. 🐝</p>
               ` : `<p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">${memberBodyText}</p>`}
               <p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
                 L'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.
@@ -110,7 +111,7 @@ export async function POST(request: Request) {
 `
 
     const text = isFoundingMember
-      ? `Bienvenue dans la ruche, ${firstName} ✦\n\n🎉 Félicitations ! Tu fais partie des 150 Founding Members de Beez. Ce statut est permanent et te donne accès à la version Pro gratuitement, à vie. Quoi qu'il arrive, tu ne paieras jamais pour Beez.\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
+      ? `Bienvenue dans la ruche, ${firstName} ✦\n\n🎉 Félicitations ! Tu fais partie des 150 premiers membres fondateurs de Beez et ton badge porte le numéro #${paddedNumber}.\nBeez Pro sera gratuit à vie pour toi !\nMerci de ta confiance. 🐝\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
       : `Bienvenue dans la ruche, ${firstName} ✦\n\nBienvenue dans la ruche !\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
 
     // ── Send ─────────────────────────────────────────────────────────────────

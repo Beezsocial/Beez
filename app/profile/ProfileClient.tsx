@@ -158,7 +158,7 @@ function PillToggle({
           : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }
       }
       className={[
-        'px-3 py-1.5 text-xs font-medium border rounded-sm transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+        'px-3 py-1.5 text-xs font-medium border rounded-[10px] transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold',
         !selected && !disabled ? 'hover:border-gold/40 hover:text-white/80' : '',
         disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
       ].join(' ')}
@@ -202,6 +202,29 @@ function EditSection({ title, children }: { title: string; children: ReactNode }
 const inputBg = { background: 'rgba(255,255,255,0.04)' } as const
 const inputClass =
   'w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/25 px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)]'
+
+const PRIMARY_TYPE_CARDS = [
+  {
+    value: 'futur_entrepreneur' as const,
+    icon: '🌱',
+    title: 'Starter',
+    description: "Je n'ai pas encore de business mais je veux partager mes idées, apprendre et tester.",
+  },
+  {
+    value: 'entrepreneur_actif' as const,
+    icon: '🐝',
+    title: 'Founder',
+    description: "J'ai déjà un business avec SIRET. Je veux de la visibilité et des connexions.",
+  },
+]
+
+const SECONDARY_TYPE_VALUES = profileTypeValues.filter(
+  (v) => v !== 'futur_entrepreneur' && v !== 'entrepreneur_actif'
+)
+
+function padMember(n: number) {
+  return String(n).padStart(3, '0')
+}
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function ProfileClient({ profile, types, seeking }: Props) {
@@ -275,6 +298,13 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
     setEditSeeking((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     )
+  }
+
+  function setPrimaryTypeInEdit(value: 'futur_entrepreneur' | 'entrepreneur_actif') {
+    setEditTypes((prev) => [
+      value,
+      ...prev.filter((t) => t !== 'futur_entrepreneur' && t !== 'entrepreneur_actif'),
+    ])
   }
 
   function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
@@ -426,7 +456,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
       {/* Identity block */}
       <div className="mb-6">
         {/* Avatar + Tile row — avatar overlaps tile from left */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', minHeight: 83, marginBottom: 10 }}>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', minHeight: current.memberNumber != null && current.memberNumber <= 150 ? 110 : 83, marginBottom: 10 }}>
           {/* Gold border + dark tile (absolutely positioned behind avatar) */}
           <div style={{ position: 'absolute', left: 32, right: 0, top: 0, bottom: 0, zIndex: 1 }}>
             {/* Gold border layer */}
@@ -448,11 +478,24 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
               alignItems: 'center',
             }}>
               <div style={{ paddingLeft: 80, paddingRight: 48 }}>
-                <h1 className="font-heading font-bold text-lg text-white leading-tight">
-                  {current.firstName} {current.lastName}
-                </h1>
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <h1 className="font-heading font-bold text-lg text-white leading-tight">
+                    {current.firstName} {current.lastName}
+                  </h1>
+                  {currentTypes.includes('entrepreneur_actif') && (
+                    <span className="text-sm text-white/60 font-medium">🐝 Founder</span>
+                  )}
+                  {!currentTypes.includes('entrepreneur_actif') && currentTypes.includes('futur_entrepreneur') && (
+                    <span className="text-sm text-white/60 font-medium">🌱 Starter</span>
+                  )}
+                </div>
                 {current.city && (
                   <p className="text-white/50 text-sm mt-0.5">{current.city}</p>
+                )}
+                {current.memberNumber != null && current.memberNumber <= 150 && (
+                  <p className="text-xs font-semibold mt-0.5" style={{ color: '#ebaf57' }}>
+                    ✦ Founding Member #{padMember(current.memberNumber)}
+                  </p>
                 )}
               </div>
             </div>
@@ -468,9 +511,6 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                   onFileSelect={handleFileSelect}
                   disabled={saving}
                 />
-                <span className="text-[10px] text-white/30 leading-tight">
-                  Changer la photo
-                </span>
                 {avatarError && (
                   <p className="text-[10px] text-red-400 max-w-[96px]">{avatarError}</p>
                 )}
@@ -556,6 +596,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                   onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
                   placeholder="Paris, Lyon…"
                   disabled={saving}
+                  style={inputBg}
                   className={inputClass}
                 />
               </Field>
@@ -575,8 +616,42 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
 
             {/* Profile types */}
             <EditSection title="Je suis">
+              {/* Primary: Starter / Founder cards */}
+              <div className="space-y-2 mb-3">
+                {PRIMARY_TYPE_CARDS.map(({ value, icon, title, description }) => {
+                  const isSelected = editTypes.includes(value)
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setPrimaryTypeInEdit(value)}
+                      disabled={saving}
+                      style={
+                        isSelected
+                          ? { borderColor: '#ebaf57', background: 'rgba(235,175,87,0.06)' }
+                          : { borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)' }
+                      }
+                      className="w-full text-left p-3 rounded-beez border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-xl shrink-0 leading-none mt-0.5">{icon}</span>
+                        <div>
+                          <p className={`font-heading font-bold text-sm mb-0.5 ${isSelected ? 'text-gold' : 'text-white'}`}>
+                            {title}
+                          </p>
+                          <p className="text-white/40 text-xs leading-relaxed">{description}</p>
+                        </div>
+                        {isSelected && (
+                          <span className="ml-auto shrink-0 text-gold text-sm mt-0.5" aria-hidden="true">✦</span>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+              {/* Secondary types */}
               <div className="flex flex-wrap gap-2">
-                {profileTypeValues.map((value) => (
+                {SECONDARY_TYPE_VALUES.map((value) => (
                   <PillToggle
                     key={value}
                     label={profileTypeLabels[value]}

@@ -4,6 +4,7 @@ import CarouselHero from '@/components/ui/CarouselHero'
 import NavHeader from '@/components/ui/NavHeader'
 import BeezWord from '@/components/ui/BeezWord'
 import MockupCarousel from '@/components/ui/MockupCarousel'
+import MemberCounter from '@/components/ui/MemberCounter'
 
 // ─── Feature Card ─────────────────────────────────────────────────────────────
 function FeatureCard({
@@ -325,6 +326,7 @@ export default function LandingPage() {
           <p className="mt-4 text-white/25 text-xs">
             Aucune CB requise · Founding Member garanti
           </p>
+          <MemberCounter />
         </div>
       </section>
 
