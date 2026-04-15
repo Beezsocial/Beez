@@ -32,7 +32,8 @@ export default function MemberCounter() {
     const supabase = createClient()
 
     async function fetchCount() {
-      const { count: c } = await (supabase as any)
+      // Uses the anon key — works for both authenticated and unauthenticated users
+      const { count: c } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
       if (typeof c === 'number') {
