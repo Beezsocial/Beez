@@ -219,6 +219,11 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
   const [serverError, setServerError] = useState('')
   const [success, setSuccess] = useState(false)
 
+  // ── Delete account ──
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
+
   // ── Edit form ──
   const [form, setForm] = useState({
     firstName: profile.firstName,
@@ -393,81 +398,114 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
     }
   }
 
+  async function handleDeleteAccount() {
+    setDeleting(true)
+    setDeleteError('')
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Session expirée. Recharge la page.')
+
+      const db = supabase as any
+      await db.from('first_posts').delete().eq('user_id', user.id)
+      await db.from('seeking').delete().eq('user_id', user.id)
+      await db.from('profile_types').delete().eq('user_id', user.id)
+      const { error: profileError } = await db.from('profiles').delete().eq('user_id', user.id)
+      if (profileError) throw profileError
+
+      await supabase.auth.signOut()
+      router.replace('/')
+    } catch (err: unknown) {
+      setDeleteError(err instanceof Error ? err.message : 'Une erreur est survenue.')
+      setDeleting(false)
+    }
+  }
+
   // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <>
       {/* Identity block */}
-      <div className="flex items-start gap-5 mb-8">
-        {isEditing ? (
-          <div className="flex flex-col items-center gap-1.5">
-            <EditableHexAvatar
-              firstName={form.firstName || current.firstName}
-              lastName={form.lastName || current.lastName}
-              displayUrl={avatarPreview ?? current.avatarUrl}
-              onFileSelect={handleFileSelect}
-              disabled={saving}
+      <div className="mb-6">
+        {/* Avatar */}
+        <div className="mb-3">
+          {isEditing ? (
+            <div className="flex flex-col items-start gap-1.5">
+              <EditableHexAvatar
+                firstName={form.firstName || current.firstName}
+                lastName={form.lastName || current.lastName}
+                displayUrl={avatarPreview ?? current.avatarUrl}
+                onFileSelect={handleFileSelect}
+                disabled={saving}
+              />
+              <span className="text-[10px] text-white/30 leading-tight">
+                Changer la photo
+              </span>
+              {avatarError && (
+                <p className="text-[10px] text-red-400 max-w-[96px]">{avatarError}</p>
+              )}
+            </div>
+          ) : (
+            <HexAvatar
+              firstName={current.firstName}
+              lastName={current.lastName}
+              avatarUrl={current.avatarUrl}
             />
-            <span className="text-[10px] text-white/30 text-center leading-tight">
-              Changer<br />la photo
-            </span>
-            {avatarError && (
-              <p className="text-[10px] text-red-400 text-center max-w-[96px]">{avatarError}</p>
-            )}
-          </div>
-        ) : (
-          <HexAvatar
-            firstName={current.firstName}
-            lastName={current.lastName}
-            avatarUrl={current.avatarUrl}
-          />
-        )}
+          )}
+        </div>
 
-        <div className="flex-1 min-w-0 pt-1">
+        {/* Name / city tile — gold glow, half-hex right edge */}
+        <div
+          style={{
+            filter: 'drop-shadow(0 0 10px rgba(235,175,87,0.12)) drop-shadow(0 0 24px rgba(235,175,87,0.06))',
+            marginBottom: 10,
+          }}
+        >
           <div
             style={{
-              background: '#0D2E4A',
-              padding: '10px 32px 10px 16px',
-              clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%)',
-              display: 'inline-block',
-              marginBottom: 4,
+              background: '#0a2540',
+              padding: '14px 44px 14px 20px',
+              clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
+              borderRadius: '10px 0 0 10px',
+              border: '1px solid rgba(235,175,87,0.3)',
             }}
           >
-            <h1 className="font-heading font-bold text-xl text-white leading-tight">
+            <h1 className="font-heading font-bold text-lg text-white leading-tight">
               {current.firstName} {current.lastName}
             </h1>
+            {current.city && (
+              <p className="text-white/50 text-sm mt-0.5">{current.city}</p>
+            )}
           </div>
-          {current.city && (
-            <p className="text-white/40 text-sm mt-0.5">{current.city}</p>
-          )}
-          {current.memberNumber != null && current.memberNumber <= 150 ? (
-            <div
-              className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1"
-              style={{
-                background: 'rgba(235,175,87,0.12)',
-                border: '1px solid rgba(235,175,87,0.4)',
-                borderRadius: 6,
-              }}
-            >
-              <span className="text-gold text-xs" aria-hidden="true">✦</span>
-              <span className="text-gold text-xs font-bold tracking-wide">
-                Founding Member #{current.memberNumber}
-              </span>
-            </div>
-          ) : current.memberNumber != null ? (
-            <div
-              className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 6,
-              }}
-            >
-              <span className="text-white/40 text-xs font-medium">
-                Membre #{current.memberNumber}
-              </span>
-            </div>
-          ) : null}
         </div>
+
+        {/* Member badge */}
+        {current.memberNumber != null && current.memberNumber <= 150 ? (
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1"
+            style={{
+              background: 'rgba(235,175,87,0.12)',
+              border: '1px solid rgba(235,175,87,0.4)',
+              borderRadius: 6,
+            }}
+          >
+            <span className="text-gold text-xs" aria-hidden="true">✦</span>
+            <span className="text-gold text-xs font-bold tracking-wide">
+              Founding Member #{current.memberNumber}
+            </span>
+          </div>
+        ) : current.memberNumber != null ? (
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1"
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 6,
+            }}
+          >
+            <span className="text-white/40 text-xs font-medium">
+              Membre #{current.memberNumber}
+            </span>
+          </div>
+        ) : null}
       </div>
 
       {/* Card body */}
@@ -654,9 +692,92 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
               Modifier mon profil
             </button>
             <SignOutButton />
+            <button
+              type="button"
+              onClick={() => { setShowDeleteModal(true); setDeleteError('') }}
+              className="w-full text-xs rounded-beez py-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              style={{
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.25)',
+                background: 'transparent',
+              }}
+            >
+              Supprimer mon profil
+            </button>
           </>
         )}
       </div>
+
+      {/* Delete confirmation modal */}
+      {showDeleteModal && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.65)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+            padding: '0 16px',
+          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowDeleteModal(false) }}
+        >
+          <div
+            style={{
+              background: '#0a2540',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 10,
+              padding: '24px',
+              maxWidth: 360,
+              width: '100%',
+            }}
+          >
+            <h2 className="font-heading font-bold text-white text-base mb-2">
+              Supprimer ton profil ?
+            </h2>
+            <p className="text-white/55 text-sm leading-relaxed mb-6">
+              Es-tu sûr de vouloir supprimer ton profil ? Cette action est irréversible et supprimera toutes tes données.
+            </p>
+
+            {deleteError && (
+              <p className="text-sm text-red-400 border border-red-500/20 bg-red-500/5 px-3 py-2 mb-4" role="alert">
+                {deleteError}
+              </p>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={deleting}
+                className="flex-1 border border-white/15 text-white/60 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={deleting}
+                className="flex-1 font-bold rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+                style={{
+                  background: 'rgba(220,50,50,0.15)',
+                  border: '1px solid rgba(220,50,50,0.5)',
+                  color: 'rgb(220,80,80)',
+                }}
+              >
+                {deleting && (
+                  <svg className="animate-spin h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                )}
+                Supprimer définitivement
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

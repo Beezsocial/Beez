@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const FLAT_TOP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 
@@ -26,12 +26,12 @@ function MHex({ initial, gradient }: { initial: string; gradient: string }) {
   )
 }
 
+// Dark card — stands on white phone background
 function MCard({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{
         background: '#0a2540',
-        border: '1px solid rgba(255,255,255,0.08)',
         borderRadius: 10,
         padding: '9px 10px',
         marginBottom: 7,
@@ -42,18 +42,19 @@ function MCard({ children }: { children: React.ReactNode }) {
   )
 }
 
+// Status bar — dark text for white background
 function StatusBar({ title }: { title: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, padding: '0 2px' }}>
-      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>9:41</span>
-      <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: 700 }}>{title}</span>
-      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>●●●</span>
+      <span style={{ color: 'rgba(0,0,0,0.35)', fontSize: 10 }}>9:41</span>
+      <span style={{ color: 'rgba(0,0,0,0.65)', fontSize: 11, fontWeight: 700 }}>{title}</span>
+      <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 10 }}>●●●</span>
     </div>
   )
 }
 
 const SCREENS = [
-  // Screen 1 — Feed
+  // ── Screen 1 — Feed ──────────────────────────────────────────────────────────
   <div key="feed">
     <StatusBar title="Feed" />
     <MCard>
@@ -70,7 +71,7 @@ const SCREENS = [
       <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, lineHeight: 1.4, marginBottom: 5 }}>
         Vient de rejoindre la ruche 🐝
       </p>
-      <div style={{ display: 'flex', gap: 10, color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>
+      <div style={{ display: 'flex', gap: 10, color: 'rgba(255,255,255,0.35)', fontSize: 10 }}>
         <span>🍯 14</span><span>💬 6</span>
       </div>
     </MCard>
@@ -99,10 +100,10 @@ const SCREENS = [
     </MCard>
   </div>,
 
-  // Screen 2 — Discover
+  // ── Screen 2 — Discover ───────────────────────────────────────────────────────
   <div key="discover">
     <StatusBar title="Découvrir" />
-    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10, marginBottom: 8, textAlign: 'center' }}>Membres récents</p>
+    <p style={{ color: 'rgba(0,0,0,0.4)', fontSize: 10, marginBottom: 8, textAlign: 'center' }}>Membres récents</p>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
       {[
         { init: 'S', grad: 'linear-gradient(135deg,#a78bfa,#7c3aed)', name: 'Sophie', role: 'SaaS B2B' },
@@ -110,7 +111,7 @@ const SCREENS = [
         { init: 'L', grad: 'linear-gradient(135deg,#f59e0b,#d97706)', name: 'Léa', role: 'E-commerce' },
         { init: 'R', grad: 'linear-gradient(135deg,#fb7185,#e11d48)', name: 'Romain', role: 'Dev indep.' },
       ].map(({ init, grad, name, role }) => (
-        <div key={name} style={{ background: '#0a2540', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 8px', textAlign: 'center' }}>
+        <div key={name} style={{ background: '#0a2540', borderRadius: 10, padding: '10px 8px', textAlign: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>
             <div style={{ width: 38, height: 33, clipPath: FLAT_TOP, background: grad, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#082b44' }}>{init}</div>
           </div>
@@ -121,7 +122,7 @@ const SCREENS = [
     </div>
   </div>,
 
-  // Screen 3 — Matching
+  // ── Screen 3 — Matching ───────────────────────────────────────────────────────
   <div key="matching">
     <StatusBar title="Matching" />
     <p style={{ color: '#ebaf57', fontSize: 10, fontWeight: 700, textAlign: 'center', marginBottom: 8, letterSpacing: '0.1em', textTransform: 'uppercase' }}>✦ Nouveaux matches</p>
@@ -148,14 +149,14 @@ const SCREENS = [
     </div>
   </div>,
 
-  // Screen 4 — Profile
+  // ── Screen 4 — Profile ────────────────────────────────────────────────────────
   <div key="profile">
     <StatusBar title="Profil" />
     <div style={{ textAlign: 'center', marginBottom: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>
         <div style={{ width: 56, height: 49, clipPath: FLAT_TOP, background: 'linear-gradient(135deg,#ebaf57,#d4912a)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color: '#082b44' }}>C</div>
       </div>
-      <p style={{ color: 'white', fontSize: 13, fontWeight: 700, marginBottom: 2 }}>Clara D.</p>
+      <p style={{ color: 'rgba(0,0,0,0.85)', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>Clara D.</p>
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: 'rgba(235,175,87,0.12)', border: '1px solid rgba(235,175,87,0.3)', borderRadius: 5, padding: '2px 8px' }}>
         <span style={{ color: '#ebaf57', fontSize: 9, fontWeight: 700 }}>✦ Founding Member #042</span>
       </div>
@@ -171,7 +172,7 @@ const SCREENS = [
     </div>
   </div>,
 
-  // Screen 5 — Startup
+  // ── Screen 5 — Startup ────────────────────────────────────────────────────────
   <div key="startup">
     <StatusBar title="Entreprise" />
     <MCard>
@@ -201,7 +202,7 @@ const SCREENS = [
     </MCard>
   </div>,
 
-  // Screen 6 — Notifications
+  // ── Screen 6 — Notifications ──────────────────────────────────────────────────
   <div key="notifs">
     <StatusBar title="Notifs" />
     {[
@@ -209,17 +210,17 @@ const SCREENS = [
       { icon: '🍯', color: '#f59e0b', text: 'Paul a aimé ton post', time: '14m' },
       { icon: '💬', color: '#60a5fa', text: 'Sophie a répondu à ta question', time: '1h' },
       { icon: '✦', color: '#ebaf57', text: 'Nouveau match : Romain (Dev)', time: '2h' },
-      { icon: '🐝', color: '#ebaf57', text: 'Bienvenue dans la ruche !', time: '1j' },
+      { icon: '🐝', color: '#d4912a', text: 'Bienvenue dans la ruche !', time: '1j' },
     ].map(({ icon, color, text, time }, i) => (
-      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 0', borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.05)' : undefined }}>
+      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 0', borderBottom: i < 4 ? '1px solid rgba(0,0,0,0.06)' : undefined }}>
         <span style={{ color, fontSize: 13, marginTop: 1 }}>{icon}</span>
-        <p style={{ flex: 1, color: 'rgba(255,255,255,0.75)', fontSize: 10, lineHeight: 1.4 }}>{text}</p>
-        <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 9, flexShrink: 0 }}>{time}</span>
+        <p style={{ flex: 1, color: 'rgba(0,0,0,0.65)', fontSize: 10, lineHeight: 1.4 }}>{text}</p>
+        <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 9, flexShrink: 0 }}>{time}</span>
       </div>
     ))}
   </div>,
 
-  // Screen 7 — Messages
+  // ── Screen 7 — Messages ───────────────────────────────────────────────────────
   <div key="messages">
     <StatusBar title="Messages" />
     {[
@@ -228,14 +229,14 @@ const SCREENS = [
       { init: 'S', grad: 'linear-gradient(135deg,#a78bfa,#7c3aed)', name: 'Sophie', msg: 'Super idée 🔥', time: '3h', unread: false },
       { init: 'K', grad: 'linear-gradient(135deg,#34d399,#059669)', name: 'Karim', msg: 'Merci pour le conseil !', time: '1j', unread: false },
     ].map(({ init, grad, name, msg, time, unread }, i) => (
-      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.05)' : undefined }}>
+      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 3 ? '1px solid rgba(0,0,0,0.06)' : undefined }}>
         <MHex initial={init} gradient={grad} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-            <span style={{ color: unread ? 'white' : 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: unread ? 600 : 400 }}>{name}</span>
-            <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 9 }}>{time}</span>
+            <span style={{ color: unread ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.45)', fontSize: 11, fontWeight: unread ? 600 : 400 }}>{name}</span>
+            <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 9 }}>{time}</span>
           </div>
-          <p style={{ color: unread ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.3)', fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{msg}</p>
+          <p style={{ color: unread ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.3)', fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{msg}</p>
         </div>
         {unread && <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#ebaf57', flexShrink: 0 }} />}
       </div>
@@ -248,62 +249,75 @@ const LABELS = ['Feed', 'Découvrir', 'Matching', 'Profil', 'Startup', 'Notifs',
 export default function MockupCarousel() {
   const [index, setIndex] = useState(0)
   const [visible, setVisible] = useState(true)
+  const indexRef = useRef(0)
+  const startXRef = useRef<number | null>(null)
 
+  function goTo(n: number) {
+    const total = SCREENS.length
+    const i = ((n % total) + total) % total
+    setVisible(false)
+    setTimeout(() => {
+      setIndex(i)
+      indexRef.current = i
+      setVisible(true)
+    }, 300)
+  }
+
+  // Auto-advance every 8 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setVisible(false)
-      const t = setTimeout(() => {
-        setIndex((i) => (i + 1) % SCREENS.length)
-        setVisible(true)
-      }, 400)
-      return () => clearTimeout(t)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
+    const id = setInterval(() => goTo(indexRef.current + 1), 8000)
+    return () => clearInterval(id)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    startXRef.current = e.clientX
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+
+  function handlePointerUp(e: React.PointerEvent<HTMLDivElement>) {
+    if (startXRef.current === null) return
+    const dx = e.clientX - startXRef.current
+    startXRef.current = null
+    if (Math.abs(dx) > 50) {
+      goTo(indexRef.current + (dx < 0 ? 1 : -1))
+    }
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-      {/* Phone frame */}
+      {/* Phone — white background, fixed 280×580 */}
       <div
         style={{
-          maxWidth: 280,
-          width: '100%',
+          width: 280,
+          height: 580,
           background: 'white',
-          borderRadius: 40,
-          boxShadow: '0 40px 80px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.08)',
-          padding: 10,
+          borderRadius: 36,
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.5)',
+          padding: '16px 14px',
+          overflow: 'hidden',
           animation: 'float 3s ease-in-out infinite',
+          cursor: 'grab',
+          touchAction: 'pan-y',
+          userSelect: 'none',
         }}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={() => { startXRef.current = null }}
       >
-        {/* Screen */}
-        <div
-          style={{
-            background: '#082b44',
-            borderRadius: 30,
-            padding: '14px 12px',
-            minHeight: 420,
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              opacity: visible ? 1 : 0,
-              transition: 'opacity 0.4s ease',
-            }}
-          >
-            {SCREENS[index]}
-          </div>
+        <div style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease' }}>
+          {SCREENS[index]}
         </div>
       </div>
 
-      {/* Dots */}
+      {/* Dot indicators */}
       <div style={{ display: 'flex', gap: 6 }}>
         {SCREENS.map((_, i) => (
           <button
             key={i}
             type="button"
             aria-label={LABELS[i]}
-            onClick={() => { setVisible(false); setTimeout(() => { setIndex(i); setVisible(true) }, 400) }}
+            onClick={() => goTo(i)}
             style={{
               width: i === index ? 20 : 6,
               height: 6,
