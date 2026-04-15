@@ -141,21 +141,21 @@
 }
 
 @layer utilities {
-  /* Honeycomb background pattern — uniform opacity via pseudo-element */
-  .honeycomb-bg {
-    position: relative;
-    isolation: isolate;
-  }
+  /* Honeycomb background pattern — fixed viewport-level via pseudo-element */
   .honeycomb-bg::before {
     content: '';
-    position: absolute;
+    position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'%3E%3Cpath d='M45 0 L30 26 L0 26 L-15 0 L0 -26 L30 -26 Z' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpath d='M75 0 L60 26 L30 26 L15 0 L30 -26 L60 -26 Z' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpath d='M60 52 L45 78 L15 78 L0 52 L15 26 L45 26 Z' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3C/svg%3E");
-    background-size: 60px 52px;
-    background-repeat: repeat;
-    opacity: 0.08;
+    z-index: 0;
     pointer-events: none;
-    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104' viewBox='0 0 60 104'%3E%3Cpolygon points='30,2 58,18 58,50 30,66 2,50 2,18' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='30,54 58,70 58,102 30,118 2,102 2,70' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='0,28 -28,44 -28,76 0,92 28,76 28,44' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='60,28 32,44 32,76 60,92 88,76 88,44' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3C/svg%3E");
+    background-size: 60px 104px;
+    background-repeat: repeat;
+    opacity: 0.07;
+  }
+  .honeycomb-bg > * {
+    position: relative;
+    z-index: 1;
   }
 
   /* Clip hex shape — flat-top orientation */

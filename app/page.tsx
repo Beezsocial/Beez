@@ -334,9 +334,6 @@ export default function LandingPage() {
           <Logo height={32} />
           <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>
           <div className="flex flex-wrap justify-center gap-6">
-            <a href="/roadmap" className="hover:text-white/50 transition-colors">
-              Roadmap
-            </a>
             <a href="/mentions-legales" className="hover:text-white/50 transition-colors">
               Mentions légales
             </a>

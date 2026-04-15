@@ -425,54 +425,62 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
     <>
       {/* Identity block */}
       <div className="mb-6">
-        {/* Avatar */}
-        <div className="mb-3">
-          {isEditing ? (
-            <div className="flex flex-col items-start gap-1.5">
-              <EditableHexAvatar
-                firstName={form.firstName || current.firstName}
-                lastName={form.lastName || current.lastName}
-                displayUrl={avatarPreview ?? current.avatarUrl}
-                onFileSelect={handleFileSelect}
-                disabled={saving}
-              />
-              <span className="text-[10px] text-white/30 leading-tight">
-                Changer la photo
-              </span>
-              {avatarError && (
-                <p className="text-[10px] text-red-400 max-w-[96px]">{avatarError}</p>
-              )}
-            </div>
-          ) : (
-            <HexAvatar
-              firstName={current.firstName}
-              lastName={current.lastName}
-              avatarUrl={current.avatarUrl}
-            />
-          )}
-        </div>
-
-        {/* Name / city tile — gold glow, half-hex right edge */}
-        <div
-          style={{
-            filter: 'drop-shadow(0 0 10px rgba(235,175,87,0.12)) drop-shadow(0 0 24px rgba(235,175,87,0.06))',
-            marginBottom: 10,
-          }}
-        >
-          <div
-            style={{
-              background: '#0a2540',
-              padding: '14px 44px 14px 20px',
+        {/* Avatar + Tile row — avatar overlaps tile from left */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', minHeight: 83, marginBottom: 10 }}>
+          {/* Gold border + dark tile (absolutely positioned behind avatar) */}
+          <div style={{ position: 'absolute', left: 32, right: 0, top: 0, bottom: 0, zIndex: 1 }}>
+            {/* Gold border layer */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'rgba(235,175,87,0.4)',
               clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
               borderRadius: '10px 0 0 10px',
-              border: '1px solid rgba(235,175,87,0.3)',
-            }}
-          >
-            <h1 className="font-heading font-bold text-lg text-white leading-tight">
-              {current.firstName} {current.lastName}
-            </h1>
-            {current.city && (
-              <p className="text-white/50 text-sm mt-0.5">{current.city}</p>
+            }} />
+            {/* Dark content layer — 1px inset creates border effect */}
+            <div style={{
+              position: 'absolute',
+              top: 1, right: 1, bottom: 1, left: 1,
+              background: '#041625',
+              clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
+              borderRadius: '10px 0 0 10px',
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <div style={{ paddingLeft: 80, paddingRight: 48 }}>
+                <h1 className="font-heading font-bold text-lg text-white leading-tight">
+                  {current.firstName} {current.lastName}
+                </h1>
+                {current.city && (
+                  <p className="text-white/50 text-sm mt-0.5">{current.city}</p>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* Avatar on top (z-index: 2) */}
+          <div style={{ position: 'relative', zIndex: 2, flexShrink: 0 }}>
+            {isEditing ? (
+              <div className="flex flex-col items-start gap-1.5">
+                <EditableHexAvatar
+                  firstName={form.firstName || current.firstName}
+                  lastName={form.lastName || current.lastName}
+                  displayUrl={avatarPreview ?? current.avatarUrl}
+                  onFileSelect={handleFileSelect}
+                  disabled={saving}
+                />
+                <span className="text-[10px] text-white/30 leading-tight">
+                  Changer la photo
+                </span>
+                {avatarError && (
+                  <p className="text-[10px] text-red-400 max-w-[96px]">{avatarError}</p>
+                )}
+              </div>
+            ) : (
+              <HexAvatar
+                firstName={current.firstName}
+                lastName={current.lastName}
+                avatarUrl={current.avatarUrl}
+              />
             )}
           </div>
         </div>

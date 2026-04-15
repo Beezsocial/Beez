@@ -11,7 +11,7 @@ const ITEMS = [
   'Construis ta communauté',
   'Lève des fonds',
   'Trouve un mentor',
-  'Rends visible la vie de ta startup',
+  'Rends visible ta startup',
 ]
 
 export default function CarouselHero() {

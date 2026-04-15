@@ -1,25 +1,32 @@
 import Link from 'next/link'
 import NavBrand from '@/components/ui/NavBrand'
-import BeezWord from '@/components/ui/BeezWord'
 
 type Status = 'done' | 'progress' | 'future'
 
 const items: { status: Status; title: string; description: string; date?: string }[] = [
   {
     status: 'done',
-    title: 'Lancement Early Access',
-    description: 'Inscriptions ouvertes, profils membres, système Founding Member (150 premiers = Pro à vie), email de bienvenue, page entreprise.',
-    date: 'Avril 2026',
+    date: 'Janvier 2026',
+    title: '🌐 Publication de la landing page',
+    description: "Création de la page Beez et de l'identité visuelle.",
+  },
+  {
+    status: 'done',
+    date: '16 avril 2026',
+    title: "🚀 Lancement de l'Early Access",
+    description: "Ouverture des créations de profils. Les 150 premiers membres deviennent Founding Members. Accès à la roadmap et à la newsletter.",
   },
   {
     status: 'progress',
-    title: 'Feed & communauté',
-    description: 'Publication de posts, réactions, commentaires, partage de milestones. La vie de la ruche visible par tous les membres.',
+    date: 'Bientôt',
+    title: '🎬 Contenu vidéo',
+    description: 'Publication des vidéos Beez sur Instagram et YouTube. Build in public documenté.',
   },
   {
     status: 'future',
-    title: 'Matching par IA',
-    description: 'Algorithme de matching passif : <BeezWord /> analyse ton profil et tes besoins pour te notifier quand une opportunité te correspond. Associé, investisseur, mentor, client — sans chercher.',
+    date: 'À venir',
+    title: "📱 Publication de l'app",
+    description: 'Lancement du feed communautaire et des fonctionnalités sociales complètes.',
   },
 ]
 
@@ -47,10 +54,10 @@ function NodeDot({ status }: { status: Status }) {
 
 function StatusBadge({ status }: { status: Status }) {
   if (status === 'done') {
-    return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(235,175,87,0.15)', border: '1px solid rgba(235,175,87,0.4)', color: '#ebaf57', borderRadius: 5 }}>Terminé</span>
+    return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(52,211,153,0.15)', border: '1px solid rgba(52,211,153,0.4)', color: '#34d399', borderRadius: 5 }}>Terminé</span>
   }
   if (status === 'progress') {
-    return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(96,165,250,0.15)', border: '1px solid rgba(96,165,250,0.4)', color: '#60a5fa', borderRadius: 5 }}>En cours</span>
+    return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(235,175,87,0.15)', border: '1px solid rgba(235,175,87,0.4)', color: '#ebaf57', borderRadius: 5, animation: 'pulse 2s ease-in-out infinite' }}>En cours</span>
   }
   return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.4)', borderRadius: 5 }}>À venir</span>
 }
@@ -113,17 +120,19 @@ export default function RoadmapPage() {
                     {date && <span className="text-white/25 text-xs">{date}</span>}
                   </div>
                   <p className={`text-sm leading-relaxed ${status === 'future' ? 'text-white/30' : 'text-white/55'}`}>
-                    {description.includes('<BeezWord />') ? (
-                      <>
-                        {description.split('<BeezWord />')[0]}
-                        <BeezWord />
-                        {description.split('<BeezWord />')[1]}
-                      </>
-                    ) : description}
+                    {description}
                   </p>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Fading continuation */}
+          <div className="flex gap-5 mt-4">
+            <div style={{ width: 20, display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: 2, height: 40, background: 'linear-gradient(to bottom, rgba(255,255,255,0.08), transparent)', borderLeft: '2px dashed rgba(255,255,255,0.06)' }} />
+            </div>
+            <p className="text-white/20 text-sm italic pt-2">... et la suite</p>
           </div>
         </div>
 

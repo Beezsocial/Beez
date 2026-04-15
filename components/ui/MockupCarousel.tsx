@@ -26,12 +26,12 @@ function MHex({ initial, gradient }: { initial: string; gradient: string }) {
   )
 }
 
-// Dark card — stands on white phone background
+// Dark card
 function MCard({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{
-        background: '#0a2540',
+        background: '#0D2E4A',
         borderRadius: 10,
         padding: '9px 10px',
         marginBottom: 7,
@@ -42,13 +42,13 @@ function MCard({ children }: { children: React.ReactNode }) {
   )
 }
 
-// Status bar — dark text for white background
+// Status bar — white text for navy background
 function StatusBar({ title }: { title: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, padding: '0 2px' }}>
-      <span style={{ color: 'rgba(0,0,0,0.35)', fontSize: 10 }}>9:41</span>
-      <span style={{ color: 'rgba(0,0,0,0.65)', fontSize: 11, fontWeight: 700 }}>{title}</span>
-      <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 10 }}>●●●</span>
+      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>9:41</span>
+      <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11, fontWeight: 700 }}>{title}</span>
+      <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>●●●</span>
     </div>
   )
 }
@@ -103,7 +103,7 @@ const SCREENS = [
   // ── Screen 2 — Discover ───────────────────────────────────────────────────────
   <div key="discover">
     <StatusBar title="Découvrir" />
-    <p style={{ color: 'rgba(0,0,0,0.4)', fontSize: 10, marginBottom: 8, textAlign: 'center' }}>Membres récents</p>
+    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10, marginBottom: 8, textAlign: 'center' }}>Membres récents</p>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
       {[
         { init: 'S', grad: 'linear-gradient(135deg,#a78bfa,#7c3aed)', name: 'Sophie', role: 'SaaS B2B' },
@@ -156,7 +156,7 @@ const SCREENS = [
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>
         <div style={{ width: 56, height: 49, clipPath: FLAT_TOP, background: 'linear-gradient(135deg,#ebaf57,#d4912a)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, color: '#082b44' }}>C</div>
       </div>
-      <p style={{ color: 'rgba(0,0,0,0.85)', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>Clara D.</p>
+      <p style={{ color: 'white', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>Clara D.</p>
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: 'rgba(235,175,87,0.12)', border: '1px solid rgba(235,175,87,0.3)', borderRadius: 5, padding: '2px 8px' }}>
         <span style={{ color: '#ebaf57', fontSize: 9, fontWeight: 700 }}>✦ Founding Member #042</span>
       </div>
@@ -212,10 +212,10 @@ const SCREENS = [
       { icon: '✦', color: '#ebaf57', text: 'Nouveau match : Romain (Dev)', time: '2h' },
       { icon: '🐝', color: '#d4912a', text: 'Bienvenue dans la ruche !', time: '1j' },
     ].map(({ icon, color, text, time }, i) => (
-      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 0', borderBottom: i < 4 ? '1px solid rgba(0,0,0,0.06)' : undefined }}>
+      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 0', borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.05)' : undefined }}>
         <span style={{ color, fontSize: 13, marginTop: 1 }}>{icon}</span>
-        <p style={{ flex: 1, color: 'rgba(0,0,0,0.65)', fontSize: 10, lineHeight: 1.4 }}>{text}</p>
-        <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 9, flexShrink: 0 }}>{time}</span>
+        <p style={{ flex: 1, color: 'rgba(255,255,255,0.75)', fontSize: 10, lineHeight: 1.4 }}>{text}</p>
+        <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 9, flexShrink: 0 }}>{time}</span>
       </div>
     ))}
   </div>,
@@ -229,14 +229,14 @@ const SCREENS = [
       { init: 'S', grad: 'linear-gradient(135deg,#a78bfa,#7c3aed)', name: 'Sophie', msg: 'Super idée 🔥', time: '3h', unread: false },
       { init: 'K', grad: 'linear-gradient(135deg,#34d399,#059669)', name: 'Karim', msg: 'Merci pour le conseil !', time: '1j', unread: false },
     ].map(({ init, grad, name, msg, time, unread }, i) => (
-      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 3 ? '1px solid rgba(0,0,0,0.06)' : undefined }}>
+      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.05)' : undefined }}>
         <MHex initial={init} gradient={grad} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-            <span style={{ color: unread ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.45)', fontSize: 11, fontWeight: unread ? 600 : 400 }}>{name}</span>
-            <span style={{ color: 'rgba(0,0,0,0.3)', fontSize: 9 }}>{time}</span>
+            <span style={{ color: unread ? 'white' : 'rgba(255,255,255,0.45)', fontSize: 11, fontWeight: unread ? 600 : 400 }}>{name}</span>
+            <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 9 }}>{time}</span>
           </div>
-          <p style={{ color: unread ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.3)', fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{msg}</p>
+          <p style={{ color: unread ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.3)', fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{msg}</p>
         </div>
         {unread && <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#ebaf57', flexShrink: 0 }} />}
       </div>
@@ -285,15 +285,15 @@ export default function MockupCarousel() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-      {/* Phone — white background, fixed 280×580 */}
+      {/* Phone — navy background with gold glow, fixed 280×580 */}
       <div
         style={{
           width: 280,
           height: 580,
-          background: 'white',
+          background: '#082b44',
           borderRadius: 36,
           border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 40px 80px rgba(0,0,0,0.5)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.5), 0 0 30px rgba(235,175,87,0.15), 0 0 60px rgba(235,175,87,0.08)',
           padding: '16px 14px',
           overflow: 'hidden',
           animation: 'float 3s ease-in-out infinite',

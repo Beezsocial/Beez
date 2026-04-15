@@ -37,26 +37,36 @@ export default function NavHeader() {
             </svg>
           </a>
           {hasSession ? (
-            <Link
-              href="/profile"
-              className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200"
-            >
-              Mon profil
-            </Link>
+            <>
+              <Link
+                href="/roadmap"
+                className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+              >
+                Roadmap →
+              </Link>
+              <Link
+                href="/profile"
+                className="text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200"
+              >
+                Mon profil
+              </Link>
+            </>
           ) : (
-            <Link
-              href="/signin"
-              className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200"
-            >
-              Se connecter
-            </Link>
+            <>
+              <Link
+                href="/signin"
+                className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200"
+              >
+                Se connecter
+              </Link>
+              <Link
+                href="#signup"
+                className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+              >
+                Rejoindre →
+              </Link>
+            </>
           )}
-          <Link
-            href="#signup"
-            className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
-          >
-            Rejoindre →
-          </Link>
         </div>
       </div>
     </header>
