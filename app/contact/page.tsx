@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
 
 export default function ContactPage() {
   return (
@@ -16,9 +16,7 @@ export default function ContactPage() {
           >
             ← Accueil
           </Link>
-          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
-            <Logo height={36} />
-          </Link>
+          <NavBrand height={36} />
         </div>
         <span className="text-white/30 text-xs">Contact</span>
       </header>

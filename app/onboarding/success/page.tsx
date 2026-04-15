@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import HexBadge from '@/components/ui/HexBadge'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
 
 async function getProfileData() {
   try {
@@ -50,7 +50,7 @@ export default async function SuccessPage() {
         >
           ← Accueil
         </Link>
-        <Logo height={36} />
+        <NavBrand height={36} />
       </header>
 
       {/* Content */}

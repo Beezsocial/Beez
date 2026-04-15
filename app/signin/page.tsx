@@ -4,7 +4,7 @@ import { useState, useEffect, type FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
 
 // ─── French error messages ────────────────────────────────────────────────────
 function friendlyError(message: string): string {
@@ -118,9 +118,7 @@ export default function SignInPage() {
           >
             ← Accueil
           </Link>
-          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
-            <Logo height={36} />
-          </Link>
+          <NavBrand height={36} />
         </div>
         <Link
           href="/onboarding"

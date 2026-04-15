@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Logo from '@/components/ui/Logo'
 import CarouselHero from '@/components/ui/CarouselHero'
+import NavHeader from '@/components/ui/NavHeader'
+import BeezWord from '@/components/ui/BeezWord'
 
 // ─── Feature Card ─────────────────────────────────────────────────────────────
 function FeatureCard({
@@ -10,10 +12,10 @@ function FeatureCard({
 }: {
   icon: string
   title: string
-  description: string
+  description: React.ReactNode
 }) {
   return (
-    <div className="card p-6 space-y-3" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+    <div className="card p-6 space-y-3">
       <div
         className="w-10 h-10 flex items-center justify-center text-xl"
         style={{ background: 'rgba(235,175,87,0.1)', borderRadius: 8 }}
@@ -71,29 +73,8 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-navy honeycomb-bg overflow-x-hidden">
 
-      {/* ── NAV ── */}
-      <header
-        className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b border-white/6"
-        style={{ background: 'rgba(8,43,68,0.92)', height: 56 }}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
-          <Logo height={36} />
-          <div className="flex items-center gap-5">
-            <Link
-              href="/signin"
-              className="text-sm font-medium text-white/50 hover:text-white transition-colors duration-200"
-            >
-              Se connecter
-            </Link>
-            <Link
-              href="#signup"
-              className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
-            >
-              Rejoindre →
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* ── NAV (client — session-aware) ── */}
+      <NavHeader />
 
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-16">
@@ -104,21 +85,28 @@ export default function LandingPage() {
         <img
           src="/images/logo-dark.png"
           alt="Beez"
-          style={{ height: 80, width: 'auto', marginBottom: 16 }}
+          style={{ height: 80, width: 'auto', marginBottom: 16, position: 'relative', zIndex: 1 }}
         />
 
         {/* "Beez" wordmark */}
         <h1
-          className="font-heading text-white leading-none mb-4"
-          style={{ fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: 800, letterSpacing: '-2px' }}
+          className="font-heading leading-none mb-4"
+          style={{
+            fontSize: 'clamp(48px, 8vw, 72px)',
+            fontWeight: 800,
+            letterSpacing: '-2px',
+            position: 'relative',
+            zIndex: 1,
+          }}
         >
-          Beez
+          <span style={{ color: '#ffffff' }}>Bee</span>
+          <span style={{ color: '#ebaf57' }}>z</span>
         </h1>
 
         {/* Main headline */}
         <p
           className="font-heading font-bold text-center mb-4 leading-tight"
-          style={{ fontSize: 'clamp(32px, 5vw, 52px)' }}
+          style={{ fontSize: 'clamp(32px, 5vw, 52px)', position: 'relative', zIndex: 1 }}
         >
           <span className="text-white">Construis. </span>
           <span className="text-white">Partage. </span>
@@ -126,12 +114,12 @@ export default function LandingPage() {
         </p>
 
         {/* Subtitle */}
-        <p className="text-white/60 text-xl text-center mb-6">
+        <p className="text-white/60 text-xl text-center mb-6" style={{ position: 'relative', zIndex: 1 }}>
           La ruche des entrepreneurs
         </p>
 
         {/* Auto-rotating carousel */}
-        <div className="mb-8 h-8 flex items-center justify-center">
+        <div className="mb-8 flex items-center justify-center px-4" style={{ position: 'relative', zIndex: 1 }}>
           <CarouselHero />
         </div>
 
@@ -139,18 +127,19 @@ export default function LandingPage() {
         <Link
           href="#signup"
           className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
+          style={{ position: 'relative', zIndex: 1 }}
         >
           Rejoindre la ruche →
         </Link>
 
         {/* Early access note */}
-        <p className="text-white/30 text-sm">
+        <p className="text-white/30 text-sm" style={{ position: 'relative', zIndex: 1 }}>
           🔒 Early Access en cours · Founding Member garanti
         </p>
       </section>
 
       {/* ── APP MOCKUP ── */}
-      <section className="py-12 px-4 flex items-center justify-center overflow-visible">
+      <section className="py-12 px-4 flex items-center justify-center overflow-visible" style={{ position: 'relative', zIndex: 1 }}>
         <div
           style={{
             maxWidth: 300,
@@ -164,17 +153,10 @@ export default function LandingPage() {
           }}
         >
           {/* Status bar */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: 12,
-              padding: '0 4px',
-            }}
-          >
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12, padding: '0 4px' }}>
             <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>9:41</span>
             <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: 700, letterSpacing: -0.5 }}>
-              Beez
+              <span style={{ color: '#ffffff' }}>Bee</span><span style={{ color: '#ebaf57' }}>z</span>
             </span>
             <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>●●●</span>
           </div>
@@ -252,39 +234,36 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="py-20 px-4 sm:px-6 max-w-4xl mx-auto" aria-labelledby="features-heading">
+      <section className="py-20 px-4 sm:px-6 max-w-4xl mx-auto" aria-labelledby="features-heading" style={{ position: 'relative', zIndex: 1 }}>
         <div className="mb-12 text-center">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">
-            Pourquoi Beez
+          <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3">
+            <span style={{ color: '#ebaf57' }}>Pourquoi </span>
+            <span style={{ color: '#ffffff' }}>Bee</span>
+            <span style={{ color: '#ebaf57' }}>z</span>
           </p>
           <h2
             id="features-heading"
             className="font-heading font-bold text-3xl sm:text-4xl text-white"
           >
-            Fait pour ceux qui construisent.
+            Fait pour ceux qui font.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FeatureCard
             icon="🏗️"
             title="Build in public"
-            description="Partage ton parcours en temps réel. Wins, galères, pivots. La vraie vie d'un entrepreneur."
+            description="Partage ton parcours en temps réel. Succès, échecs, pivots. La vraie vie d'un entrepreneur."
           />
           <FeatureCard
             icon="🔔"
             title="Matching passif"
-            description="Dis ce que tu cherches une fois. Beez te notifie quand le bon profil apparaît."
+            description={<><BeezWord /> te notifie quand les bonnes opportunités apparaissent. Dis ce que tu cherches une fois, c'est tout.</>}
           />
           <FeatureCard
             icon="🤝"
             title="Intelligence collective"
-            description="Pose tes questions à ceux qui sont passés par là. Conseils vrais, pas de bullshit."
-          />
-          <FeatureCard
-            icon="✦"
-            title="Founding Members"
-            description="Les 150 premiers inscrits obtiennent un statut permanent et des avantages Pro à vie."
+            description="Pose tes questions à ceux qui sont passés par là. Conseils vrais, pas de bullshit. Profite du cercle vertueux de la ruche."
           />
         </div>
       </section>
@@ -292,7 +271,7 @@ export default function LandingPage() {
       {/* ── PRICING ── */}
       <section
         className="py-20 px-4 sm:px-6"
-        style={{ background: 'rgba(8,30,50,0.7)', borderTop: '1px solid rgba(255,255,255,0.05)' }}
+        style={{ background: 'rgba(8,30,50,0.7)', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 1 }}
         aria-labelledby="pricing-heading"
       >
         <div className="max-w-3xl mx-auto">
@@ -312,12 +291,15 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
 
             {/* Free */}
-            <div className="card p-6 space-y-5">
+            <div
+              className="card p-6 space-y-5"
+              style={{ borderColor: 'rgba(255,255,255,0.3)' }}
+            >
               <div>
                 <h3 className="font-heading font-bold text-white text-xl mb-1">
-                  Starter ou Founder
+                  Gratuit
                 </h3>
-                <p className="text-white/50 text-sm">Gratuit · Pour toujours</p>
+                <p className="text-white/50 text-sm">Pour toujours</p>
               </div>
 
               {/* Profile type explainers */}
@@ -362,7 +344,7 @@ export default function LandingPage() {
                   { text: 'Profil entrepreneur (Starter ou Founder)', ok: true },
                   { text: 'Accès à la communauté', ok: true },
                   { text: 'Posts et interactions', ok: true },
-                  { text: 'Badge Founding Member (150 premiers)', ok: true },
+                  { text: 'Prends ta place au sein de la ruche', ok: true },
                   { text: 'Matching passif par IA', ok: false },
                   { text: 'Page entreprise rattachée', ok: false },
                   { text: 'Fonctionnalités Pro', ok: false },
@@ -416,6 +398,7 @@ export default function LandingPage() {
                   'Notifications de matching avancées',
                   'Badge Pro visible sur ton profil',
                   'Accès prioritaire aux nouvelles features',
+                  'Gratuit à vie pour les 150 premiers membres',
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm">
                     <span className="text-gold shrink-0 mt-0.5" aria-hidden="true">✦</span>
@@ -435,10 +418,6 @@ export default function LandingPage() {
               >
                 Bientôt disponible
               </button>
-
-              <p className="text-white/30 text-xs text-center">
-                Les Founding Members ont le Pro gratuit à vie.
-              </p>
             </div>
 
           </div>
@@ -450,6 +429,7 @@ export default function LandingPage() {
         id="signup"
         className="py-20 px-4 sm:px-6 honeycomb-bg relative"
         aria-labelledby="signup-heading"
+        style={{ zIndex: 1 }}
       >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy via-transparent to-navy" />
         <div className="relative max-w-lg mx-auto text-center">
@@ -478,7 +458,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="py-8 px-4 sm:px-6 border-t border-white/5">
+      <footer className="py-8 px-4 sm:px-6 border-t border-white/5" style={{ position: 'relative', zIndex: 1 }}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
           <Logo height={32} />
           <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>

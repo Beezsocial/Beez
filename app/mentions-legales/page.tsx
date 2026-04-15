@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
+import BeezWord from '@/components/ui/BeezWord'
 
 function Section({ number, title, children }: { number: string; title: string; children: React.ReactNode }) {
   return (
@@ -29,9 +30,7 @@ export default function MentionsLegalesPage() {
           >
             ← Accueil
           </Link>
-          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
-            <Logo height={36} />
-          </Link>
+          <NavBrand height={36} />
         </div>
         <span className="text-white/30 text-xs">Mentions légales</span>
       </header>
@@ -79,7 +78,7 @@ export default function MentionsLegalesPage() {
 
           <Section number="3" title="Propriété intellectuelle">
             <p>
-              L'ensemble du contenu de ce site — textes, graphismes, logotype, icônes — est la propriété exclusive de Beez et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.
+              L'ensemble du contenu de ce site — textes, graphismes, logotype, icônes — est la propriété exclusive de <BeezWord /> et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.
             </p>
             <p>
               Toute reproduction, représentation, modification ou exploitation, totale ou partielle, de ce site ou de son contenu, sans autorisation écrite préalable, est strictement interdite et constituerait une contrefaçon sanctionnée par les articles L.335-2 et suivants du Code de la propriété intellectuelle.

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
+import BeezWord from '@/components/ui/BeezWord'
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -28,9 +29,7 @@ export default function PrivacyPage() {
           >
             ← Accueil
           </Link>
-          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
-            <Logo height={36} />
-          </Link>
+          <NavBrand height={36} />
         </div>
         <span className="text-white/30 text-xs">Confidentialité</span>
       </header>
@@ -56,7 +55,7 @@ export default function PrivacyPage() {
 
           <Section title="1. Qui sommes-nous ?">
             <p>
-              Beez est un réseau social français dédié aux entrepreneurs. Le responsable du traitement des données est l'équipe Beez, joignable à{' '}
+              <BeezWord /> est un réseau social français dédié aux entrepreneurs. Le responsable du traitement des données est l'équipe <BeezWord />, joignable à{' '}
               <a
                 href="mailto:contact@joinbeez.com"
                 className="text-gold hover:text-gold-400 transition-colors duration-200"
@@ -68,7 +67,7 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="2. Données collectées">
-            <p>Lors de ton inscription et de l'utilisation de Beez, nous collectons :</p>
+            <p>Lors de ton inscription et de l'utilisation de <BeezWord />, nous collectons :</p>
             <ul className="list-none space-y-1.5 mt-2">
               {[
                 'Ton adresse email (via ton compte Google ou directement)',
@@ -94,9 +93,9 @@ export default function PrivacyPage() {
               {[
                 'Créer et afficher ton profil de membre au sein de la communauté',
                 'Faciliter la mise en relation entre entrepreneurs, investisseurs et mentors',
-                'T\'envoyer un email de bienvenue lors de ton inscription',
-                'Te notifier en priorité du lancement de l\'application',
-                'Améliorer l\'expérience de la plateforme',
+                "T'envoyer un email de bienvenue lors de ton inscription",
+                "Te notifier en priorité du lancement de l'application",
+                "Améliorer l'expérience de la plateforme",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
@@ -111,7 +110,7 @@ export default function PrivacyPage() {
 
           <Section title="4. Sous-traitants et hébergement">
             <p>
-              Beez utilise <strong className="text-white/80">Supabase</strong> (Supabase Inc., États-Unis) comme base de données et service d'authentification. Supabase agit en tant que sous-traitant et traite tes données conformément à ses propres engagements RGPD, dont les clauses contractuelles types (CCT) approuvées par la Commission européenne.
+              <BeezWord /> utilise <strong className="text-white/80">Supabase</strong> (Supabase Inc., États-Unis) comme base de données et service d'authentification. Supabase agit en tant que sous-traitant et traite tes données conformément à ses propres engagements RGPD, dont les clauses contractuelles types (CCT) approuvées par la Commission européenne.
             </p>
             <p>
               Les données sont hébergées dans la région <strong className="text-white/80">Europe de l'Ouest</strong> (Frankfurt, AWS eu-central-1).
@@ -123,7 +122,7 @@ export default function PrivacyPage() {
 
           <Section title="5. Durée de conservation">
             <p>
-              Tes données sont conservées pendant toute la durée de ton appartenance à la communauté Beez. Si tu demandes la suppression de ton compte, tes données sont effacées dans un délai de <strong className="text-white/80">30 jours</strong>, sauf obligation légale de conservation.
+              Tes données sont conservées pendant toute la durée de ton appartenance à la communauté <BeezWord />. Si tu demandes la suppression de ton compte, tes données sont effacées dans un délai de <strong className="text-white/80">30 jours</strong>, sauf obligation légale de conservation.
             </p>
           </Section>
 
@@ -131,11 +130,11 @@ export default function PrivacyPage() {
             <p>Conformément au RGPD, tu disposes des droits suivants :</p>
             <ul className="list-none space-y-1.5 mt-2">
               {[
-                'Droit d\'accès : obtenir une copie de tes données',
+                "Droit d'accès : obtenir une copie de tes données",
                 'Droit de rectification : corriger des informations inexactes',
-                'Droit à l\'effacement : demander la suppression de ton compte et de tes données',
+                "Droit à l'effacement : demander la suppression de ton compte et de tes données",
                 'Droit à la portabilité : recevoir tes données dans un format structuré',
-                'Droit d\'opposition : t\'opposer à un traitement basé sur notre intérêt légitime',
+                "Droit d'opposition : t'opposer à un traitement basé sur notre intérêt légitime",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
@@ -157,7 +156,7 @@ export default function PrivacyPage() {
 
           <Section title="7. Cookies et traceurs">
             <p>
-              Beez n'utilise pas de cookies publicitaires ou de traceurs tiers à des fins de ciblage. Seuls des cookies strictement nécessaires au fonctionnement de l'authentification (session Supabase) sont utilisés.
+              <BeezWord /> n'utilise pas de cookies publicitaires ou de traceurs tiers à des fins de ciblage. Seuls des cookies strictement nécessaires au fonctionnement de l'authentification (session Supabase) sont utilisés.
             </p>
           </Section>
 

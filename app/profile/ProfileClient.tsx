@@ -634,7 +634,18 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
             <button
               type="button"
               onClick={handleEdit}
-              className="w-full border border-white/15 text-white/60 hover:border-gold/40 hover:text-white/90 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="w-full font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              style={{
+                border: '1px solid #ebaf57',
+                color: '#ebaf57',
+                background: 'transparent',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(235,175,87,0.1)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent'
+              }}
             >
               Modifier mon profil
             </button>

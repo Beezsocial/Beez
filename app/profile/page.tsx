@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
 import ProfileClient from './ProfileClient'
 
 // ─── Data fetching ────────────────────────────────────────────────────────────
@@ -76,9 +76,7 @@ export default async function ProfilePage() {
           >
             ← Accueil
           </Link>
-          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
-            <Logo height={36} />
-          </Link>
+          <NavBrand height={36} />
         </div>
         <span className="text-white/30 text-xs">Mon profil</span>
       </header>

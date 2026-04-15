@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
+import BeezWord from '@/components/ui/BeezWord'
 
 function Section({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return (
@@ -39,9 +40,7 @@ export default function TermsPage() {
           >
             ← Accueil
           </Link>
-          <Link href="/" className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
-            <Logo height={36} />
-          </Link>
+          <NavBrand height={36} />
         </div>
         <span className="text-white/30 text-xs">Conditions d'utilisation</span>
       </header>
@@ -67,23 +66,23 @@ export default function TermsPage() {
 
           <Section number="1" title="Objet">
             <p>
-              Les présentes conditions générales d'utilisation (CGU) régissent l'accès et l'utilisation de la plateforme <strong className="text-white/80">Beez</strong>, réseau social français dédié aux entrepreneurs, investisseurs et mentors.
+              Les présentes conditions générales d'utilisation (CGU) régissent l'accès et l'utilisation de la plateforme <strong className="text-white/80"><BeezWord /></strong>, réseau social français dédié aux entrepreneurs, investisseurs et mentors.
             </p>
             <p>
-              En créant un compte, tu acceptes sans réserve les présentes CGU. Si tu n'acceptes pas ces conditions, tu ne dois pas utiliser Beez.
+              En créant un compte, tu acceptes sans réserve les présentes CGU. Si tu n'acceptes pas ces conditions, tu ne dois pas utiliser <BeezWord />.
             </p>
           </Section>
 
           <Section number="2" title="Inscription">
             <p>
-              Pour rejoindre Beez, tu dois fournir des informations exactes, complètes et à jour. Toute fausse déclaration peut entraîner la suspension immédiate de ton compte.
+              Pour rejoindre <BeezWord />, tu dois fournir des informations exactes, complètes et à jour. Toute fausse déclaration peut entraîner la suspension immédiate de ton compte.
             </p>
             <ul className="list-none space-y-1.5 mt-2">
               <Bullet>
                 L'inscription est ouverte à toute personne majeure exerçant ou souhaitant exercer une activité entrepreneuriale.
               </Bullet>
               <Bullet>
-                Les comptes de type <strong className="text-white/80">Pro</strong> (entrepreneurs avec une activité déclarée) nécessitent un numéro de <strong className="text-white/80">SIRET valide</strong>. Beez se réserve le droit de vérifier cette information.
+                Les comptes de type <strong className="text-white/80">Pro</strong> (entrepreneurs avec une activité déclarée) nécessitent un numéro de <strong className="text-white/80">SIRET valide</strong>. <BeezWord /> se réserve le droit de vérifier cette information.
               </Bullet>
               <Bullet>
                 Tu es responsable de la confidentialité de tes identifiants de connexion et de toute activité réalisée depuis ton compte.
@@ -92,7 +91,7 @@ export default function TermsPage() {
           </Section>
 
           <Section number="3" title="Utilisation acceptable">
-            <p>En utilisant Beez, tu t'engages à ne pas :</p>
+            <p>En utilisant <BeezWord />, tu t'engages à ne pas :</p>
             <ul className="list-none space-y-1.5 mt-2">
               <Bullet>Créer de faux profils ou usurper l'identité d'une autre personne ou entreprise</Bullet>
               <Bullet>Envoyer des messages non sollicités (spam) ou du contenu promotionnel abusif</Bullet>
@@ -105,16 +104,16 @@ export default function TermsPage() {
 
           <Section number="4" title="Contenu publié">
             <p>
-              Tu restes seul responsable du contenu que tu publies sur Beez (profil, biographie, messages, photos, etc.). En publiant du contenu, tu garantis en disposer des droits nécessaires et qu'il ne porte pas atteinte aux droits de tiers.
+              Tu restes seul responsable du contenu que tu publies sur <BeezWord /> (profil, biographie, messages, photos, etc.). En publiant du contenu, tu garantis en disposer des droits nécessaires et qu'il ne porte pas atteinte aux droits de tiers.
             </p>
             <p>
-              Beez ne saurait être tenu responsable du contenu publié par ses membres. Tout contenu contraire aux présentes CGU peut être supprimé sans préavis.
+              <BeezWord /> ne saurait être tenu responsable du contenu publié par ses membres. Tout contenu contraire aux présentes CGU peut être supprimé sans préavis.
             </p>
           </Section>
 
           <Section number="5" title="Suspension et résiliation">
             <p>
-              Beez se réserve le droit de suspendre ou de résilier ton accès à la plateforme, avec ou sans préavis, en cas de :
+              <BeezWord /> se réserve le droit de suspendre ou de résilier ton accès à la plateforme, avec ou sans préavis, en cas de :
             </p>
             <ul className="list-none space-y-1.5 mt-2">
               <Bullet>Violation des présentes CGU</Bullet>
@@ -136,25 +135,25 @@ export default function TermsPage() {
 
           <Section number="6" title="Propriété intellectuelle">
             <p>
-              Le contenu que tu publies sur Beez (textes, photos, descriptions) te reste entièrement <strong className="text-white/80">appartenant</strong>. En le publiant, tu accordes à Beez une licence non exclusive, mondiale, gratuite et transférable, pour l'afficher et le distribuer dans le cadre du fonctionnement de la plateforme.
+              Le contenu que tu publies sur <BeezWord /> (textes, photos, descriptions) te reste entièrement <strong className="text-white/80">appartenant</strong>. En le publiant, tu accordes à <BeezWord /> une licence non exclusive, mondiale, gratuite et transférable, pour l'afficher et le distribuer dans le cadre du fonctionnement de la plateforme.
             </p>
             <p>
-              La marque Beez, le logo, le design de la plateforme et le code source sont la propriété exclusive de Beez et sont protégés par le droit de la propriété intellectuelle. Toute reproduction sans autorisation écrite est interdite.
+              La marque <BeezWord />, le logo, le design de la plateforme et le code source sont la propriété exclusive de <BeezWord /> et sont protégés par le droit de la propriété intellectuelle. Toute reproduction sans autorisation écrite est interdite.
             </p>
           </Section>
 
           <Section number="7" title="Limitation de responsabilité">
             <p>
-              La plateforme Beez est fournie <strong className="text-white/80">en l'état</strong>, sans garantie d'aucune sorte, expresse ou implicite. Beez ne garantit pas la disponibilité continue du service ni l'absence d'erreurs.
+              La plateforme <BeezWord /> est fournie <strong className="text-white/80">en l'état</strong>, sans garantie d'aucune sorte, expresse ou implicite. <BeezWord /> ne garantit pas la disponibilité continue du service ni l'absence d'erreurs.
             </p>
             <p>
-              Dans les limites autorisées par la loi applicable, Beez ne pourra être tenu responsable des dommages indirects, accessoires ou consécutifs découlant de l'utilisation ou de l'impossibilité d'utiliser la plateforme.
+              Dans les limites autorisées par la loi applicable, <BeezWord /> ne pourra être tenu responsable des dommages indirects, accessoires ou consécutifs découlant de l'utilisation ou de l'impossibilité d'utiliser la plateforme.
             </p>
           </Section>
 
           <Section number="8" title="Modification des CGU">
             <p>
-              Beez se réserve le droit de modifier les présentes CGU à tout moment. En cas de modification substantielle, un préavis de <strong className="text-white/80">30 jours</strong> sera envoyé par email à l'adresse associée à ton compte.
+              <BeezWord /> se réserve le droit de modifier les présentes CGU à tout moment. En cas de modification substantielle, un préavis de <strong className="text-white/80">30 jours</strong> sera envoyé par email à l'adresse associée à ton compte.
             </p>
             <p>
               La poursuite de l'utilisation de la plateforme après ce délai vaut acceptation des nouvelles conditions. Si tu refuses les modifications, tu peux supprimer ton compte avant l'entrée en vigueur des nouvelles CGU.

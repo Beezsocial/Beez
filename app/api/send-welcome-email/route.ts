@@ -67,7 +67,7 @@ export async function POST(request: Request) {
           <!-- Header -->
           <tr>
             <td style="padding:32px 40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">B</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ebaf57;">eez</span>
+              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ebaf57;">z</span>
             </td>
           </tr>
 
@@ -78,9 +78,10 @@ export async function POST(request: Request) {
                 Bienvenue dans la ruche, ${firstName}&nbsp;✦
               </p>
               ${memberBadgeHtml}
-              <p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
-                ${memberBodyText}
-              </p>
+              ${isFoundingMember ? `
+              <p style="color:#ebaf57;font-weight:bold;margin:16px 0 8px;">🎉 Félicitations !</p>
+              <p style="color:#cccccc;margin:0 0 16px;font-size:15px;line-height:1.6;">Tu fais partie des 150 Founding Members de Beez. Ce statut est permanent et te donne accès à la version Pro gratuitement, à vie. Quoi qu'il arrive, tu ne paieras jamais pour Beez.</p>
+              ` : `<p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">${memberBodyText}</p>`}
               <p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
                 L'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.
               </p>
@@ -109,7 +110,7 @@ export async function POST(request: Request) {
 `
 
     const text = isFoundingMember
-      ? `Bienvenue dans la ruche, ${firstName} ✦\n\nTu fais partie des 150 premiers membres de Beez. Tu as l'accès Pro gratuit à vie.\nTon badge : ✦ Founding Member #${memberNumber}\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
+      ? `Bienvenue dans la ruche, ${firstName} ✦\n\n🎉 Félicitations ! Tu fais partie des 150 Founding Members de Beez. Ce statut est permanent et te donne accès à la version Pro gratuitement, à vie. Quoi qu'il arrive, tu ne paieras jamais pour Beez.\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
       : `Bienvenue dans la ruche, ${firstName} ✦\n\nBienvenue dans la ruche !\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
 
     // ── Send ─────────────────────────────────────────────────────────────────

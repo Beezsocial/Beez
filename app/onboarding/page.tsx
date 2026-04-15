@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback, type FormEvent, type ChangeEvent } from 'react'
 import Link from 'next/link'
-import Logo from '@/components/ui/Logo'
+import NavBrand from '@/components/ui/NavBrand'
+import BeezWord from '@/components/ui/BeezWord'
 import { useRouter } from 'next/navigation'
 import Button from '@/components/ui/Button'
 import { Input, Textarea } from '@/components/ui/Input'
@@ -486,7 +487,7 @@ function Step3({
   return (
     <div>
       <p className="text-white/50 text-sm mb-2">
-        Beez te notifiera quand quelqu'un correspond.
+        <BeezWord /> te notifiera quand quelqu'un correspond.
       </p>
       <p className="text-white/30 text-xs mb-5">Multi-sélection possible.</p>
       <div className="flex flex-wrap gap-2.5" role="group" aria-label="Ce que tu cherches">
@@ -840,7 +841,7 @@ export default  function OnboardingPage() {
           >
             ← Accueil
           </Link>
-          <Logo height={36} />
+          <NavBrand height={36} />
         </div>
         {isOnboarding ? (
           <span className="text-white/30 text-xs">

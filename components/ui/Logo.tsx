@@ -16,8 +16,8 @@ export default function Logo({ height = 36, className = '' }: LogoProps) {
         className={`font-heading font-extrabold tracking-tight ${className}`}
         style={{ fontSize: Math.round(height * 0.56) + 'px' }}
       >
-        <span className="text-white">B</span>
-        <span className="text-gold">eez</span>
+        <span className="text-white">Bee</span>
+        <span className="text-gold">z</span>
       </span>
     )
   }

@@ -141,11 +141,21 @@
 }
 
 @layer utilities {
-  /* Honeycomb background pattern */
+  /* Honeycomb background pattern — uniform opacity via pseudo-element */
   .honeycomb-bg {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48' viewBox='0 0 56 48'%3E%3Cpath d='M14 0 L28 8 L28 24 L14 32 L0 24 L0 8 Z' fill='none' stroke='%23ebaf57' stroke-width='0.4' opacity='0.12'/%3E%3Cpath d='M42 0 L56 8 L56 24 L42 32 L28 24 L28 8 Z' fill='none' stroke='%23ebaf57' stroke-width='0.4' opacity='0.12'/%3E%3Cpath d='M28 24 L42 32 L42 48 L28 56 L14 48 L14 32 Z' fill='none' stroke='%23ebaf57' stroke-width='0.4' opacity='0.12'/%3E%3C/svg%3E");
+    position: relative;
+    isolation: isolate;
+  }
+  .honeycomb-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48' viewBox='0 0 56 48'%3E%3Cpath d='M14 0 L28 8 L28 24 L14 32 L0 24 L0 8 Z' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpath d='M42 0 L56 8 L56 24 L42 32 L28 24 L28 8 Z' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpath d='M28 24 L42 32 L42 48 L28 56 L14 48 L14 32 Z' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3C/svg%3E");
     background-size: 56px 48px;
     background-repeat: repeat;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: -1;
   }
 
   /* Clip hex shape */
@@ -190,6 +200,11 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes slideInUnderline {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 /* Custom scrollbar */

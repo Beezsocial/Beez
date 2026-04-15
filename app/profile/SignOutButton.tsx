@@ -20,7 +20,24 @@ export default function SignOutButton() {
       type="button"
       onClick={handleSignOut}
       disabled={loading}
-      className="w-full inline-flex items-center justify-center gap-2 border border-white/10 text-white/40 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed hover:[border-color:rgba(255,0,0,0.3)] hover:[color:rgba(255,100,100,0.8)]"
+      className="w-full inline-flex items-center justify-center gap-2 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+      style={{
+        border: '1px solid rgba(220,50,50,0.5)',
+        color: 'rgba(220,50,50,0.8)',
+        background: 'transparent',
+      }}
+      onMouseEnter={(e) => {
+        if (!loading) {
+          e.currentTarget.style.borderColor = 'rgba(220,50,50,0.8)'
+          e.currentTarget.style.color = 'rgb(220,50,50)'
+          e.currentTarget.style.background = 'rgba(220,50,50,0.08)'
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(220,50,50,0.5)'
+        e.currentTarget.style.color = 'rgba(220,50,50,0.8)'
+        e.currentTarget.style.background = 'transparent'
+      }}
     >
       {loading ? (
         <svg className="animate-spin h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">
