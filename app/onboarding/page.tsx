@@ -787,7 +787,14 @@ export default  function OnboardingPage() {
           )}
 
           {/* Card */}
-          <div className="bg-navy-950 border border-white/8 p-6 sm:p-8">
+          <div
+            className="bg-navy-950 p-6 sm:p-8"
+            style={{
+              borderRadius: 10,
+              border: '1px solid rgba(235,175,87,0.3)',
+              boxShadow: '0 0 20px rgba(235,175,87,0.1), 0 0 40px rgba(235,175,87,0.05)',
+            }}
+          >
             {/* Auth phase */}
             {phase === 'auth' && (
               <>
