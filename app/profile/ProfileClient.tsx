@@ -26,10 +26,9 @@ type Props = {
   profile: ProfileData
   types: string[]
   seeking: string[]
-  firstPost: string | null
 }
 
-const HEX_CLIP = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
+const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const MAX_FILE_BYTES = 2 * 1024 * 1024 // 2 MB
 
 // ─── Read-only hex avatar ─────────────────────────────────────────────────────
@@ -45,7 +44,7 @@ function HexAvatar({
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
   return (
     <div
-      className="w-24 h-[111px] relative flex items-center justify-center shrink-0"
+      className="w-24 h-[83px] relative flex items-center justify-center shrink-0"
       style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)' }}
       aria-hidden="true"
     >
@@ -88,7 +87,7 @@ function EditableHexAvatar({
         aria-label="Changer la photo de profil"
         disabled={disabled}
         onClick={() => fileRef.current?.click()}
-        className="w-24 h-[111px] relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy disabled:cursor-not-allowed"
+        className="w-24 h-[83px] relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy disabled:cursor-not-allowed"
       >
         {/* Gold border hex */}
         <div
@@ -130,7 +129,7 @@ function EditableHexAvatar({
 // ─── Read-only pill ───────────────────────────────────────────────────────────
 function Pill({ label }: { label: string }) {
   return (
-    <span className="px-3 py-1.5 text-xs font-medium border border-gold/40 text-gold bg-gold/8">
+    <span className="px-3 py-1.5 text-xs font-medium border border-gold/40 text-gold bg-gold/8 rounded-beez">
       {label}
     </span>
   )
@@ -205,7 +204,7 @@ const inputClass =
   'w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/25 px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)]'
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export default function ProfileClient({ profile, types, seeking, firstPost }: Props) {
+export default function ProfileClient({ profile, types, seeking }: Props) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -424,9 +423,19 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
         )}
 
         <div className="flex-1 min-w-0 pt-1">
-          <h1 className="font-heading font-bold text-2xl text-white leading-tight break-words">
-            {current.firstName} {current.lastName}
-          </h1>
+          <div
+            style={{
+              background: '#0D2E4A',
+              padding: '10px 32px 10px 16px',
+              clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%)',
+              display: 'inline-block',
+              marginBottom: 4,
+            }}
+          >
+            <h1 className="font-heading font-bold text-xl text-white leading-tight">
+              {current.firstName} {current.lastName}
+            </h1>
+          </div>
           {current.city && (
             <p className="text-white/40 text-sm mt-0.5">{current.city}</p>
           )}
@@ -585,11 +594,6 @@ export default function ProfileClient({ profile, types, seeking, firstPost }: Pr
               </Section>
             )}
 
-            {firstPost && (
-              <Section title="Premier post">
-                <p className="text-white/70 text-sm leading-relaxed whitespace-pre-wrap">{firstPost}</p>
-              </Section>
-            )}
           </>
         )}
       </div>

@@ -16,7 +16,7 @@ async function getFullProfile() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = supabase as any
 
-    const [profileRes, typesRes, seekingRes, postRes] = await Promise.all([
+    const [profileRes, typesRes, seekingRes] = await Promise.all([
       db
         .from('profiles')
         .select('first_name, last_name, city, bio, avatar_url, member_number')
@@ -30,13 +30,6 @@ async function getFullProfile() {
         .from('seeking')
         .select('seeking_type')
         .eq('user_id', userId),
-      db
-        .from('first_posts')
-        .select('content')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: true })
-        .limit(1)
-        .maybeSingle(),
     ])
 
     if (!profileRes.data) return null
@@ -45,7 +38,6 @@ async function getFullProfile() {
       profile: profileRes.data,
       types: (typesRes.data ?? []).map((r: any) => r.type),
       seeking: (seekingRes.data ?? []).map((r: any) => r.seeking_type),
-      firstPost: postRes.data?.content ?? null,
     }
   } catch {
     return null
@@ -60,7 +52,7 @@ export default async function ProfilePage() {
     redirect('/onboarding')
   }
 
-  const { profile, types, seeking, firstPost } = data
+  const { profile, types, seeking } = data
 
   return (
     <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
@@ -94,7 +86,6 @@ export default async function ProfilePage() {
           }}
           types={types}
           seeking={seeking}
-          firstPost={firstPost}
         />
       </main>
     </div>

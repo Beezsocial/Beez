@@ -6,10 +6,12 @@ interface HexBadgeProps {
   children?: ReactNode
 }
 
+const FLAT_TOP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+
 const sizeMap = {
-  sm: { outer: 'w-20 h-[92px]', inner: 'text-xs' },
-  md: { outer: 'w-32 h-[148px]', inner: 'text-sm' },
-  lg: { outer: 'w-48 h-[222px]', inner: 'text-base' },
+  sm: { outer: 'w-20 h-[69px]', inner: 'text-xs' },
+  md: { outer: 'w-32 h-[111px]', inner: 'text-sm' },
+  lg: { outer: 'w-48 h-[166px]', inner: 'text-base' },
 }
 
 export default function HexBadge({ number, size = 'md', children }: HexBadgeProps) {
@@ -19,7 +21,7 @@ export default function HexBadge({ number, size = 'md', children }: HexBadgeProp
     <div
       className={`${outer} relative flex items-center justify-center`}
       style={{
-        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+        clipPath: FLAT_TOP,
         background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)',
       }}
       role="img"
@@ -28,7 +30,7 @@ export default function HexBadge({ number, size = 'md', children }: HexBadgeProp
       <div
         className="absolute inset-[3px] flex flex-col items-center justify-center gap-1"
         style={{
-          clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+          clipPath: FLAT_TOP,
           background: '#082b44',
         }}
       >

@@ -14,7 +14,6 @@ import {
   step1Schema,
   step2Schema,
   step3Schema,
-  step4Schema,
   profileTypeValues,
   seekingValues,
   profileTypeLabels,
@@ -34,7 +33,6 @@ type OnboardingData = {
   avatarFile: File | null
   types: (typeof profileTypeValues)[number][]
   seeking: (typeof seekingValues)[number][]
-  post: string
 }
 
 // ─── Progress Bar ─────────────────────────────────────────────────────────────
@@ -290,7 +288,7 @@ function Step1({
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="w-16 h-[74px] clip-hex bg-navy-800 border border-white/10 hover:border-gold/40 transition-colors flex items-center justify-center overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="w-[74px] h-16 clip-hex bg-navy-800 border border-white/10 hover:border-gold/40 transition-colors flex items-center justify-center overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           aria-label="Changer la photo de profil"
         >
           {preview ? (
@@ -300,7 +298,7 @@ function Step1({
               alt="Aperçu de ta photo"
               className="w-full h-full object-cover"
               style={{
-                clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
               }}
             />
           ) : (
@@ -509,77 +507,13 @@ function Step3({
   )
 }
 
-// ─── Step 4 ───────────────────────────────────────────────────────────────────
-function Step4({
-  post,
-  onUpdate,
-  firstName,
-  onSkip,
-}: {
-  post: string
-  onUpdate: (value: string) => void
-  firstName: string
-  onSkip: () => void
-}) {
-  const MAX = 280
-
-  return (
-    <div className="space-y-4">
-      <p className="text-white/50 text-sm">
-        Dis bonjour à la ruche,{firstName ? ` ${firstName}` : ''} ! Ce post sera
-        visible par les autres membres.
-      </p>
-
-      <Textarea
-        value={post}
-        onChange={(e) => onUpdate(e.target.value)}
-        placeholder="Raconte-nous où tu en es…"
-        rows={5}
-        maxLength={MAX}
-        charCount={post.length}
-        maxChars={MAX}
-        aria-label="Ton premier post"
-      />
-
-      {/* Suggestion prompts */}
-      <div className="space-y-1.5 border-l-2 border-gold/30 pl-4">
-        <p className="text-xs text-white/30 font-medium mb-2">Besoin d'inspiration ?</p>
-        {[
-          'Quel problème tu résous et pour qui ?',
-          'Où en est ton projet aujourd&aposhui ?',
-          'Pourquoi tu t&aposes lancé ?',
-        ].map((prompt) => (
-          <button
-            key={prompt}
-            type="button"
-            onClick={() =>
-              onUpdate(post ? `${post}\n→ ${prompt}` : `→ ${prompt}`)
-            }
-            className="block text-xs text-white/40 hover:text-gold transition-colors text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-gold"
-          >
-            → {prompt}
-          </button>
-        ))}
-      </div>
-
-      <button
-        type="button"
-        onClick={onSkip}
-        className="text-sm text-white/30 hover:text-white/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-      >
-        Passer cette étape →
-      </button>
-    </div>
-  )
-}
-
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default  function OnboardingPage() {
   const router = useRouter()
   const supabase = createClient()
 
   // 0 = auth, 1-4 = onboarding steps
-  const [phase, setPhase] = useState<'auth' | 1 | 2 | 3 | 4>('auth')
+  const [phase, setPhase] = useState<'auth' | 1 | 2 | 3>('auth')
   const [sessionChecked, setSessionChecked] = useState(false)
   const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState('')
@@ -626,7 +560,6 @@ export default  function OnboardingPage() {
     avatarFile: null,
     types: [],
     seeking: [],
-    post: '',
   })
 
   const update = useCallback(
@@ -698,7 +631,6 @@ export default  function OnboardingPage() {
     } else if (phase === 3) {
       const result = step3Schema.safeParse({ seeking: data.seeking })
       if (!result.success) return
-      setPhase(4)
     }
   }
 
@@ -715,7 +647,7 @@ export default  function OnboardingPage() {
   }
 
   // Submit all onboarding data
-  const submit = async (skipPost = false) => {
+  const submit = async () => {
     setLoading(true)
     setServerError('')
 
@@ -766,18 +698,6 @@ export default  function OnboardingPage() {
         if (seekingError) throw seekingError
       }
 
-      // Insert first post (optional)
-      if (!skipPost && data.post.trim()) {
-        const postResult = step4Schema.safeParse({ post: data.post })
-        if (postResult.success) {
-          await supabase.from('first_posts').insert({
-            user_id: user.id,
-            content: data.post.trim(),
-          } as any)
-          // Non-critical — don't throw on post error
-        }
-      }
-
       // Send welcome email (non-blocking — don't fail registration on email error)
       try {
         const { data: { session } } = await supabase.auth.getSession()
@@ -821,7 +741,6 @@ export default  function OnboardingPage() {
     'Qui es-tu ?',
     'Tu es…',
     'Tu cherches…',
-    'Dis bonjour à la ruche',
   ]
 
   const isOnboarding = phase !== 'auth'
@@ -863,7 +782,7 @@ export default  function OnboardingPage() {
           {/* Progress (onboarding steps only) */}
           {isOnboarding && (
             <div className="mb-8">
-              <ProgressBar step={stepNumber as number} total={4} />
+              <ProgressBar step={stepNumber as number} total={3} />
             </div>
           )}
 
@@ -921,24 +840,6 @@ export default  function OnboardingPage() {
               </>
             )}
 
-            {/* Step 4 */}
-            {phase === 4 && (
-              <>
-                <h2 className="font-heading font-bold text-2xl text-white mb-1">
-                  Dis bonjour à la ruche
-                </h2>
-                <p className="text-white/40 text-sm mb-6">
-                  Ton premier post — optionnel mais recommandé.
-                </p>
-                <Step4
-                  post={data.post}
-                  onUpdate={(value) => update({ post: value })}
-                  firstName={data.firstName}
-                  onSkip={() => submit(true)}
-                />
-              </>
-            )}
-
             {/* Server error */}
             {serverError && (
               <p className="text-sm text-red-400 border border-red-500/20 bg-red-500/5 px-3 py-2 mt-4" role="alert">
@@ -949,14 +850,13 @@ export default  function OnboardingPage() {
             {/* Actions */}
             {isOnboarding && (
               <div className="mt-6 flex flex-col gap-3">
-                {phase < 4 ? (
+                {(phase as number) < 3 ? (
                   <Button
                     onClick={validateAndAdvance}
                     fullWidth
                     size="lg"
                     disabled={
-                      (phase === 2 && data.types.length === 0) ||
-                      (phase === 3 && data.seeking.length === 0)
+                      (phase === 2 && data.types.length === 0)
                     }
                   >
                     Continuer
@@ -966,11 +866,11 @@ export default  function OnboardingPage() {
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => submit(false)}
+                    onClick={() => submit()}
                     loading={loading}
                     fullWidth
                     size="lg"
-                    disabled={data.post.length > 280}
+                    disabled={data.seeking.length === 0}
                   >
                     Rejoindre la ruche ✦
                   </Button>
@@ -981,7 +881,7 @@ export default  function OnboardingPage() {
                   <button
                     type="button"
                     onClick={() =>
-                      setPhase((prev) => ((prev as number) - 1) as 1 | 2 | 3 | 4)
+                      setPhase((prev) => ((prev as number) - 1) as 1 | 2 | 3)
                     }
                     className="text-sm text-white/30 hover:text-white/50 transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   >

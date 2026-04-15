@@ -3,6 +3,7 @@ import Logo from '@/components/ui/Logo'
 import CarouselHero from '@/components/ui/CarouselHero'
 import NavHeader from '@/components/ui/NavHeader'
 import BeezWord from '@/components/ui/BeezWord'
+import MockupCarousel from '@/components/ui/MockupCarousel'
 
 // ─── Feature Card ─────────────────────────────────────────────────────────────
 function FeatureCard({
@@ -28,46 +29,6 @@ function FeatureCard({
   )
 }
 
-// ─── Mockup hex avatar ────────────────────────────────────────────────────────
-function MockHex({ initial, gradient }: { initial: string; gradient: string }) {
-  return (
-    <div
-      style={{
-        width: 36,
-        height: 42,
-        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-        background: gradient,
-        flexShrink: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 13,
-        fontWeight: 700,
-        color: '#082b44',
-      }}
-    >
-      {initial}
-    </div>
-  )
-}
-
-// ─── Phone feed card ──────────────────────────────────────────────────────────
-function MockCard({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 10,
-        padding: '10px 12px',
-        marginBottom: 8,
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function LandingPage() {
   return (
@@ -85,7 +46,7 @@ export default function LandingPage() {
         <img
           src="/images/logo-dark.png"
           alt="Beez"
-          style={{ height: 80, width: 'auto', marginBottom: 16, position: 'relative', zIndex: 1 }}
+          style={{ height: 120, width: 'auto', marginBottom: 32, position: 'relative', zIndex: 1 }}
         />
 
         {/* "Beez" wordmark */}
@@ -105,8 +66,8 @@ export default function LandingPage() {
 
         {/* Main headline */}
         <p
-          className="font-heading font-bold text-center mb-4 leading-tight"
-          style={{ fontSize: 'clamp(32px, 5vw, 52px)', position: 'relative', zIndex: 1 }}
+          className="font-heading font-bold text-center leading-tight"
+          style={{ fontSize: 'clamp(32px, 5vw, 52px)', position: 'relative', zIndex: 1, marginTop: 24, marginBottom: 24 }}
         >
           <span className="text-white">Construis. </span>
           <span className="text-white">Partage. </span>
@@ -114,12 +75,12 @@ export default function LandingPage() {
         </p>
 
         {/* Subtitle */}
-        <p className="text-white/60 text-xl text-center mb-6" style={{ position: 'relative', zIndex: 1 }}>
+        <p className="text-white/60 text-xl text-center" style={{ position: 'relative', zIndex: 1, marginBottom: 32 }}>
           La ruche des entrepreneurs
         </p>
 
         {/* Auto-rotating carousel */}
-        <div className="mb-8 flex items-center justify-center px-4" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="flex items-center justify-center px-4" style={{ position: 'relative', zIndex: 1, marginTop: 32, marginBottom: 40 }}>
           <CarouselHero />
         </div>
 
@@ -129,7 +90,7 @@ export default function LandingPage() {
           className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
           style={{ position: 'relative', zIndex: 1 }}
         >
-          Rejoindre la ruche →
+          🐝 Rejoindre la ruche →
         </Link>
 
         {/* Early access note */}
@@ -138,99 +99,9 @@ export default function LandingPage() {
         </p>
       </section>
 
-      {/* ── APP MOCKUP ── */}
+      {/* ── APP MOCKUP CAROUSEL ── */}
       <section className="py-12 px-4 flex items-center justify-center overflow-visible" style={{ position: 'relative', zIndex: 1 }}>
-        <div
-          style={{
-            maxWidth: 300,
-            width: '100%',
-            background: '#082b44',
-            borderRadius: 36,
-            border: '2px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 40px 80px rgba(0,0,0,0.5)',
-            padding: '20px 16px',
-            animation: 'float 3s ease-in-out infinite',
-          }}
-        >
-          {/* Status bar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12, padding: '0 4px' }}>
-            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>9:41</span>
-            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: 700, letterSpacing: -0.5 }}>
-              <span style={{ color: '#ffffff' }}>Bee</span><span style={{ color: '#ebaf57' }}>z</span>
-            </span>
-            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>●●●</span>
-          </div>
-
-          {/* Card 1 — Welcome */}
-          <MockCard>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
-              <MockHex initial="M" gradient="linear-gradient(135deg,#ebaf57,#d4912a)" />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
-                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Martin</span>
-                  <span style={{ background: 'rgba(235,175,87,0.15)', border: '1px solid rgba(235,175,87,0.4)', color: '#ebaf57', fontSize: 9, padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>
-                    ✦ Founding Member #001
-                  </span>
-                </div>
-                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10 }}>FlowDesk · À l'instant</span>
-              </div>
-            </div>
-            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, marginBottom: 6, lineHeight: 1.4 }}>
-              Vient de rejoindre la ruche 🐝
-            </p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, marginBottom: 6, lineHeight: 1.4 }}>
-              Souhaitez la bienvenue à Martin, fondateur de FlowDesk !
-            </p>
-            <div style={{ display: 'flex', gap: 12, color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>
-              <span>🍯 14</span>
-              <span>💬 6</span>
-            </div>
-          </MockCard>
-
-          {/* Card 2 — Milestone */}
-          <MockCard>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
-              <MockHex initial="B" gradient="linear-gradient(135deg,#f472b6,#ef4444)" />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Blop 🚀</span>
-                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>· 1h</span>
-                </div>
-                <span style={{ background: 'rgba(235,175,87,0.12)', color: '#ebaf57', fontSize: 9, padding: '1px 6px', borderRadius: 3, fontWeight: 600 }}>
-                  250K€ levés
-                </span>
-              </div>
-            </div>
-            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, marginBottom: 4, lineHeight: 1.4 }}>
-              Première levée de fonds 🎉
-            </p>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, lineHeight: 1.4 }}>
-              250 000€ en pré-seed. Merci aux 3 business angels.
-            </p>
-          </MockCard>
-
-          {/* Card 3 — Help */}
-          <MockCard>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
-              <MockHex initial="T" gradient="linear-gradient(135deg,#60a5fa,#3b82f6)" />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                  <span style={{ color: 'white', fontSize: 12, fontWeight: 600 }}>Thibault</span>
-                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>· Nexio</span>
-                </div>
-                <span style={{ background: 'rgba(251,146,60,0.15)', border: '1px solid rgba(251,146,60,0.3)', color: '#fb923c', fontSize: 9, padding: '1px 5px', borderRadius: 4, fontWeight: 600 }}>
-                  🙋 Aide
-                </span>
-              </div>
-            </div>
-            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11, marginBottom: 8, lineHeight: 1.4 }}>
-              Comment créer ma chaîne YouTube ?
-            </p>
-            <div style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', fontSize: 10, padding: '5px 10px', borderRadius: 6, textAlign: 'center' }}>
-              💬 Répondre
-            </div>
-          </MockCard>
-        </div>
+        <MockupCarousel />
       </section>
 
       {/* ── FEATURES ── */}
@@ -463,6 +334,9 @@ export default function LandingPage() {
           <Logo height={32} />
           <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>
           <div className="flex flex-wrap justify-center gap-6">
+            <a href="/roadmap" className="hover:text-white/50 transition-colors">
+              Roadmap
+            </a>
             <a href="/mentions-legales" className="hover:text-white/50 transition-colors">
               Mentions légales
             </a>
