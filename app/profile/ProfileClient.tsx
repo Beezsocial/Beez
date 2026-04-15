@@ -721,7 +721,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
 
       {/* Success banner */}
       {success && !isEditing && (
-        <div className="mt-4 flex items-center gap-2 border border-gold/30 bg-gold/8 px-4 py-3" role="status">
+        <div className="mt-4 flex items-center gap-2 border border-gold/30 bg-gold/8 px-4 py-3" style={{ borderRadius: 10 }} role="status">
           <span className="text-gold text-xs" aria-hidden="true">✦</span>
           <span className="text-gold text-sm font-medium">Profil mis à jour ✓</span>
         </div>

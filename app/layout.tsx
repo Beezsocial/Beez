@@ -24,12 +24,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'fr_FR',
     siteName: 'Beez',
+    images: [
+      {
+        url: 'https://www.joinbeez.com/images/beez-og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Beez — La ruche des entrepreneurs',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Beez — La ruche des entrepreneurs',
     description:
       'La communauté pour ceux qui construisent quelque chose. Zéro bullshit corporate.',
+    images: ['https://www.joinbeez.com/images/beez-og.png'],
   },
   robots: {
     index: true,
