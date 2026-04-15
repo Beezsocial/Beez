@@ -39,7 +39,7 @@ export default function LandingPage() {
       <NavHeader />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-16">
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-10 pb-16">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-navy to-transparent" />
 
         {/* Logo image */}

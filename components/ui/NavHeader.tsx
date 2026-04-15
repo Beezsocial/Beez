@@ -42,7 +42,7 @@ export default function NavHeader() {
                 href="/roadmap"
                 className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
               >
-                Roadmap →
+                Roadmap
               </Link>
               <Link
                 href="/profile"

@@ -525,35 +525,8 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
           </div>
         </div>
 
-        {/* Member badge */}
-        {current.memberNumber != null && current.memberNumber <= 150 ? (
-          <div
-            className="inline-flex items-center gap-1.5 px-2.5 py-1"
-            style={{
-              background: 'rgba(235,175,87,0.12)',
-              border: '1px solid rgba(235,175,87,0.4)',
-              borderRadius: 6,
-            }}
-          >
-            <span className="text-gold text-xs" aria-hidden="true">✦</span>
-            <span className="text-gold text-xs font-bold tracking-wide">
-              Founding Member #{current.memberNumber}
-            </span>
-          </div>
-        ) : current.memberNumber != null ? (
-          <div
-            className="inline-flex items-center gap-1.5 px-2.5 py-1"
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: 6,
-            }}
-          >
-            <span className="text-white/40 text-xs font-medium">
-              Membre #{current.memberNumber}
-            </span>
-          </div>
-        ) : null}
+        {/* Spacer — preserves gap between tile and card below */}
+        <div className="h-2" />
       </div>
 
       {/* Card body */}
