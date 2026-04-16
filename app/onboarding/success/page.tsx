@@ -67,7 +67,7 @@ export default async function SuccessPage() {
             Tu es dans la ruche
           </p>
           <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-white mb-4 leading-tight">
-            Bienvenue dans la ruche,
+            Bienvenue,
             <br />
             <span className="text-gradient">{firstName}</span> ✦
           </h1>
@@ -75,14 +75,26 @@ export default async function SuccessPage() {
           {isFoundingMember ? (
             <>
               <div
-                className="inline-flex items-center gap-2 mb-4 px-4 py-2"
+                className="inline-flex flex-col items-center mb-4 px-6 py-3"
                 style={{
                   background: 'rgba(235,175,87,0.12)',
                   border: '1px solid rgba(235,175,87,0.4)',
                   borderRadius: 8,
                 }}
               >
-                <span className="text-gold font-bold text-sm">✦ Founding Member #{paddedNumber}</span>
+                <span className="text-gold font-bold text-sm tracking-wide">✦ Founding Member</span>
+                <span
+                  style={{
+                    fontFamily: "'Syne', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 28,
+                    color: '#ebaf57',
+                    lineHeight: 1.2,
+                    letterSpacing: '0.05em',
+                  }}
+                >
+                  #{paddedNumber}
+                </span>
               </div>
               <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
                 Tu fais partie des 150 Founding Members. Accès Pro gratuit à vie.
@@ -103,7 +115,7 @@ export default async function SuccessPage() {
                 </div>
               )}
               <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
-                Bienvenue dans la ruche !
+                La communauté Beez est heureuse de te compter parmi ses membres !
               </p>
             </>
           )}
@@ -114,6 +126,7 @@ export default async function SuccessPage() {
           <Link
             href="/profile"
             className="inline-flex items-center justify-center gap-2 w-full bg-gold text-navy-900 font-bold px-8 py-4 text-base hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            style={{ borderRadius: 10 }}
           >
             Consulter mon profil
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -80,8 +80,11 @@ export async function POST(request: Request) {
               </p>
               ${memberBadgeHtml}
               ${isFoundingMember ? `
-              <p style="color:#ebaf57;font-weight:bold;margin:16px 0 8px;">🎉 Félicitations !</p>
-              <p style="color:#cccccc;margin:0 0 16px;font-size:15px;line-height:1.6;">Tu fais partie des 150 premiers membres fondateurs de Beez et ton badge porte le numéro <strong style="color:#ebaf57;">#${paddedNumber}</strong>.<br/>Beez Pro sera gratuit à vie pour toi !<br/>Merci de ta confiance. 🐝</p>
+              <p style="margin:24px 0;padding:20px;background:rgba(235,175,87,0.1);border-left:3px solid #ebaf57;border-radius:8px;font-size:15px;color:#cccccc;line-height:1.7;">
+                🎉 <strong style="color:#ebaf57;">Félicitations !</strong> Tu fais partie des 150 premiers membres fondateurs de Beez et ton badge porte le numéro <strong style="color:#ebaf57;">#${paddedNumber}</strong>.<br/><br/>
+                Beez Pro sera <strong style="color:#ffffff;">gratuit à vie</strong> pour toi !<br/>
+                Merci de ta confiance. 🐝
+              </p>
               ` : `<p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">${memberBodyText}</p>`}
               <p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
                 L'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.
