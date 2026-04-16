@@ -639,10 +639,13 @@ export default  function OnboardingPage() {
     const ext = file.name.split('.').pop() ?? 'jpg'
     const path = `${userId}/avatar.${ext}`
     const { error } = await supabase.storage
-      .from('avatars')
+      .from('Avatars')
       .upload(path, file, { upsert: true })
-    if (error) return null
-    const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
+    if (error) {
+      console.error('[onboarding] Avatar upload failed:', error.message)
+      return null
+    }
+    const { data: urlData } = supabase.storage.from('Avatars').getPublicUrl(path)
     return urlData.publicUrl
   }
 

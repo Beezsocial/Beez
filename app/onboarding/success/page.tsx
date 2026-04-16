@@ -97,7 +97,7 @@ export default async function SuccessPage() {
                 </span>
               </div>
               <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
-                Tu fais partie des 150 Founding Members. Accès Pro gratuit à vie.
+                La communauté Beez est heureuse de te compter parmi ses membres !
               </p>
             </>
           ) : (
