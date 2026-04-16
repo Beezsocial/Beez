@@ -25,7 +25,7 @@ export default function HexBadge({ number, size = 'md', children }: HexBadgeProp
         background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)',
       }}
       role="img"
-      aria-label={number ? `Founding Member #${number}` : 'Badge membre'}
+      aria-label={number ? `Founding Member #${String(number).padStart(3, '0')}` : 'Badge membre'}
     >
       <div
         className="absolute inset-[3px] flex flex-col items-center justify-center gap-1"
@@ -46,7 +46,7 @@ export default function HexBadge({ number, size = 'md', children }: HexBadgeProp
             </span>
             {number !== undefined && (
               <span className="text-gold font-mono text-xs font-bold">
-                #{number}
+                #{String(number).padStart(3, '0')}
               </span>
             )}
           </>
