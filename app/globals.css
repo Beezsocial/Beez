@@ -52,7 +52,9 @@
   }
 
   body {
-    @apply font-sans bg-background text-foreground;
+    @apply font-sans;
+    background: #082b44;
+    color: #ffffff;
   }
 
   *,

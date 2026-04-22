@@ -1,9 +1,9 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
-
 import { cn } from "@/lib/utils"
 
+// ─── shadcn buttonVariants — kept for UI library compatibility ────────────────
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -41,7 +41,8 @@ const buttonVariants = cva(
   }
 )
 
-function Button({
+// ─── shadcn Button — named export for UI library compatibility ────────────────
+function ShadcnButton({
   className,
   variant = "default",
   size = "default",
@@ -52,7 +53,6 @@ function Button({
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot.Root : "button"
-
   return (
     <Comp
       data-slot="button"
@@ -64,4 +64,63 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+export { ShadcnButton as Button, buttonVariants }
+
+// ─── Beez Button — default export ────────────────────────────────────────────
+interface ButtonProps {
+  children: React.ReactNode
+  onClick?: () => void
+  className?: string
+  disabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
+  loading?: boolean
+  fullWidth?: boolean
+  size?: 'sm' | 'md' | 'lg'
+}
+
+const sizeClasses = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-6 py-2.5 text-sm',
+  lg: 'px-7 py-3 text-base',
+}
+
+export default function Button({
+  children,
+  onClick,
+  className,
+  disabled,
+  type = 'button',
+  loading = false,
+  fullWidth = false,
+  size = 'md',
+}: ButtonProps) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled || loading}
+      className={cn(
+        'inline-flex items-center justify-center gap-2 font-bold rounded-beez bg-gold text-navy-900 transition-all duration-200',
+        'hover:brightness-110 active:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy',
+        'disabled:opacity-50 disabled:cursor-not-allowed',
+        sizeClasses[size],
+        fullWidth && 'w-full',
+        className
+      )}
+    >
+      {loading && (
+        <svg
+          className="animate-spin"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="31.4" strokeDashoffset="10" />
+        </svg>
+      )}
+      {children}
+    </button>
+  )
+}
