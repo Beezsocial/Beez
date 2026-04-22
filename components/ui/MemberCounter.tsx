@@ -1,15 +1,19 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useInView } from 'motion/react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function MemberCounter() {
   const [count, setCount] = useState<number | null>(null)
   const [displayCount, setDisplayCount] = useState(0)
-  const animationRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const animationRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  function animateCount(from: number, to: number, duration = 1000) {
-    const steps = 40
+  function animateCount(from: number, to: number, duration = 1200) {
+    const steps = 48
     const stepMs = duration / steps
     const increment = (to - from) / steps
     let current = from
@@ -32,7 +36,6 @@ export default function MemberCounter() {
     const supabase = createClient()
 
     async function fetchCount() {
-      // Uses the anon key — works for both authenticated and unauthenticated users
       const { count: c } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
@@ -42,11 +45,8 @@ export default function MemberCounter() {
     }
 
     fetchCount()
-
-    // Refresh every 30s
     const interval = setInterval(fetchCount, 30_000)
 
-    // Realtime: increment on new INSERT
     const channel = supabase
       .channel('member-counter')
       .on(
@@ -64,14 +64,22 @@ export default function MemberCounter() {
     }
   }, [])
 
-  // Animate whenever count changes
+  // Trigger count-up from 0 when both in-view AND count loaded
   useEffect(() => {
-    if (count == null) return
-    animateCount(displayCount, count, count === 0 ? 0 : 1000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (isInView && count != null && !hasAnimated) {
+      setHasAnimated(true)
+      animateCount(0, count, count === 0 ? 0 : 1200)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInView, count])
+
+  // Re-animate on live updates after initial animation
+  useEffect(() => {
+    if (!hasAnimated || count == null) return
+    animateCount(displayCount, count, 600)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count])
 
-  // Cleanup animation on unmount
   useEffect(() => {
     return () => {
       if (animationRef.current) clearInterval(animationRef.current)
@@ -81,10 +89,10 @@ export default function MemberCounter() {
   if (count == null) return null
 
   return (
-    <div className="text-center mt-6">
+    <div ref={ref} className="text-center mt-6">
       <p
         style={{
-          fontFamily: "'Syne', sans-serif",
+          fontFamily: 'Outfit, sans-serif',
           fontSize: 'clamp(48px, 8vw, 72px)',
           fontWeight: 800,
           color: '#ebaf57',

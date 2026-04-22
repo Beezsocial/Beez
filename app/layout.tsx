@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import './globals.css'
 import { Outfit } from "next/font/google";
 import { cn } from "@/lib/utils";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 const outfit = Outfit({ subsets: ['latin'], weight: ['400','500','600','700','800'], variable: '--font-heading' });
 
@@ -65,7 +66,10 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="min-h-screen bg-navy antialiased">{children}</body>
+      <body className="min-h-screen bg-navy antialiased">
+        <ScrollProgress />
+        {children}
+      </body>
     </html>
   )
 }
