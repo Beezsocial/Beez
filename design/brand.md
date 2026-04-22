@@ -11,7 +11,7 @@ White : #ffffff
 Muted : rgba(255,255,255,0.5)
 
 ## Typographie
-Titres : Syne 700/800, tracking-tight
+Titres : Outfit 700/800, tracking-tight
 Corps : DM Sans 400/500
 Taille hero : clamp(48px, 8vw, 96px)
 Taille section : clamp(32px, 5vw, 52px)

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import './globals.css'
-import { Geist } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const outfit = Outfit({ subsets: ['latin'], weight: ['400','500','600','700','800'], variable: '--font-heading' });
 
 export const metadata: Metadata = {
   title: 'Beez — La ruche des entrepreneurs',
@@ -56,7 +56,7 @@ export default function RootLayout({
   children: ReactNode
 }) {
   return (
-    <html lang="fr" className={cn("scroll-smooth", "font-sans", geist.variable)}>
+    <html lang="fr" className={cn("scroll-smooth", "font-sans", outfit.variable)}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

@@ -56,7 +56,7 @@ Toujours adapter le border-radius à 10px.
 - Hexagones : orientation flat-top UNIQUEMENT
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)
 - Honeycomb background sur toutes les pages (::before pseudo-element)
-- Fonts : Syne (titres) + DM Sans (corps)
+- Fonts : Outfit (titres) + DM Sans (corps)
 
 ## Règles absolues
 - JAMAIS modifier la base de données Supabase directement
@@ -99,3 +99,9 @@ Founding Members : member_number <= 150 = Pro gratuit à vie
 4. Vérifier sur Vercel preview URL
 5. Si OK : git checkout main && git merge preview/nom-feature && git push
 6. git branch -d preview/nom-feature && git push origin --delete preview/nom-feature
+
+## Assets
+Logo fond sombre (header, fond navy) : /public/images/logo-dark.png
+Logo fond clair (si besoin) : /public/images/logo-light.png
+OG Image : /public/images/beez-og.png
+TOUJOURS utiliser ces fichiers, jamais recréer le logo en SVG ou texte.
