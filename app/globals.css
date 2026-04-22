@@ -110,7 +110,7 @@
     --sidebar-ring: oklch(0.556 0 0);
   }
   * {
-    @apply border-border outline-ring/50;
+    border-color: rgba(255, 255, 255, 0.08);
   }
 }
 
