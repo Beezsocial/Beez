@@ -6,12 +6,12 @@ import { createClient } from '@/lib/supabase/client'
 
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const LIFT_TRANSITION = { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const }
-const GAP = 4
-// Breathing room so the bio tooltip (which floats above/beside a hex) never
-// gets clipped by the scroll container when the hex sits on the top row or
-// against a side edge.
-const TOOLTIP_TOP_SPACE = 100
-const TOOLTIP_SIDE_SPACE = 90
+const HOVER_SHADOW = 'drop-shadow(0 12px 20px rgba(0,0,0,0.45))'
+// Breathing room around the scroll container so the bio tooltip (which
+// floats above a hex) and the 1.25x hover scale never get clipped when a
+// cell sits on the honeycomb's outer edge.
+const TOOLTIP_TOP_SPACE = 90
+const TOOLTIP_SIDE_SPACE = 80
 
 type Profile = {
   id: string
@@ -23,8 +23,16 @@ type Profile = {
 }
 
 type Cell =
-  | { kind: 'empty'; key: string; row: number; col: number }
-  | { kind: 'profile'; key: string; row: number; col: number; profile: Profile }
+  | { kind: 'empty'; key: string; x: number; y: number }
+  | { kind: 'profile'; key: string; x: number; y: number; profile: Profile }
+
+// Deterministic pseudo-random in [0, 1) from an integer seed, so the
+// honeycomb's organic edge and the profile spread stay stable across
+// re-renders instead of reshuffling on every layout recompute.
+function seededRandom(seed: number) {
+  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453
+  return x - Math.floor(x)
+}
 
 export default function RucheClient() {
   const [profiles, setProfiles] = useState<Profile[]>([])
@@ -67,41 +75,85 @@ export default function RucheClient() {
   }, [toast])
 
   const isMobile = containerSize.width > 0 && containerSize.width < 640
-  const hexSize = isMobile ? 60 : 90
-  const hexHeight = hexSize * (Math.sqrt(3) / 2)
-  const colStep = hexSize + GAP
-  const rowStep = hexHeight * 0.75 + GAP
-  const colOffset = colStep / 2
+  const hexW = isMobile ? 60 : 100
+  const hexH = hexW * 0.866
+  const colStep = hexW * 0.75
+  const rowStep = hexH
 
   const { cells, gridWidth, gridHeight } = useMemo(() => {
-    const width = (containerSize.width || 1200) - TOOLTIP_SIDE_SPACE * 2
-    const height = (containerSize.height || 800) - TOOLTIP_TOP_SPACE
+    const availWidth = Math.max(320, (containerSize.width || 1200) - TOOLTIP_SIDE_SPACE * 2)
+    const availHeight = Math.max(320, (containerSize.height || 800) - TOOLTIP_TOP_SPACE)
 
-    const cols = Math.max(1, Math.ceil(width / colStep) + 1)
-    const fillRows = Math.max(1, Math.ceil(height / rowStep) + 1)
-    const rowsForProfiles = Math.ceil(profiles.length / cols)
-    const rows = Math.max(fillRows, rowsForProfiles)
+    const cols = Math.max(3, Math.ceil(availWidth / colStep) + 2)
+    const rows = Math.max(3, Math.ceil(availHeight / rowStep) + 2)
 
-    const list: Cell[] = []
-    let profileIndex = 0
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const key = `${r}-${c}`
-        if (profileIndex < profiles.length) {
-          list.push({ kind: 'profile', key, row: r, col: c, profile: profiles[profileIndex] })
-          profileIndex++
-        } else {
-          list.push({ kind: 'empty', key, row: r, col: c })
-        }
+    // True flat-top interlocking: columns are the repeating unit, spaced at
+    // 3/4 of a hex width, with odd columns pushed down by half a hex height
+    // so each hex nests into the notch of its neighboring columns.
+    const candidates: { col: number; row: number; x: number; y: number }[] = []
+    for (let col = 0; col < cols; col++) {
+      for (let row = 0; row < rows; row++) {
+        candidates.push({
+          col,
+          row,
+          x: col * colStep,
+          y: row * rowStep + (col % 2) * (rowStep / 2),
+        })
       }
     }
 
-    return {
-      cells: list,
-      gridWidth: cols * colStep + colOffset,
-      gridHeight: rows * rowStep + hexHeight * 0.25,
+    const gridW = cols * colStep + hexW * 0.25
+    const gridH = rows * rowStep + rowStep / 2 + rowStep * 0.25
+
+    // Organic silhouette: only keep cells within an elliptical radius of the
+    // honeycomb's center, with a small per-cell jitter so the boundary reads
+    // as an irregular cluster rather than a perfect ellipse or rectangle.
+    const centerX = gridW / 2
+    const centerY = gridH / 2
+
+    let masked = candidates.filter((c) => {
+      const dx = (c.x - centerX) / centerX
+      const dy = (c.y - centerY) / centerY
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      const jitter = (seededRandom(c.col * 1000 + c.row) - 0.5) * 0.3
+      return dist <= 1 + jitter
+    })
+
+    // Never let the organic mask drop profiles on very small viewports —
+    // fall back to the full candidate grid if it left too few cells.
+    if (masked.length < profiles.length) {
+      masked = candidates
     }
-  }, [containerSize, profiles, colStep, rowStep, colOffset, hexHeight])
+
+    const total = masked.length
+    const profileCount = profiles.length
+    const cellIndexToProfile = new Map<number, Profile>()
+
+    if (profileCount > 0) {
+      const step = Math.max(1, Math.floor(total / profileCount))
+      const usedIndices = new Set<number>()
+      for (let i = 0; i < profileCount; i++) {
+        const bucketStart = i * step
+        const bucketEnd = i === profileCount - 1 ? total : Math.min(total, bucketStart + step)
+        const span = Math.max(1, bucketEnd - bucketStart)
+        let idx = bucketStart + Math.floor(seededRandom(i * 97 + total) * span)
+        idx = Math.min(idx, total - 1)
+        while (usedIndices.has(idx) && idx < total - 1) idx++
+        usedIndices.add(idx)
+        cellIndexToProfile.set(idx, profiles[i])
+      }
+    }
+
+    const list: Cell[] = masked.map((c, index) => {
+      const profile = cellIndexToProfile.get(index)
+      const key = `${c.col}-${c.row}`
+      return profile
+        ? { kind: 'profile', key, x: c.x, y: c.y, profile }
+        : { kind: 'empty', key, x: c.x, y: c.y }
+    })
+
+    return { cells: list, gridWidth: gridW, gridHeight: gridH }
+  }, [containerSize, profiles, colStep, rowStep, hexW])
 
   const handleSelect = useCallback((profile: Profile) => {
     setSelectedProfile(profile)
@@ -129,29 +181,27 @@ export default function RucheClient() {
           overflowY: 'auto',
           overflowX: 'hidden',
           paddingTop: TOOLTIP_TOP_SPACE,
+          paddingBottom: 40,
           paddingLeft: TOOLTIP_SIDE_SPACE,
           paddingRight: TOOLTIP_SIDE_SPACE,
         }}
       >
-        <div className="relative" style={{ width: gridWidth, height: gridHeight }}>
-          {cells.map((cell) => {
-            const x = cell.col * colStep + (cell.row % 2 === 1 ? colOffset : 0)
-            const y = cell.row * rowStep
-
-            return cell.kind === 'empty' ? (
-              <EmptyHex key={cell.key} x={x} y={y} size={hexSize} height={hexHeight} />
+        <div className="relative mx-auto" style={{ width: gridWidth, height: gridHeight }}>
+          {cells.map((cell) =>
+            cell.kind === 'empty' ? (
+              <EmptyHex key={cell.key} x={cell.x} y={cell.y} size={hexW} height={hexH} />
             ) : (
               <ProfileHex
                 key={cell.key}
-                x={x}
-                y={y}
-                size={hexSize}
-                height={hexHeight}
+                x={cell.x}
+                y={cell.y}
+                size={hexW}
+                height={hexH}
                 profile={cell.profile}
                 onSelect={handleSelect}
               />
             )
-          })}
+          )}
         </div>
       </div>
 
@@ -187,19 +237,19 @@ function EmptyHex({
   return (
     <motion.div
       className="absolute"
-      style={{ left: x, top: y, width: size, height, zIndex: 1 }}
-      whileHover={{ scale: 1.25, zIndex: 10, boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
+      style={{
+        left: x,
+        top: y,
+        width: size,
+        height,
+        zIndex: 1,
+        clipPath: HEX_CLIP,
+        background: '#0a2540',
+        border: '1px solid rgba(235,175,87,0.1)',
+      }}
+      whileHover={{ scale: 1.25, zIndex: 10, filter: HOVER_SHADOW }}
       transition={LIFT_TRANSITION}
-    >
-      <div
-        className="w-full h-full"
-        style={{
-          clipPath: HEX_CLIP,
-          background: 'rgba(235,175,87,0.03)',
-          border: '1px solid rgba(235,175,87,0.08)',
-        }}
-      />
-    </motion.div>
+    />
   )
 }
 
@@ -223,22 +273,23 @@ function ProfileHex({
   const initials = `${profile.first_name?.[0] ?? ''}${profile.last_name?.[0] ?? ''}`.toUpperCase()
 
   return (
-    <motion.div
-      className="absolute cursor-pointer"
-      style={{ left: x, top: y, width: size, height, zIndex: 1 }}
-      whileHover={{ scale: 1.25, zIndex: 10, boxShadow: '0 12px 32px rgba(0,0,0,0.4)' }}
-      transition={LIFT_TRANSITION}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      onClick={() => onSelect(profile)}
-    >
-      <div
-        className="w-full h-full overflow-hidden flex items-center justify-center"
+    // Plain, un-clipped, un-scaled positioning wrapper. The hex clip-path and
+    // the hover scale both live on the motion child below — keeping them on
+    // the SAME element is what stops the hover zoom from revealing a square.
+    // The tooltip is this wrapper's other child so it escapes the hex clip.
+    <div className="absolute" style={{ left: x, top: y, width: size, height }}>
+      <motion.div
+        className="cursor-pointer w-full h-full flex items-center justify-center"
         style={{
           clipPath: HEX_CLIP,
           border: '1px solid rgba(235,175,87,0.25)',
           background: profile.avatar_url ? undefined : '#0D2E4A',
         }}
+        whileHover={{ scale: 1.25, zIndex: 10, filter: HOVER_SHADOW }}
+        transition={LIFT_TRANSITION}
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
+        onClick={() => onSelect(profile)}
       >
         {profile.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -246,7 +297,7 @@ function ProfileHex({
         ) : (
           <span className="font-heading font-bold text-gold text-lg">{initials}</span>
         )}
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {hovered && (
@@ -274,6 +325,6 @@ function ProfileHex({
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   )
 }
