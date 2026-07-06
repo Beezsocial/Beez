@@ -13,7 +13,7 @@ export default async function RuchePage() {
   }
 
   return (
-    <div className="h-screen bg-navy honeycomb-bg flex flex-col overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden" style={{ background: '#ffffff' }}>
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md z-20"
         style={{ background: 'rgba(8,43,68,0.92)' }}

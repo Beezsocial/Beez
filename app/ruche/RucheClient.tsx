@@ -7,11 +7,21 @@ import { createClient } from '@/lib/supabase/client'
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const LIFT_TRANSITION = { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const }
 const HOVER_SHADOW = 'drop-shadow(0 12px 20px rgba(0,0,0,0.45))'
+const GOLD = '#ebaf57'
+// Visual border thickness for the layered "gold hex behind, content hex
+// inset in front" technique — a plain CSS `border` on a clip-path hexagon
+// renders unevenly thick along the slanted edges, so instead every cell is
+// two nested hexagons: a solid gold one, with a smaller one on top inset by
+// this many pixels showing the actual fill (same trick as HexBadge.tsx).
+const HEX_BORDER = 2.5
 // Breathing room around the scroll container so the bio tooltip (which
 // floats above a hex) and the 1.25x hover scale never get clipped when a
 // cell sits on the honeycomb's outer edge.
 const TOOLTIP_TOP_SPACE = 90
 const TOOLTIP_SIDE_SPACE = 80
+// Mouse movement (px) past which a mousedown+drag is treated as a pan
+// gesture rather than a click, so panning never fires a spurious profile click.
+const DRAG_CLICK_THRESHOLD = 4
 
 type Profile = {
   id: string
@@ -43,6 +53,59 @@ export default function RucheClient() {
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+
+  // Mouse drag-to-pan on top of native scroll: dragging adjusts scrollLeft/
+  // scrollTop directly, so trackpad horizontal scroll and mobile touch swipe
+  // keep working natively via the container's own overflow: auto.
+  const [isPanning, setIsPanning] = useState(false)
+  const panStateRef = useRef({ startX: 0, startY: 0, scrollLeft: 0, scrollTop: 0, moved: false })
+  const suppressClickRef = useRef(false)
+
+  const handlePanStart = useCallback((e: React.MouseEvent) => {
+    const el = containerRef.current
+    if (!el) return
+    panStateRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      scrollLeft: el.scrollLeft,
+      scrollTop: el.scrollTop,
+      moved: false,
+    }
+    setIsPanning(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isPanning) return
+
+    function onMouseMove(e: MouseEvent) {
+      const el = containerRef.current
+      if (!el) return
+      const dx = e.clientX - panStateRef.current.startX
+      const dy = e.clientY - panStateRef.current.startY
+      if (Math.abs(dx) > DRAG_CLICK_THRESHOLD || Math.abs(dy) > DRAG_CLICK_THRESHOLD) {
+        panStateRef.current.moved = true
+      }
+      el.scrollLeft = panStateRef.current.scrollLeft - dx
+      el.scrollTop = panStateRef.current.scrollTop - dy
+    }
+
+    function onMouseUp() {
+      if (panStateRef.current.moved) {
+        suppressClickRef.current = true
+        setTimeout(() => {
+          suppressClickRef.current = false
+        }, 0)
+      }
+      setIsPanning(false)
+    }
+
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+  }, [isPanning])
 
   useEffect(() => {
     const supabase = createClient()
@@ -156,6 +219,7 @@ export default function RucheClient() {
   }, [containerSize, profiles, colStep, rowStep, hexW])
 
   const handleSelect = useCallback((profile: Profile) => {
+    if (suppressClickRef.current) return
     setSelectedProfile(profile)
     console.log(profile)
     setToast(`Chat avec ${profile.first_name} ${profile.last_name} — bientôt disponible`)
@@ -164,10 +228,10 @@ export default function RucheClient() {
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative z-10">
       <div className="px-4 sm:px-6 pt-6 pb-3 shrink-0">
-        <h1 className="font-heading font-bold text-2xl sm:text-3xl text-white tracking-tight">
+        <h1 className="font-heading font-bold text-2xl sm:text-3xl text-navy tracking-tight">
           La Ruche
         </h1>
-        <p className="text-white/50 text-sm mt-1">
+        <p className="text-navy text-sm mt-1">
           {loading
             ? '...'
             : `${profiles.length} entrepreneur${profiles.length === 1 ? '' : 's'} dans la ruche`}
@@ -177,13 +241,16 @@ export default function RucheClient() {
       <div
         ref={containerRef}
         className="flex-1"
+        onMouseDown={handlePanStart}
         style={{
           overflowY: 'auto',
-          overflowX: 'hidden',
+          overflowX: 'auto',
           paddingTop: TOOLTIP_TOP_SPACE,
           paddingBottom: 40,
           paddingLeft: TOOLTIP_SIDE_SPACE,
           paddingRight: TOOLTIP_SIDE_SPACE,
+          cursor: isPanning ? 'grabbing' : 'grab',
+          userSelect: isPanning ? 'none' : 'auto',
         }}
       >
         <div className="relative mx-auto" style={{ width: gridWidth, height: gridHeight }}>
@@ -244,12 +311,16 @@ function EmptyHex({
         height,
         zIndex: 1,
         clipPath: HEX_CLIP,
-        background: '#0a2540',
-        border: '1px solid rgba(235,175,87,0.1)',
+        background: GOLD,
       }}
       whileHover={{ scale: 1.25, zIndex: 10, filter: HOVER_SHADOW }}
       transition={LIFT_TRANSITION}
-    />
+    >
+      <div
+        className="absolute"
+        style={{ inset: HEX_BORDER, clipPath: HEX_CLIP, background: '#0a2540' }}
+      />
+    </motion.div>
   )
 }
 
@@ -279,11 +350,13 @@ function ProfileHex({
     // The tooltip is this wrapper's other child so it escapes the hex clip.
     <div className="absolute" style={{ left: x, top: y, width: size, height }}>
       <motion.div
-        className="cursor-pointer w-full h-full flex items-center justify-center"
+        className="cursor-pointer"
         style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
           clipPath: HEX_CLIP,
-          border: '1px solid rgba(235,175,87,0.25)',
-          background: profile.avatar_url ? undefined : '#0D2E4A',
+          background: GOLD,
         }}
         whileHover={{ scale: 1.25, zIndex: 10, filter: HOVER_SHADOW }}
         transition={LIFT_TRANSITION}
@@ -291,12 +364,21 @@ function ProfileHex({
         onHoverEnd={() => setHovered(false)}
         onClick={() => onSelect(profile)}
       >
-        {profile.avatar_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={profile.avatar_url} alt={fullName} className="w-full h-full object-cover" />
-        ) : (
-          <span className="font-heading font-bold text-gold text-lg">{initials}</span>
-        )}
+        <div
+          className="absolute flex items-center justify-center overflow-hidden"
+          style={{
+            inset: HEX_BORDER,
+            clipPath: HEX_CLIP,
+            background: profile.avatar_url ? undefined : '#0D2E4A',
+          }}
+        >
+          {profile.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={profile.avatar_url} alt={fullName} className="w-full h-full object-cover" />
+          ) : (
+            <span className="font-heading font-bold text-gold text-lg">{initials}</span>
+          )}
+        </div>
       </motion.div>
 
       <AnimatePresence>
