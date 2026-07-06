@@ -101,7 +101,7 @@ Founding Members : member_number <= 150 = Pro gratuit à vie
 6. git branch -d preview/nom-feature && git push origin --delete preview/nom-feature
 
 ## Assets
-Logo fond sombre (header, fond navy) : /public/images/logo-dark.png
+Logo fond sombre (header, fond navy) : /public/images/logo-dark-v2.png
 Logo fond clair (si besoin) : /public/images/logo-light.png
 OG Image : /public/images/beez-og.png
 TOUJOURS utiliser ces fichiers, jamais recréer le logo en SVG ou texte.

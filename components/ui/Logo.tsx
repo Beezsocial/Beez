@@ -25,7 +25,7 @@ export default function Logo({ height = 36, className = '' }: LogoProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/images/logo-dark.png"
+      src="/images/logo-dark-v2.png"
       alt="Beez"
       height={height}
       style={{ height: `${height}px`, width: 'auto', display: 'block' }}

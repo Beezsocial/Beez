@@ -16,7 +16,7 @@ export default function NavBrand({ height = 36 }: { height?: number }) {
       {!imgFailed && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/images/logo-dark.png"
+          src="/images/logo-dark-v2.png"
           alt=""
           style={{ height, width: 'auto', display: 'block' }}
           onError={() => setImgFailed(true)}

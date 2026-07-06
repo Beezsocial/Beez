@@ -72,7 +72,7 @@ export default function HeroSection() {
         <motion.div variants={fadeUp}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/logo-dark.png"
+            src="/images/logo-dark-v2.png"
             alt="Beez"
             style={{ height: 120, width: 'auto', marginBottom: 32 }}
           />

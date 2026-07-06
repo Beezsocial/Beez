@@ -36,9 +36,12 @@ export default function MemberCounter() {
     const supabase = createClient()
 
     async function fetchCount() {
-      const { count: c } = await supabase
+      const { count: c, error } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
+
+      console.log('[MemberCounter] fetched count:', c, error)
+
       if (typeof c === 'number') {
         setCount(c)
       }
@@ -86,10 +89,12 @@ export default function MemberCounter() {
     }
   }, [])
 
-  if (count == null) return null
-
+  // The div below must always render — useInView attaches its
+  // IntersectionObserver to `ref` on mount, so if this returned null while
+  // count was still loading, there was nothing to observe and isInView
+  // would never flip true, leaving the count-up animation stuck at 0.
   return (
-    <div ref={ref} className="text-center mt-6">
+    <div ref={ref} className="text-center mt-6" style={{ opacity: count == null ? 0 : 1, transition: 'opacity 0.3s' }}>
       <p
         style={{
           fontFamily: 'Outfit, sans-serif',
