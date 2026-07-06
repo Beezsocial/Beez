@@ -45,6 +45,12 @@ export default function NavHeader() {
                 Roadmap
               </Link>
               <Link
+                href="/ruche"
+                className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+              >
+                La Ruche
+              </Link>
+              <Link
                 href="/profile"
                 className="text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200"
               >
