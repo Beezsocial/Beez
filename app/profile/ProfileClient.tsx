@@ -708,7 +708,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
               type="button"
               onClick={handleSave}
               disabled={saving}
-              className="w-full inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez py-3 text-sm transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="gold-gradient gold-shine w-full inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez py-3 text-sm transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving && (
                 <svg className="animate-spin h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { createClient } from '@/lib/supabase/client'
+import ComposeBox from '@/components/messaging/ComposeBox'
 
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const LIFT_TRANSITION = { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const }
@@ -25,6 +26,7 @@ const DRAG_CLICK_THRESHOLD = 4
 
 type Profile = {
   id: string
+  user_id: string
   first_name: string
   last_name: string
   avatar_url: string | null
@@ -47,9 +49,8 @@ function seededRandom(seed: number) {
 export default function RucheClient() {
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
-  const [toast, setToast] = useState<string | null>(null)
-  // Kept for the upcoming chat integration — not read yet.
-  const [, setSelectedProfile] = useState<Profile | null>(null)
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
@@ -109,9 +110,12 @@ export default function RucheClient() {
 
   useEffect(() => {
     const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUserId(data.user?.id ?? null)
+    })
     supabase
       .from('profiles')
-      .select('id, first_name, last_name, avatar_url, bio, member_number')
+      .select('id, user_id, first_name, last_name, avatar_url, bio, member_number')
       .order('member_number', { ascending: true })
       .then(({ data }) => {
         setProfiles((data ?? []) as Profile[])
@@ -130,12 +134,6 @@ export default function RucheClient() {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-
-  useEffect(() => {
-    if (!toast) return
-    const timer = setTimeout(() => setToast(null), 3000)
-    return () => clearTimeout(timer)
-  }, [toast])
 
   const isMobile = containerSize.width > 0 && containerSize.width < 640
   const hexW = isMobile ? 60 : 100
@@ -221,8 +219,6 @@ export default function RucheClient() {
   const handleSelect = useCallback((profile: Profile) => {
     if (suppressClickRef.current) return
     setSelectedProfile(profile)
-    console.log(profile)
-    setToast(`Chat avec ${profile.first_name} ${profile.last_name} — bientôt disponible`)
   }, [])
 
   return (
@@ -273,16 +269,39 @@ export default function RucheClient() {
       </div>
 
       <AnimatePresence>
-        {toast && (
+        {selectedProfile && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 text-white text-sm rounded-beez px-4 py-3 shadow-card z-50"
-            style={{ background: '#041625', border: '1px solid rgba(235,175,87,0.3)' }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed bottom-0 inset-x-0 z-50 px-4 sm:px-6 pb-4 sm:pb-6 pt-4"
+            style={{
+              background: '#041625',
+              borderTop: '1px solid rgba(235,175,87,0.3)',
+              boxShadow: '0 -12px 32px rgba(0,0,0,0.4)',
+            }}
           >
-            {toast}
+            <div className="max-w-lg mx-auto relative">
+              <button
+                type="button"
+                onClick={() => setSelectedProfile(null)}
+                aria-label="Fermer"
+                className="absolute -top-2 right-0 text-white/40 hover:text-white transition-colors duration-200 text-xl leading-none"
+              >
+                ×
+              </button>
+              {currentUserId ? (
+                <ComposeBox
+                  currentUserId={currentUserId}
+                  recipientUserId={selectedProfile.user_id}
+                  recipientName={`${selectedProfile.first_name} ${selectedProfile.last_name}`}
+                  autoFocus
+                />
+              ) : (
+                <p className="text-white/50 text-sm">Chargement...</p>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

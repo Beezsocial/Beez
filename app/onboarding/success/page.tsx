@@ -125,7 +125,7 @@ export default async function SuccessPage() {
         <div className="animate-slide-up delay-200 w-full max-w-xs space-y-3">
           <Link
             href="/profile"
-            className="inline-flex items-center justify-center gap-2 w-full bg-gold text-navy-900 font-bold px-8 py-4 text-base hover:bg-gold-400 active:bg-gold-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 w-full text-navy-900 font-bold px-8 py-4 text-base hover:brightness-110 active:brightness-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
             style={{ borderRadius: 10 }}
           >
             Consulter mon profil

@@ -43,7 +43,7 @@ export default function CarouselHero() {
             fontFamily: 'Outfit, sans-serif',
             fontWeight: 700,
             fontSize: 'clamp(24px, 4vw, 36px)',
-            textShadow: '0 0 20px rgba(235,175,87,0.5), 0 0 40px rgba(235,175,87,0.2)',
+            textShadow: '0 0 8px rgba(255,224,178,0.6), 0 0 20px rgba(235,175,87,0.5), 0 0 40px rgba(235,175,87,0.2)',
             lineHeight: 1.2,
           }}
         >

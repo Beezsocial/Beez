@@ -100,7 +100,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled || loading}
       className={cn(
-        'inline-flex items-center justify-center gap-2 font-bold rounded-beez bg-gold text-navy-900 transition-all duration-200',
+        'gold-gradient gold-shine inline-flex items-center justify-center gap-2 font-bold rounded-beez text-navy-900 transition-all duration-200',
         'hover:brightness-110 active:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         sizeClasses[size],

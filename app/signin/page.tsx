@@ -224,7 +224,7 @@ export default function SignInPage() {
               <button
                 type="submit"
                 disabled={anyLoading}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-6 py-3.5 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+                className="gold-gradient gold-shine w-full inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-6 py-3.5 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed mt-1"
               >
                 {emailLoading ? (
                   <svg className="animate-spin h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">

@@ -102,7 +102,7 @@ export default function MemberCounter() {
           fontWeight: 800,
           color: '#ebaf57',
           lineHeight: 1,
-          textShadow: '0 0 20px rgba(235,175,87,0.4)',
+          textShadow: '0 0 8px rgba(255,224,178,0.5), 0 0 20px rgba(235,175,87,0.4)',
           margin: 0,
         }}
       >

@@ -5,6 +5,7 @@ import HeroSection from '@/components/ui/HeroSection'
 import FeaturesSection from '@/components/ui/FeaturesSection'
 import PricingSection from '@/components/ui/PricingSection'
 import CtaSection from '@/components/ui/CtaSection'
+import EarlyAccessBanner from '@/components/ui/EarlyAccessBanner'
 
 export default function LandingPage() {
   return (
@@ -12,6 +13,11 @@ export default function LandingPage() {
 
       {/* ── NAV ── */}
       <NavHeader />
+
+      {/* ── EARLY ACCESS BANNER ── */}
+      <div className="pt-14">
+        <EarlyAccessBanner />
+      </div>
 
       {/* ── HERO ── */}
       <HeroSection />

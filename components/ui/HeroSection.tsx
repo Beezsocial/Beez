@@ -130,7 +130,7 @@ export default function HeroSection() {
           >
             <Link
               href="#signup"
-              className="inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
+              className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
             >
               🐝 Rejoindre la ruche →
             </Link>

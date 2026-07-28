@@ -22,7 +22,8 @@ export default function HexBadge({ number, size = 'md', children }: HexBadgeProp
       className={`${outer} relative flex items-center justify-center`}
       style={{
         clipPath: FLAT_TOP,
-        background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)',
+        background: 'linear-gradient(135deg, #ebaf57 0%, #d4932a 50%, #ebaf57 100%)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
       }}
       role="img"
       aria-label={number ? `Founding Member #${String(number).padStart(3, '0')}` : 'Badge membre'}

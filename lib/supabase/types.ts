@@ -90,6 +90,27 @@ export type Database = {
           content?: string | null
         }
       }
+      messages: {
+        Row: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          created_at: string
+          read: boolean
+        }
+        Insert: {
+          id?: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          created_at?: string
+          read?: boolean
+        }
+        Update: {
+          read?: boolean
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>

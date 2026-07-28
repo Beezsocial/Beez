@@ -80,7 +80,7 @@ export default function CtaSection() {
             />
             <Link
               href="/onboarding"
-              className="relative inline-flex items-center justify-center gap-2 bg-gold text-navy-900 font-bold rounded-beez px-10 py-4 text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
+              className="gold-gradient gold-shine relative inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-10 py-4 text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
               style={{ position: 'relative' }}
             >
               Créer mon profil

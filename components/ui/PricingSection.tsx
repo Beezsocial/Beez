@@ -112,7 +112,7 @@ export default function PricingSection() {
             <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.15 }}>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center justify-center gap-2 w-full bg-gold text-navy-900 font-bold rounded-beez px-6 py-3.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 w-full text-navy-900 font-bold rounded-beez px-6 py-3.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               >
                 Créer mon profil gratuit →
               </Link>
@@ -126,10 +126,10 @@ export default function PricingSection() {
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true, margin: '-60px' }}
             whileHover={{
-              boxShadow: '0 0 40px rgba(235,175,87,0.15), 0 0 80px rgba(235,175,87,0.06), 0 4px 24px rgba(0,0,0,0.25)',
+              boxShadow:
+                '0 0 40px rgba(235,175,87,0.15), 0 0 80px rgba(235,175,87,0.06), 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
             }}
-            className="card p-6 space-y-5 relative"
-            style={{ borderColor: 'rgba(235,175,87,0.4)' }}
+            className="card card-gold p-6 space-y-5 relative"
           >
             <div
               className="absolute -top-3 left-6 text-gold text-xs font-bold px-3 py-1 uppercase tracking-wider"
