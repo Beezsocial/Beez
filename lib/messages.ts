@@ -10,9 +10,9 @@ type TurnState = {
   lastMessage: MessageRow | null
 }
 
-// One message until reply: the current user can send if there is no message
-// history yet between the two of them, or if the last message in the thread
-// was NOT sent by the current user (i.e. it's their turn to reply/initiate).
+// The one-message-until-reply rule only gates the very FIRST message of a
+// new conversation — once the other person has replied even once, the
+// thread is permanently unlocked and both sides can send freely forever.
 export async function getTurnState(
   supabase: TypedSupabaseClient,
   currentUserId: string,
@@ -20,6 +20,7 @@ export async function getTurnState(
 ): Promise<TurnState> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
+
   const { data } = await db
     .from('messages')
     .select('*')
@@ -30,7 +31,22 @@ export async function getTurnState(
     .limit(1)
 
   const lastMessage: MessageRow | null = data?.[0] ?? null
-  return { canSend: !lastMessage || lastMessage.sender_id !== currentUserId, lastMessage }
+
+  // No history yet — first contact is always allowed.
+  if (!lastMessage) {
+    return { canSend: true, lastMessage: null }
+  }
+
+  // Has the other person ever sent current user a message in this thread?
+  // If so, they've already replied at least once and the gate is off for
+  // good — this is independent of who sent the *last* message.
+  const { count } = await db
+    .from('messages')
+    .select('id', { count: 'exact', head: true })
+    .eq('sender_id', otherUserId)
+    .eq('receiver_id', currentUserId)
+
+  return { canSend: (count ?? 0) > 0, lastMessage }
 }
 
 export async function sendMessage(
