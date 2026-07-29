@@ -18,106 +18,61 @@ const ITEMS = [
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const EASE = [0.22, 1, 0.36, 1] as const
 
-// How long a phrase stays fully readable before the honeycomb closes over it.
+// How long a phrase stays fully readable before the next swarm pass.
 const HOLD_MS = 3800
-// Fast, single-direction "swarm" sweep — the SAME left-to-right stagger
-// order and timing drive both the cover pass and the reveal pass, since
-// they're one continuous motion happening twice per phrase change (sweep
-// covers phrase A, text swaps underneath while fully covered, the same
-// sweep reveals phrase B) rather than two separate directional animations.
-// Tuned so a full pass (first column to last) lands around 0.4-0.5s.
-const SWEEP_STAGGER_MS = 8
-const SWEEP_CELL_DURATION = 0.16
+// Total time for the swarm to cross the full text width, left to right.
+const SWEEP_MS = 450
+// How long any single hexagon stays visible (fade in → hold → fade out)
+// as the sweep passes its horizontal position.
+const FLASH_MS = 200
+// Small random offset applied to each hex's delay so the pass reads as an
+// organic scatter rather than a mechanically even line sweeping across.
+const JITTER_MS = 40
 
-type Phase = 'revealing' | 'holding' | 'hiding'
+const DESKTOP_COUNT = 20
+const MOBILE_COUNT = 10
+const DESKTOP_SIZE_RANGE: [number, number] = [12, 24]
+const MOBILE_SIZE_RANGE: [number, number] = [8, 16]
 
-type HexCellData = { key: string; x: number; y: number; col: number; row: number }
+type Phase = 'idle' | 'transitioning'
+type SwarmHex = { id: string; x: number; y: number; size: number; delay: number }
 
-// Deterministic pseudo-random in [0, 1) from an integer seed — same helper as
-// /ruche, so the organic edge is stable across re-renders instead of
-// reshuffling every time the grid recomputes.
-function seededRandom(seed: number) {
-  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453
-  return x - Math.floor(x)
-}
+// A sparse, non-interlocking scatter of hexagons spread across the text's
+// width and height. Horizontal position (stratified — the width is split
+// into `count` even bands, one hex randomly placed within each) drives the
+// per-hex delay, so the group reads as a single fast left→right pass even
+// though each hex's own position, size, and timing jitter are random.
+function generateSwarm(
+  width: number,
+  height: number,
+  count: number,
+  sizeRange: [number, number]
+): SwarmHex[] {
+  const maxDelayMs = Math.max(0, SWEEP_MS - FLASH_MS)
+  const [minSize, maxSize] = sizeRange
+  const bandWidth = width / count
 
-// Same flat-top interlocking math used by the /ruche honeycomb and the site
-// honeycomb-bg pattern: columns spaced at 3/4 width, alternating columns
-// pushed down by half a hex height.
-//
-// Coverage is split into two zones instead of one probabilistic ellipse:
-//   1. CORE — every cell whose center falls within the actual text box
-//      (± half a hex of slack at the edges) is included UNCONDITIONALLY.
-//      This is what guarantees zero gaps over real text — it never depends
-//      on a jitter roll.
-//   2. RING — cells beyond the core, out to `margin` px past the box, are
-//      included only if they fall within an ellipse centered on the box's
-//      true center (± seeded jitter), which is what produces the organic,
-//      ragged edge — entirely outside the area any text can occupy.
-//
-// The previous version used a single ellipse over the whole padded grid,
-// but centered it on a box (`gridW`/`gridH`) that didn't match the actual
-// span of generated points — off by more than a full row height — which
-// both let the "safe" zone dip into real text (gaps) and made the ellipse
-// visibly off-center (organic edge only visible on two sides).
-function buildGrid(width: number, height: number, hexW: number) {
-  const hexH = hexW * 0.866
-  const colStep = hexW * 0.75
-  const rowStep = hexH
-  // Kept to roughly one hex-width deep — enough for a couple of rings of
-  // organic edge, but bounded so it can't spill into whatever sits right
-  // above/below the carousel in HeroSection's own layout (~32-40px margin).
-  const margin = hexW
+  const hexes: SwarmHex[] = []
+  for (let i = 0; i < count; i++) {
+    const size = minSize + Math.random() * (maxSize - minSize)
+    const hexH = size * 0.866
 
-  const cols = Math.max(3, Math.ceil((width + margin * 2) / colStep) + 2)
-  const rows = Math.max(3, Math.ceil((height + margin * 2) / rowStep) + 2)
-  // Col/row loop counters stay non-negative on purpose — `col % 2` on a
-  // negative index flips sign in JS (-3 % 2 === -1), which would silently
-  // break the alternating-column interlock for anything left of x=0 and
-  // reproduce the exact asymmetry bug this rewrite is fixing. The pixel
-  // origin is shifted separately via startX/startY instead.
-  const startX = -margin - colStep
-  const startY = -margin - rowStep
+    const cx = bandWidth * i + Math.random() * bandWidth
+    const halfH = hexH / 2
+    const cy = halfH + Math.random() * Math.max(1, height - hexH)
 
-  const candidates: HexCellData[] = []
-  for (let col = 0; col < cols; col++) {
-    for (let row = 0; row < rows; row++) {
-      candidates.push({
-        key: `${col}-${row}`,
-        col,
-        row,
-        x: startX + col * colStep,
-        y: startY + row * rowStep + (col % 2) * (rowStep / 2),
-      })
-    }
+    const xFrac = width > 0 ? cx / width : 0
+    const jitter = (Math.random() - 0.5) * 2 * JITTER_MS
+    const delay = Math.max(0, Math.min(maxDelayMs, xFrac * maxDelayMs + jitter))
+
+    hexes.push({ id: `${i}-${Math.round(cx)}-${Math.round(cy)}-${Math.round(size)}`, x: cx, y: cy, size, delay })
   }
-
-  const centerX = width / 2
-  const centerY = height / 2
-  const radiusX = width / 2 + margin
-  const radiusY = height / 2 + margin
-
-  const cells = candidates.filter((c) => {
-    const insideCore =
-      c.x >= -hexW * 0.5 &&
-      c.x <= width + hexW * 0.5 &&
-      c.y >= -hexH * 0.5 &&
-      c.y <= height + hexH * 0.5
-    if (insideCore) return true
-
-    const dx = (c.x - centerX) / radiusX
-    const dy = (c.y - centerY) / radiusY
-    const dist = Math.sqrt(dx * dx + dy * dy)
-    const jitter = (seededRandom(c.col * 1000 + c.row) - 0.5) * 0.3
-    return dist <= 1 + jitter
-  })
-
-  return { cells, hexH, cols, margin }
+  return hexes
 }
 
 export default function CarouselHero() {
   const [index, setIndex] = useState(0)
-  const [phase, setPhase] = useState<Phase>('revealing')
+  const [phase, setPhase] = useState<Phase>('idle')
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -132,47 +87,35 @@ export default function CarouselHero() {
     return () => ro.disconnect()
   }, [])
 
-  // Larger, fewer hexagons on mobile — same idea as the /ruche grid, tuned
-  // here to keep total cell count (and therefore animated DOM nodes) low.
-  const isMobile = size.width > 0 && size.width < 400
-  const hexW = isMobile ? 38 : 30
-
-  // Nothing has been measured yet on the very first paint. Rather than build
-  // a grid from a guessed fallback size and then swap in the real one a
-  // moment later (different column count → different cell keys → React
-  // unmounts/remounts every cell mid-animation, restarting the reveal), the
-  // grid below is built from the real size once available, and cell
-  // animation stays frozen in "covering" until then — so the only thing
-  // that ever changes size is a static, unanimated hex grid.
   const ready = size.width > 0
+  const isMobile = size.width > 0 && size.width < 400
+  const count = isMobile ? MOBILE_COUNT : DESKTOP_COUNT
+  const sizeRange = isMobile ? MOBILE_SIZE_RANGE : DESKTOP_SIZE_RANGE
 
-  const grid = useMemo(
-    () => buildGrid(size.width || 320, size.height || 90, hexW),
-    [size, hexW]
+  // Regenerated once per phrase change (not on every render) so the scatter
+  // stays put for the duration of a single sweep instead of reshuffling.
+  const swarm = useMemo(
+    () => generateSwarm(size.width || 320, size.height || 90, count, sizeRange),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [index, size.width, size.height, count]
   )
-
-  // Sweep-pass duration is derived from the actual grid size so it's never
-  // cut short (or left waiting) regardless of how many columns the current
-  // viewport/phrase produces — cover and reveal now use the same one-
-  // directional sweep, so there's a single duration for both passes.
-  const sweepTotalMs = Math.round((grid.cols - 1) * SWEEP_STAGGER_MS + SWEEP_CELL_DURATION * 1000) + 60
 
   useEffect(() => {
     if (!ready) return
     let timer: ReturnType<typeof setTimeout>
-    if (phase === 'revealing') {
-      timer = setTimeout(() => setPhase('holding'), sweepTotalMs)
-    } else if (phase === 'holding') {
-      timer = setTimeout(() => setPhase('hiding'), HOLD_MS)
-    } else {
+    if (phase === 'idle') {
       timer = setTimeout(() => {
+        // Advance the phrase and start the sweep in the SAME tick, so the
+        // text crossfade and the hexagon pass run concurrently — the swarm
+        // sweeping through is what visually "causes" the text to change.
         setIndex((i) => (i + 1) % ITEMS.length)
-        setPhase('revealing')
-      }, sweepTotalMs)
+        setPhase('transitioning')
+      }, HOLD_MS)
+    } else {
+      timer = setTimeout(() => setPhase('idle'), SWEEP_MS)
     }
     return () => clearTimeout(timer)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, sweepTotalMs, ready])
+  }, [phase, ready])
 
   return (
     <div className="relative inline-block text-center" style={{ width: 'min(600px, 92vw)' }}>
@@ -187,16 +130,27 @@ export default function CarouselHero() {
           padding: '8px 4px',
         }}
       >
-        <AnimatePresence mode="wait">
+        {/* Text crossfade — no `mode="wait"`, so the outgoing phrase's exit
+            and the incoming phrase's enter run at the same time (a true
+            crossfade), timed to match the swarm's own sweep duration. */}
+        <AnimatePresence>
           <motion.span
             key={index}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: SWEEP_MS / 1000, ease: 'easeInOut' }}
             style={{
-              position: 'relative',
-              display: 'block',
+              // Both the outgoing and incoming span coexist in the DOM
+              // during the crossfade (no `mode="wait"`), so each is
+              // absolutely positioned to fill and center within the
+              // container itself — otherwise two simultaneous flex
+              // children would push each other out of the centered spot.
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               color: '#ffffff',
               textTransform: 'uppercase',
               fontFamily: 'Outfit, sans-serif',
@@ -211,98 +165,40 @@ export default function CarouselHero() {
           </motion.span>
         </AnimatePresence>
 
-        {/* Honeycomb reveal/cover mask — a persistent grid of hex cells that
-            animate scale/opacity in a column-staggered wave. It never
-            unmounts between phrases, only retargets, so the same wave that
-            "grows" the text into view also closes back over it. The clip
-            boundary is expanded by exactly `grid.margin` (not left fully
-            unclipped) — that shows the full organic ring without letting it
-            spill into whatever sits just above/below in HeroSection. */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: -grid.margin,
-            overflow: 'hidden',
-            pointerEvents: 'none',
-            zIndex: 2,
-          }}
-        >
-          {grid.cells.map((cell) => (
-            <HexCell
-              key={cell.key}
-              // The wrapper itself is offset by -margin (inset: -margin),
-              // so cell positions — generated in the text box's own 0,0
-              // coordinate space — need the same margin added back to land
-              // in the right place relative to the wrapper's shifted origin.
-              x={cell.x + grid.margin}
-              y={cell.y + grid.margin}
-              size={hexW}
-              height={grid.hexH}
-              col={cell.col}
-              row={cell.row}
-              phase={phase}
-              ready={ready}
-            />
-          ))}
+        {/* Scattered hexagon swarm — sparse, non-interlocking, each one a
+            brief individual flash staggered by horizontal position so the
+            group reads as one fast left→right pass. Only mounted while
+            actively transitioning; each hex fully completes its own fade
+            within the phase's own duration, so there's nothing to clip. */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2 }}>
+          <AnimatePresence>
+            {phase === 'transitioning' &&
+              swarm.map((h) => (
+                <motion.div
+                  key={h.id}
+                  className="absolute gold-gradient gold-shine"
+                  style={{
+                    left: h.x - h.size / 2,
+                    top: h.y - (h.size * 0.866) / 2,
+                    width: h.size,
+                    height: h.size * 0.866,
+                    clipPath: HEX_CLIP,
+                    border: '1px solid #082b44',
+                  }}
+                  initial={{ opacity: 0, scale: 0.4 }}
+                  animate={{ opacity: [0, 1, 1, 0], scale: [0.4, 1, 1, 0.5] }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: FLASH_MS / 1000,
+                    delay: h.delay / 1000,
+                    times: [0, 0.25, 0.7, 1],
+                    ease: EASE,
+                  }}
+                />
+              ))}
+          </AnimatePresence>
         </div>
       </div>
     </div>
-  )
-}
-
-function HexCell({
-  x,
-  y,
-  size,
-  height,
-  col,
-  row,
-  phase,
-  ready,
-}: {
-  x: number
-  y: number
-  size: number
-  height: number
-  col: number
-  row: number
-  phase: Phase
-  ready: boolean
-}) {
-  // Target "covering" while actively hiding, or before the container has
-  // been measured even once — that second case matters because the grid
-  // rendered before `ready` is built from a guessed fallback size, and
-  // freezing it in place (instead of animating it) means it can be swapped
-  // for the real grid invisibly, with no mid-animation restart.
-  const covering = !ready || phase === 'hiding'
-
-  // Left→right ONLY, for both directions of the swarm pass: covering
-  // (hiding phase) sweeps in left→right just like revealing does, so the
-  // whole cover→swap-text→reveal cycle reads as one continuous sweep
-  // rather than the mask closing from the right and opening from the left.
-  const delay = (col * SWEEP_STAGGER_MS + row * SWEEP_STAGGER_MS * 0.35) / 1000
-
-  return (
-    <motion.div
-      // .gold-gradient / .gold-shine (globals.css) give the fill the same
-      // richer, metallic gold treatment as the "Rejoindre la ruche" CTA —
-      // a 3-stop gradient plus a diagonal shine streak, both correctly
-      // clipped to the hex shape since clip-path applies to the whole box
-      // (content, border, and the ::after shine pseudo-element alike).
-      className="absolute gold-gradient gold-shine"
-      style={{
-        left: x,
-        top: y,
-        width: size,
-        height,
-        clipPath: HEX_CLIP,
-        // Navy border so the grid lines between cells read as the site's
-        // other primary brand color on top of the gold fill.
-        border: '1px solid #082b44',
-      }}
-      initial={{ opacity: 1, scale: 1 }}
-      animate={{ opacity: covering ? 1 : 0, scale: covering ? 1 : 0 }}
-      transition={{ duration: SWEEP_CELL_DURATION, delay, ease: EASE }}
-    />
   )
 }
