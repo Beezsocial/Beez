@@ -20,11 +20,14 @@ const EASE = [0.22, 1, 0.36, 1] as const
 
 // How long a phrase stays fully readable before the honeycomb closes over it.
 const HOLD_MS = 3800
-// Per-cell timings — stagger is per-column, duration is each cell's own tween.
-const REVEAL_STAGGER_MS = 18
-const REVEAL_CELL_DURATION = 0.35
-const HIDE_STAGGER_MS = 14
-const HIDE_CELL_DURATION = 0.22
+// Fast, single-direction "swarm" sweep — the SAME left-to-right stagger
+// order and timing drive both the cover pass and the reveal pass, since
+// they're one continuous motion happening twice per phrase change (sweep
+// covers phrase A, text swaps underneath while fully covered, the same
+// sweep reveals phrase B) rather than two separate directional animations.
+// Tuned so a full pass (first column to last) lands around 0.4-0.5s.
+const SWEEP_STAGGER_MS = 8
+const SWEEP_CELL_DURATION = 0.16
 
 type Phase = 'revealing' | 'holding' | 'hiding'
 
@@ -148,28 +151,28 @@ export default function CarouselHero() {
     [size, hexW]
   )
 
-  // Phase-duration is derived from the actual grid size so the reveal/hide
-  // animation is never cut short (or left waiting) regardless of how many
-  // columns the current viewport/phrase produces.
-  const revealTotalMs = Math.round((grid.cols - 1) * REVEAL_STAGGER_MS + REVEAL_CELL_DURATION * 1000) + 80
-  const hideTotalMs = Math.round((grid.cols - 1) * HIDE_STAGGER_MS + HIDE_CELL_DURATION * 1000) + 60
+  // Sweep-pass duration is derived from the actual grid size so it's never
+  // cut short (or left waiting) regardless of how many columns the current
+  // viewport/phrase produces — cover and reveal now use the same one-
+  // directional sweep, so there's a single duration for both passes.
+  const sweepTotalMs = Math.round((grid.cols - 1) * SWEEP_STAGGER_MS + SWEEP_CELL_DURATION * 1000) + 60
 
   useEffect(() => {
     if (!ready) return
     let timer: ReturnType<typeof setTimeout>
     if (phase === 'revealing') {
-      timer = setTimeout(() => setPhase('holding'), revealTotalMs)
+      timer = setTimeout(() => setPhase('holding'), sweepTotalMs)
     } else if (phase === 'holding') {
       timer = setTimeout(() => setPhase('hiding'), HOLD_MS)
     } else {
       timer = setTimeout(() => {
         setIndex((i) => (i + 1) % ITEMS.length)
         setPhase('revealing')
-      }, hideTotalMs)
+      }, sweepTotalMs)
     }
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, revealTotalMs, hideTotalMs, ready])
+  }, [phase, sweepTotalMs, ready])
 
   return (
     <div className="relative inline-block text-center" style={{ width: 'min(600px, 92vw)' }}>
@@ -237,7 +240,6 @@ export default function CarouselHero() {
               height={grid.hexH}
               col={cell.col}
               row={cell.row}
-              maxCol={grid.cols - 1}
               phase={phase}
               ready={ready}
             />
@@ -255,7 +257,6 @@ function HexCell({
   height,
   col,
   row,
-  maxCol,
   phase,
   ready,
 }: {
@@ -265,7 +266,6 @@ function HexCell({
   height: number
   col: number
   row: number
-  maxCol: number
   phase: Phase
   ready: boolean
 }) {
@@ -276,13 +276,11 @@ function HexCell({
   // for the real grid invisibly, with no mid-animation restart.
   const covering = !ready || phase === 'hiding'
 
-  // Reveal sweeps left→right by column; hide sweeps right→left (reverse
-  // order), with a small row offset so the wave reads as a soft diagonal
-  // rather than a strictly vertical wipe.
-  const stagger = covering ? HIDE_STAGGER_MS : REVEAL_STAGGER_MS
-  const orderedCol = covering ? maxCol - col : col
-  const delay = (orderedCol * stagger + row * stagger * 0.35) / 1000
-  const duration = covering ? HIDE_CELL_DURATION : REVEAL_CELL_DURATION
+  // Left→right ONLY, for both directions of the swarm pass: covering
+  // (hiding phase) sweeps in left→right just like revealing does, so the
+  // whole cover→swap-text→reveal cycle reads as one continuous sweep
+  // rather than the mask closing from the right and opening from the left.
+  const delay = (col * SWEEP_STAGGER_MS + row * SWEEP_STAGGER_MS * 0.35) / 1000
 
   return (
     <motion.div
@@ -304,7 +302,7 @@ function HexCell({
       }}
       initial={{ opacity: 1, scale: 1 }}
       animate={{ opacity: covering ? 1 : 0, scale: covering ? 1 : 0 }}
-      transition={{ duration, delay, ease: EASE }}
+      transition={{ duration: SWEEP_CELL_DURATION, delay, ease: EASE }}
     />
   )
 }

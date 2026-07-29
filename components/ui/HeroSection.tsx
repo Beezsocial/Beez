@@ -116,7 +116,7 @@ export default function HeroSection() {
         <motion.div
           variants={fadeUp}
           className="flex items-center justify-center px-4"
-          style={{ marginTop: 32, marginBottom: 40 }}
+          style={{ marginTop: 32, marginBottom: 80 }}
         >
           <CarouselHero />
         </motion.div>
