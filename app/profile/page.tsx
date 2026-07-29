@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import NavBrand from '@/components/ui/NavBrand'
+import NavHeader from '@/components/ui/NavHeader'
 import ProfileClient from './ProfileClient'
 
 // ─── Data fetching ────────────────────────────────────────────────────────────
@@ -56,25 +55,10 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
-      {/* Header */}
-      <header
-        className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
-        style={{ background: 'rgba(8,43,68,0.92)' }}
-      >
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-          >
-            ← Accueil
-          </Link>
-          <NavBrand height={36} />
-        </div>
-        <span className="text-white/30 text-xs">Mon profil</span>
-      </header>
+      <NavHeader />
 
       {/* Main */}
-      <main className="flex-1 px-4 sm:px-6 py-8 max-w-lg mx-auto w-full">
+      <main className="flex-1 px-4 sm:px-6 py-8 max-w-lg mx-auto w-full pt-14">
         <ProfileClient
           profile={{
             firstName: profile.first_name,

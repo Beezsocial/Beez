@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
 import NavBrand from '@/components/ui/NavBrand'
 import { createClient } from '@/lib/supabase/client'
@@ -51,6 +52,8 @@ function MobileNavLink({
 }
 
 export default function NavHeader() {
+  const pathname = usePathname()
+  const showBackLink = pathname !== '/'
   const [hasSession, setHasSession] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -109,10 +112,33 @@ export default function NavHeader() {
     <>
       <header
         className="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b border-white/6"
-        style={{ background: 'rgba(8,43,68,0.92)', height: HEADER_HEIGHT }}
+        style={{
+          // Inline position/zIndex, not just the fixed/z-50 classes: pages
+          // that mount NavHeader as a direct child of a `.honeycomb-bg`
+          // container pick up globals.css's `.honeycomb-bg > *` rule, which
+          // forces position:relative + z-index:1 at the same specificity —
+          // whichever declaration is later in the stylesheet wins on a
+          // class-vs-class tie, silently breaking the fixed header. Inline
+          // styles always win over stylesheet rules, so this is immune
+          // regardless of where the header ends up mounted.
+          position: 'fixed',
+          zIndex: 50,
+          background: 'rgba(8,43,68,0.92)',
+          height: HEADER_HEIGHT,
+        }}
       >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
-        <NavBrand height={36} />
+        <div className="flex items-center gap-4">
+          {showBackLink && (
+            <Link
+              href="/"
+              className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            >
+              ← Accueil
+            </Link>
+          )}
+          <NavBrand height={36} />
+        </div>
 
         {/* Desktop nav — unchanged, hidden below md (~768px) */}
         <div className="hidden md:flex items-center gap-5">
