@@ -30,20 +30,31 @@ type Phase = 'revealing' | 'holding' | 'hiding'
 
 type HexCellData = { key: string; x: number; y: number; col: number; row: number }
 
+// Deterministic pseudo-random in [0, 1) from an integer seed — same helper as
+// /ruche, so the organic edge is stable across re-renders instead of
+// reshuffling every time the grid recomputes.
+function seededRandom(seed: number) {
+  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453
+  return x - Math.floor(x)
+}
+
 // Same flat-top interlocking math used by the /ruche honeycomb and the site
 // honeycomb-bg pattern: columns spaced at 3/4 width, alternating columns
-// pushed down by half a hex height, +1 col/+2 row buffer for edge coverage.
+// pushed down by half a hex height, +1 col/+2 row buffer for edge coverage —
+// then, also matching /ruche, only cells within an elliptical distance of
+// the block's center (plus small per-cell jitter) survive, so the reveal/
+// hide silhouette reads as an organic cluster rather than a hard rectangle.
 function buildGrid(width: number, height: number, hexW: number) {
   const hexH = hexW * 0.866
   const colStep = hexW * 0.75
   const rowStep = hexH
-  const cols = Math.max(1, Math.ceil(width / colStep) + 1)
-  const rows = Math.max(1, Math.ceil(height / rowStep) + 2)
+  const cols = Math.max(3, Math.ceil(width / colStep) + 2)
+  const rows = Math.max(3, Math.ceil(height / rowStep) + 2)
 
-  const cells: HexCellData[] = []
+  const candidates: HexCellData[] = []
   for (let col = 0; col < cols; col++) {
     for (let row = 0; row < rows; row++) {
-      cells.push({
+      candidates.push({
         key: `${col}-${row}`,
         col,
         row,
@@ -52,6 +63,26 @@ function buildGrid(width: number, height: number, hexW: number) {
       })
     }
   }
+
+  const gridW = cols * colStep + hexW * 0.25
+  const gridH = rows * rowStep + rowStep / 2 + rowStep * 0.25
+  const centerX = gridW / 2
+  const centerY = gridH / 2
+
+  let cells = candidates.filter((c) => {
+    const dx = (c.x - centerX) / centerX
+    const dy = (c.y - centerY) / centerY
+    const dist = Math.sqrt(dx * dx + dy * dy)
+    const jitter = (seededRandom(c.col * 1000 + c.row) - 0.5) * 0.3
+    return dist <= 1 + jitter
+  })
+
+  // Safety net for very small (mobile) grids — never let the organic mask
+  // thin coverage out so far that the text can't be cleanly hidden/revealed.
+  if (cells.length < candidates.length * 0.5) {
+    cells = candidates
+  }
+
   return { cells, hexH, cols }
 }
 
@@ -137,7 +168,8 @@ export default function CarouselHero() {
             style={{
               position: 'relative',
               display: 'block',
-              color: '#ebaf57',
+              color: '#ffffff',
+              textTransform: 'uppercase',
               fontFamily: 'Outfit, sans-serif',
               fontWeight: 700,
               fontSize: 'clamp(24px, 4vw, 36px)',
@@ -171,22 +203,6 @@ export default function CarouselHero() {
           ))}
         </div>
       </div>
-
-      {/* Underline — timed to land exactly as the honeycomb finishes
-          parting, so it reads as a confirmation the reveal is complete. */}
-      <motion.span
-        key={`u-${index}`}
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut', delay: revealTotalMs / 1000 + 0.05 }}
-        style={{
-          display: 'block',
-          height: 2,
-          background: 'linear-gradient(90deg, #ebaf57, rgba(235,175,87,0.3))',
-          marginTop: 6,
-          transformOrigin: 'left',
-        }}
-      />
     </div>
   )
 }
