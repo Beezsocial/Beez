@@ -40,16 +40,41 @@ function seededRandom(seed: number) {
 
 // Same flat-top interlocking math used by the /ruche honeycomb and the site
 // honeycomb-bg pattern: columns spaced at 3/4 width, alternating columns
-// pushed down by half a hex height, +1 col/+2 row buffer for edge coverage —
-// then, also matching /ruche, only cells within an elliptical distance of
-// the block's center (plus small per-cell jitter) survive, so the reveal/
-// hide silhouette reads as an organic cluster rather than a hard rectangle.
+// pushed down by half a hex height.
+//
+// Coverage is split into two zones instead of one probabilistic ellipse:
+//   1. CORE — every cell whose center falls within the actual text box
+//      (± half a hex of slack at the edges) is included UNCONDITIONALLY.
+//      This is what guarantees zero gaps over real text — it never depends
+//      on a jitter roll.
+//   2. RING — cells beyond the core, out to `margin` px past the box, are
+//      included only if they fall within an ellipse centered on the box's
+//      true center (± seeded jitter), which is what produces the organic,
+//      ragged edge — entirely outside the area any text can occupy.
+//
+// The previous version used a single ellipse over the whole padded grid,
+// but centered it on a box (`gridW`/`gridH`) that didn't match the actual
+// span of generated points — off by more than a full row height — which
+// both let the "safe" zone dip into real text (gaps) and made the ellipse
+// visibly off-center (organic edge only visible on two sides).
 function buildGrid(width: number, height: number, hexW: number) {
   const hexH = hexW * 0.866
   const colStep = hexW * 0.75
   const rowStep = hexH
-  const cols = Math.max(3, Math.ceil(width / colStep) + 2)
-  const rows = Math.max(3, Math.ceil(height / rowStep) + 2)
+  // Kept to roughly one hex-width deep — enough for a couple of rings of
+  // organic edge, but bounded so it can't spill into whatever sits right
+  // above/below the carousel in HeroSection's own layout (~32-40px margin).
+  const margin = hexW
+
+  const cols = Math.max(3, Math.ceil((width + margin * 2) / colStep) + 2)
+  const rows = Math.max(3, Math.ceil((height + margin * 2) / rowStep) + 2)
+  // Col/row loop counters stay non-negative on purpose — `col % 2` on a
+  // negative index flips sign in JS (-3 % 2 === -1), which would silently
+  // break the alternating-column interlock for anything left of x=0 and
+  // reproduce the exact asymmetry bug this rewrite is fixing. The pixel
+  // origin is shifted separately via startX/startY instead.
+  const startX = -margin - colStep
+  const startY = -margin - rowStep
 
   const candidates: HexCellData[] = []
   for (let col = 0; col < cols; col++) {
@@ -58,32 +83,33 @@ function buildGrid(width: number, height: number, hexW: number) {
         key: `${col}-${row}`,
         col,
         row,
-        x: col * colStep,
-        y: row * rowStep + (col % 2) * (rowStep / 2) - rowStep / 2,
+        x: startX + col * colStep,
+        y: startY + row * rowStep + (col % 2) * (rowStep / 2),
       })
     }
   }
 
-  const gridW = cols * colStep + hexW * 0.25
-  const gridH = rows * rowStep + rowStep / 2 + rowStep * 0.25
-  const centerX = gridW / 2
-  const centerY = gridH / 2
+  const centerX = width / 2
+  const centerY = height / 2
+  const radiusX = width / 2 + margin
+  const radiusY = height / 2 + margin
 
-  let cells = candidates.filter((c) => {
-    const dx = (c.x - centerX) / centerX
-    const dy = (c.y - centerY) / centerY
+  const cells = candidates.filter((c) => {
+    const insideCore =
+      c.x >= -hexW * 0.5 &&
+      c.x <= width + hexW * 0.5 &&
+      c.y >= -hexH * 0.5 &&
+      c.y <= height + hexH * 0.5
+    if (insideCore) return true
+
+    const dx = (c.x - centerX) / radiusX
+    const dy = (c.y - centerY) / radiusY
     const dist = Math.sqrt(dx * dx + dy * dy)
     const jitter = (seededRandom(c.col * 1000 + c.row) - 0.5) * 0.3
     return dist <= 1 + jitter
   })
 
-  // Safety net for very small (mobile) grids — never let the organic mask
-  // thin coverage out so far that the text can't be cleanly hidden/revealed.
-  if (cells.length < candidates.length * 0.5) {
-    cells = candidates
-  }
-
-  return { cells, hexH, cols }
+  return { cells, hexH, cols, margin }
 }
 
 export default function CarouselHero() {
@@ -185,13 +211,28 @@ export default function CarouselHero() {
         {/* Honeycomb reveal/cover mask — a persistent grid of hex cells that
             animate scale/opacity in a column-staggered wave. It never
             unmounts between phrases, only retargets, so the same wave that
-            "grows" the text into view also closes back over it. */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 2 }}>
+            "grows" the text into view also closes back over it. The clip
+            boundary is expanded by exactly `grid.margin` (not left fully
+            unclipped) — that shows the full organic ring without letting it
+            spill into whatever sits just above/below in HeroSection. */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: -grid.margin,
+            overflow: 'hidden',
+            pointerEvents: 'none',
+            zIndex: 2,
+          }}
+        >
           {grid.cells.map((cell) => (
             <HexCell
               key={cell.key}
-              x={cell.x}
-              y={cell.y}
+              // The wrapper itself is offset by -margin (inset: -margin),
+              // so cell positions — generated in the text box's own 0,0
+              // coordinate space — need the same margin added back to land
+              // in the right place relative to the wrapper's shifted origin.
+              x={cell.x + grid.margin}
+              y={cell.y + grid.margin}
               size={hexW}
               height={grid.hexH}
               col={cell.col}
@@ -245,19 +286,21 @@ function HexCell({
 
   return (
     <motion.div
-      className="absolute"
+      // .gold-gradient / .gold-shine (globals.css) give the fill the same
+      // richer, metallic gold treatment as the "Rejoindre la ruche" CTA —
+      // a 3-stop gradient plus a diagonal shine streak, both correctly
+      // clipped to the hex shape since clip-path applies to the whole box
+      // (content, border, and the ::after shine pseudo-element alike).
+      className="absolute gold-gradient gold-shine"
       style={{
         left: x,
         top: y,
         width: size,
         height,
         clipPath: HEX_CLIP,
-        // Deep navy (not the mid-tone surface navy) so the covering grid
-        // reads as a clearly visible, deliberate honeycomb wall against the
-        // page's primary navy background — a same-family fill was nearly
-        // invisible and made the "reveal" look like a plain fade.
-        background: '#041625',
-        border: '1px solid rgba(235,175,87,0.4)',
+        // Navy border so the grid lines between cells read as the site's
+        // other primary brand color on top of the gold fill.
+        border: '1px solid #082b44',
       }}
       initial={{ opacity: 1, scale: 1 }}
       animate={{ opacity: covering ? 1 : 0, scale: covering ? 1 : 0 }}
