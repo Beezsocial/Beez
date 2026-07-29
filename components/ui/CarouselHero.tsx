@@ -20,14 +20,20 @@ const EASE = [0.22, 1, 0.36, 1] as const
 
 // How long a phrase stays fully readable before the next swarm pass.
 const HOLD_MS = 3800
-// Total time for the swarm to cross the full text width, left to right.
-const SWEEP_MS = 450
+// Total time for the swarm to cross the full text width, left to right —
+// also drives the text crossfade duration directly (see the transition
+// below), so the two stay in sync automatically whenever this changes.
+// ~1.44x the previous 450ms, landing in the requested 0.6-0.7s range.
+const SWEEP_MS = 650
 // How long any single hexagon stays visible (fade in → hold → fade out)
-// as the sweep passes its horizontal position.
-const FLASH_MS = 200
+// as the sweep passes its horizontal position. Scaled by the same ratio
+// as SWEEP_MS (was 200ms, ~44% of the old 450ms sweep) so each flash still
+// feels proportionate rather than comparatively rushed at the new pace.
+const FLASH_MS = 290
 // Small random offset applied to each hex's delay so the pass reads as an
 // organic scatter rather than a mechanically even line sweeping across.
-const JITTER_MS = 40
+// Scaled with SWEEP_MS to keep the same ~15% jitter-to-delay-range ratio.
+const JITTER_MS = 55
 
 const DESKTOP_COUNT = 20
 const MOBILE_COUNT = 10
