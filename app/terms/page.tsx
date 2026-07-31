@@ -79,7 +79,10 @@ export default function TermsPage() {
             </p>
             <ul className="list-none space-y-1.5 mt-2">
               <Bullet>
-                L'inscription est ouverte à toute personne majeure exerçant ou souhaitant exercer une activité entrepreneuriale.
+                <BeezWord /> est réservé aux personnes majeures (<strong className="text-white/80">18 ans et plus</strong>).
+              </Bullet>
+              <Bullet>
+                L'inscription est ouverte à toute personne remplissant cette condition d'âge, exerçant ou souhaitant exercer une activité entrepreneuriale.
               </Bullet>
               <Bullet>
                 Les comptes de type <strong className="text-white/80">Pro</strong> (entrepreneurs avec une activité déclarée) nécessitent un numéro de <strong className="text-white/80">SIRET valide</strong>. <BeezWord /> se réserve le droit de vérifier cette information.
@@ -100,6 +103,25 @@ export default function TermsPage() {
               <Bullet>Tenter de contourner les mesures de sécurité ou d'accéder à des données qui ne te sont pas destinées</Bullet>
               <Bullet>Automatiser l'accès à la plateforme (scraping, bots) sans autorisation écrite préalable</Bullet>
             </ul>
+            <p className="mt-3">
+              Dans le cadre de la <strong className="text-white/80">messagerie</strong> en particulier, sont notamment interdits :
+            </p>
+            <ul className="list-none space-y-1.5 mt-2">
+              <Bullet>Le harcèlement, les menaces, les propos injurieux ou discriminatoires</Bullet>
+              <Bullet>Le spam ou le démarchage commercial non sollicité et répété</Bullet>
+              <Bullet>L'usurpation d'identité</Bullet>
+              <Bullet>Le partage de contenu illégal</Bullet>
+            </ul>
+            <p className="mt-3">
+              Tu peux signaler un comportement abusif directement via la fonction de signalement intégrée à la messagerie, ou en contactant{' '}
+              <a
+                href="mailto:contact@joinbeez.com"
+                className="text-gold hover:text-gold-400 transition-colors duration-200"
+              >
+                contact@joinbeez.com
+              </a>
+              .
+            </p>
           </Section>
 
           <Section number="4" title="Contenu publié">
@@ -113,7 +135,7 @@ export default function TermsPage() {
 
           <Section number="5" title="Suspension et résiliation">
             <p>
-              <BeezWord /> se réserve le droit de suspendre ou de résilier ton accès à la plateforme, avec ou sans préavis, en cas de :
+              <BeezWord /> se réserve le droit de suspendre temporairement ou de bannir définitivement ton compte, avec ou sans préavis selon la gravité des faits, en cas de :
             </p>
             <ul className="list-none space-y-1.5 mt-2">
               <Bullet>Violation des présentes CGU</Bullet>

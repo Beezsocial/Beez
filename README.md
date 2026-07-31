@@ -1,4 +1,4 @@
-# Beez — La ruche des entrepreneurs
+# Beez
 
 Landing page + inscription pour Beez, réseau social français pour entrepreneurs.
 

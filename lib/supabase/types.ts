@@ -111,6 +111,31 @@ export type Database = {
           read?: boolean
         }
       }
+      reports: {
+        Row: {
+          id: string
+          reporter_id: string
+          reported_user_id: string
+          conversation_context: string | null
+          reason: 'harcelement' | 'contenu_inapproprie' | 'spam' | 'usurpation_identite' | 'autre'
+          details: string | null
+          created_at: string
+          status: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+        }
+        Insert: {
+          id?: string
+          reporter_id: string
+          reported_user_id: string
+          conversation_context?: string | null
+          reason: 'harcelement' | 'contenu_inapproprie' | 'spam' | 'usurpation_identite' | 'autre'
+          details?: string | null
+          created_at?: string
+          status?: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+        }
+        Update: {
+          status?: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>

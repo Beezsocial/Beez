@@ -8,7 +8,7 @@ import ScrollProgress from "@/components/ui/ScrollProgress";
 const outfit = Outfit({ subsets: ['latin'], weight: ['400','500','600','700','800'], variable: '--font-heading' });
 
 export const metadata: Metadata = {
-  title: 'Beez — La ruche des entrepreneurs',
+  title: 'Beez',
   description:
     'Rejoins la première communauté française dédiée aux entrepreneurs qui construisent en public. Partage ton parcours, trouve ton co-fondateur, connecte avec la ruche.',
   keywords: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? 'https://joinbeez.com'
   ),
   openGraph: {
-    title: 'Beez — La ruche des entrepreneurs',
+    title: 'Beez',
     description:
       'La communauté pour ceux qui construisent quelque chose. Zéro bullshit corporate.',
     type: 'website',
@@ -34,13 +34,13 @@ export const metadata: Metadata = {
         url: 'https://www.joinbeez.com/images/beez-og.png',
         width: 1200,
         height: 630,
-        alt: 'Beez — La ruche des entrepreneurs',
+        alt: 'Beez',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Beez — La ruche des entrepreneurs',
+    title: 'Beez',
     description:
       'La communauté pour ceux qui construisent quelque chose. Zéro bullshit corporate.',
     images: ['https://www.joinbeez.com/images/beez-og.png'],

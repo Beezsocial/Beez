@@ -20,7 +20,7 @@ export default function ShareButton({ firstName, memberNumber }: ShareButtonProp
 
   const handleShare = async () => {
     const shareData: ShareData = {
-      title: 'Beez — La ruche des entrepreneurs',
+      title: 'Beez',
       text: shareText,
       url: shareUrl,
     }

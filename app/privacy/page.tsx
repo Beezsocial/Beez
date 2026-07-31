@@ -120,13 +120,51 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          <Section title="5. Durée de conservation">
+          <Section title="5. Messagerie entre membres">
+            <p>
+              <BeezWord /> propose une messagerie permettant aux membres d'échanger directement. Dans ce cadre, nous collectons :
+            </p>
+            <ul className="list-none space-y-1.5 mt-2">
+              {[
+                'Le contenu du message',
+                "L'identifiant de l'expéditeur et du destinataire",
+                "L'horodatage d'envoi",
+                'Le statut de lecture du message',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3">
+              <strong className="text-white/80">Accès :</strong> seuls les deux membres d'une conversation peuvent lire leurs propres messages. Cette restriction est appliquée techniquement au niveau de la base de données via les politiques de sécurité au niveau ligne (Row Level Security) de Supabase — personne d'autre, y compris l'équipe <BeezWord />, n'a accès au contenu des conversations dans le cadre normal du service.
+            </p>
+            <p className="mt-3">
+              <strong className="text-white/80">Finalité :</strong> permettre la communication directe entre membres <BeezWord />.
+            </p>
+            <p className="mt-3">
+              <strong className="text-white/80">Conservation :</strong> les messages sont conservés tant que ton compte est actif. Ils sont supprimés définitivement lors de la suppression de ton compte, par suppression en cascade liée aux clés étrangères de la base de données.
+            </p>
+            <p className="mt-3">
+              <strong className="text-white/80">Ton contrôle :</strong> tu peux demander la suppression d'une conversation spécifique en nous contactant à{' '}
+              <a
+                href="mailto:contact@joinbeez.com"
+                className="text-gold hover:text-gold-400 transition-colors duration-200"
+              >
+                contact@joinbeez.com
+              </a>
+              .
+            </p>
+          </Section>
+
+          <Section title="6. Durée de conservation">
             <p>
               Tes données sont conservées pendant toute la durée de ton appartenance à la communauté <BeezWord />. Si tu demandes la suppression de ton compte, tes données sont effacées dans un délai de <strong className="text-white/80">30 jours</strong>, sauf obligation légale de conservation.
             </p>
           </Section>
 
-          <Section title="6. Tes droits">
+          <Section title="7. Tes droits">
             <p>Conformément au RGPD, tu disposes des droits suivants :</p>
             <ul className="list-none space-y-1.5 mt-2">
               {[
@@ -154,13 +192,13 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          <Section title="7. Cookies et traceurs">
+          <Section title="8. Cookies et traceurs">
             <p>
               <BeezWord /> n'utilise pas de cookies publicitaires ou de traceurs tiers à des fins de ciblage. Seuls des cookies strictement nécessaires au fonctionnement de l'authentification (session Supabase) sont utilisés.
             </p>
           </Section>
 
-          <Section title="8. Contact">
+          <Section title="9. Contact">
             <p>
               Pour toute question relative à la protection de tes données personnelles :{' '}
               <a

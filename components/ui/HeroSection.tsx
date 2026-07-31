@@ -103,15 +103,6 @@ export default function HeroSection() {
           <span style={{ color: '#ebaf57' }}>Connecte.</span>
         </motion.p>
 
-        {/* Subtitle */}
-        <motion.p
-          variants={fadeUp}
-          className="text-white/60 text-xl text-center"
-          style={{ marginBottom: 32 }}
-        >
-          La ruche des entrepreneurs
-        </motion.p>
-
         {/* Carousel */}
         <motion.div
           variants={fadeUp}

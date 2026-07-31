@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import ComposeBox from '@/components/messaging/ComposeBox'
+import ReportModal from '@/components/messaging/ReportModal'
 import type { MessageRow } from '@/lib/messages'
 
 type OtherProfile = {
@@ -34,6 +35,7 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
   const [profiles, setProfiles] = useState<Record<string, OtherProfile>>({})
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
   const [refreshTick, setRefreshTick] = useState(0)
+  const [reportModalOpen, setReportModalOpen] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -210,18 +212,32 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
       <div className={`${selectedUserId ? 'flex' : 'hidden sm:flex'} flex-col flex-1 min-w-0`}>
         {selectedUserId ? (
           <>
-            <div className="shrink-0 flex items-center gap-3 px-4 sm:px-6 h-14 border-b border-white/6">
+            <div className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-6 h-14 border-b border-white/6">
+              <div className="flex items-center gap-3 min-w-0">
+                <button
+                  type="button"
+                  onClick={() => setSelectedUserId(null)}
+                  className="sm:hidden text-white/50 hover:text-white transition-colors duration-200"
+                  aria-label="Retour aux conversations"
+                >
+                  ←
+                </button>
+                <p className="text-white font-medium text-sm truncate">
+                  {selectedProfile ? `${selectedProfile.first_name} ${selectedProfile.last_name}` : 'Membre Beez'}
+                </p>
+              </div>
               <button
                 type="button"
-                onClick={() => setSelectedUserId(null)}
-                className="sm:hidden text-white/50 hover:text-white transition-colors duration-200"
-                aria-label="Retour aux conversations"
+                onClick={() => setReportModalOpen(true)}
+                className="shrink-0 text-white/40 hover:text-red-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez p-1"
+                aria-label="Signaler cette conversation"
+                title="Signaler"
               >
-                ←
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 3v18" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+                  <path d="M5 4h11l-2.5 3.5L16 11H5" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />
+                </svg>
               </button>
-              <p className="text-white font-medium text-sm">
-                {selectedProfile ? `${selectedProfile.first_name} ${selectedProfile.last_name}` : 'Membre Beez'}
-              </p>
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-3">
@@ -267,6 +283,19 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
           </div>
         )}
       </div>
+
+      {selectedUserId && (
+        <ReportModal
+          open={reportModalOpen}
+          onClose={() => setReportModalOpen(false)}
+          reporterId={currentUserId}
+          reportedUserId={selectedUserId}
+          reportedUserName={
+            selectedProfile ? `${selectedProfile.first_name} ${selectedProfile.last_name}` : 'ce membre'
+          }
+          conversationContext={thread[thread.length - 1]?.content.slice(0, 280) ?? ''}
+        />
+      )}
     </div>
   )
 }

@@ -46,7 +46,7 @@ export default function LandingPage() {
       >
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
           <Logo height={32} />
-          <p>La ruche des entrepreneurs. © {new Date().getFullYear()}</p>
+          <p>© {new Date().getFullYear()}</p>
           <div className="flex flex-wrap justify-center gap-6">
             <a href="/mentions-legales" className="hover:text-white/50 transition-colors">
               Mentions légales
