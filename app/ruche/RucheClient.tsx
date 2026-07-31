@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
 import { createClient } from '@/lib/supabase/client'
 import ComposeBox from '@/components/messaging/ComposeBox'
@@ -50,6 +51,7 @@ export default function RucheClient() {
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
+  const [composeMode, setComposeMode] = useState(false)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -218,7 +220,13 @@ export default function RucheClient() {
 
   const handleSelect = useCallback((profile: Profile) => {
     if (suppressClickRef.current) return
+    setComposeMode(false)
     setSelectedProfile(profile)
+  }, [])
+
+  const handleClose = useCallback(() => {
+    setSelectedProfile(null)
+    setComposeMode(false)
   }, [])
 
   return (
@@ -270,41 +278,121 @@ export default function RucheClient() {
 
       <AnimatePresence>
         {selectedProfile && (
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-0 inset-x-0 z-50 px-4 sm:px-6 pb-4 sm:pb-6 pt-4"
-            style={{
-              background: '#041625',
-              borderTop: '1px solid rgba(235,175,87,0.3)',
-              boxShadow: '0 -12px 32px rgba(0,0,0,0.4)',
-            }}
-          >
-            <div className="max-w-lg mx-auto relative">
-              <button
-                type="button"
-                onClick={() => setSelectedProfile(null)}
-                aria-label="Fermer"
-                className="absolute -top-2 right-0 text-white/40 hover:text-white transition-colors duration-200 text-xl leading-none"
-              >
-                ×
-              </button>
-              {currentUserId ? (
-                <ComposeBox
-                  currentUserId={currentUserId}
-                  recipientUserId={selectedProfile.user_id}
-                  recipientName={`${selectedProfile.first_name} ${selectedProfile.last_name}`}
-                  autoFocus
-                />
-              ) : (
-                <p className="text-white/50 text-sm">Chargement...</p>
-              )}
-            </div>
-          </motion.div>
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40"
+              style={{ background: 'rgba(0,0,0,0.5)' }}
+              onClick={handleClose}
+              aria-hidden="true"
+            />
+            <motion.div
+              key="panel"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed bottom-0 inset-x-0 z-50 px-4 sm:px-6 pb-4 sm:pb-6 pt-4 flex justify-center"
+            >
+              <div className="card card-gold w-full max-w-lg p-5 sm:p-6 relative">
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  aria-label="Fermer"
+                  className="absolute top-3 right-3 text-white/40 hover:text-white transition-colors duration-200 text-xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez"
+                >
+                  ×
+                </button>
+                {composeMode ? (
+                  currentUserId ? (
+                    <ComposeBox
+                      currentUserId={currentUserId}
+                      recipientUserId={selectedProfile.user_id}
+                      recipientName={`${selectedProfile.first_name} ${selectedProfile.last_name}`}
+                      autoFocus
+                    />
+                  ) : (
+                    <p className="text-white/50 text-sm">Chargement...</p>
+                  )
+                ) : (
+                  <ProfilePreview
+                    profile={selectedProfile}
+                    onContact={() => setComposeMode(true)}
+                  />
+                )}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
+    </div>
+  )
+}
+
+function ProfilePreview({
+  profile,
+  onContact,
+}: {
+  profile: Profile
+  onContact: () => void
+}) {
+  const fullName = `${profile.first_name} ${profile.last_name}`
+  const initials = `${profile.first_name?.[0] ?? ''}${profile.last_name?.[0] ?? ''}`.toUpperCase()
+  const avatarSize = 56
+
+  return (
+    <div className="pr-6">
+      <div className="flex items-center gap-3">
+        <div
+          className="shrink-0 relative"
+          style={{ width: avatarSize, height: avatarSize * 0.866 }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{ clipPath: HEX_CLIP, background: GOLD }}
+          />
+          <div
+            className="absolute flex items-center justify-center overflow-hidden"
+            style={{
+              inset: HEX_BORDER,
+              clipPath: HEX_CLIP,
+              background: profile.avatar_url ? undefined : '#0D2E4A',
+            }}
+          >
+            {profile.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar_url} alt={fullName} className="w-full h-full object-cover" />
+            ) : (
+              <span className="font-heading font-bold text-gold text-sm">{initials}</span>
+            )}
+          </div>
+        </div>
+        <p className="font-heading font-bold text-white text-base leading-tight">{fullName}</p>
+      </div>
+
+      {profile.bio && (
+        <p className="text-white/70 text-sm mt-3 leading-relaxed">{profile.bio}</p>
+      )}
+
+      <div className="flex gap-3 mt-4">
+        <Link
+          href={`/profile/${profile.user_id}`}
+          className="flex-1 text-center border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        >
+          Voir le profil
+        </Link>
+        <button
+          type="button"
+          onClick={onContact}
+          className="flex-1 gold-gradient gold-shine font-bold text-navy-900 rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold hover:brightness-110"
+        >
+          Contacter
+        </button>
+      </div>
     </div>
   )
 }
