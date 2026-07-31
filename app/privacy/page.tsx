@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import NavBrand from '@/components/ui/NavBrand'
 import BeezWord from '@/components/ui/BeezWord'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+}
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (

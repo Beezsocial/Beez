@@ -1,5 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import NavBrand from '@/components/ui/NavBrand'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+}
 
 export default function ContactPage() {
   return (

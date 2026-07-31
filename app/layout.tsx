@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     'communauté startup',
   ],
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://joinbeez.com'
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.joinbeez.com'
   ),
   openGraph: {
     title: 'Beez',
@@ -51,6 +51,23 @@ export const metadata: Metadata = {
   },
 }
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Beez',
+  url: 'https://www.joinbeez.com',
+  logo: 'https://www.joinbeez.com/images/logo-dark-v2.png',
+  description: 'Le réseau social français pour entrepreneurs qui construisent en public',
+  sameAs: ['https://www.instagram.com/beez.social'],
+}
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Beez',
+  url: 'https://www.joinbeez.com',
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -64,6 +81,14 @@ export default function RootLayout({
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
       <body className="min-h-screen bg-navy antialiased">
