@@ -125,7 +125,32 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          <Section title="5. Messagerie entre membres">
+          <Section title="5. Visibilité de ton profil">
+            <p>
+              Créer un profil sur <BeezWord /> rend certaines informations visibles aux autres membres connectés, afin de permettre la mise en relation entre entrepreneurs, investisseurs et mentors — c'est la raison d'être de la plateforme. Les informations suivantes sont visibles par les autres membres :
+            </p>
+            <ul className="list-none space-y-1.5 mt-2">
+              {[
+                'Ton prénom et ton nom',
+                'Ta ville',
+                'Ta biographie',
+                'Ta photo de profil',
+                'Ton type de profil (Starter ou Founder)',
+                'Ce que tu recherches ("Je recherche")',
+                'Ton statut de Founding Member, le cas échéant',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3">
+              Ces informations ne sont visibles que par les membres <strong className="text-white/80">connectés à leur compte</strong>. Ton profil n'est ni public, ni indexé par les moteurs de recherche : l'application nécessite une authentification pour consulter le profil de qui que ce soit.
+            </p>
+          </Section>
+
+          <Section title="6. Messagerie entre membres">
             <p>
               <BeezWord /> propose une messagerie permettant aux membres d'échanger directement. Dans ce cadre, nous collectons :
             </p>
@@ -163,13 +188,13 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          <Section title="6. Durée de conservation">
+          <Section title="7. Durée de conservation">
             <p>
               Tes données sont conservées pendant toute la durée de ton appartenance à la communauté <BeezWord />. Si tu demandes la suppression de ton compte, tes données sont effacées dans un délai de <strong className="text-white/80">30 jours</strong>, sauf obligation légale de conservation.
             </p>
           </Section>
 
-          <Section title="7. Tes droits">
+          <Section title="8. Tes droits">
             <p>Conformément au RGPD, tu disposes des droits suivants :</p>
             <ul className="list-none space-y-1.5 mt-2">
               {[
@@ -197,13 +222,13 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          <Section title="8. Cookies et traceurs">
+          <Section title="9. Cookies et traceurs">
             <p>
               <BeezWord /> n'utilise pas de cookies publicitaires ou de traceurs tiers à des fins de ciblage. Seuls des cookies strictement nécessaires au fonctionnement de l'authentification (session Supabase) sont utilisés.
             </p>
           </Section>
 
-          <Section title="9. Contact">
+          <Section title="10. Contact">
             <p>
               Pour toute question relative à la protection de tes données personnelles :{' '}
               <a

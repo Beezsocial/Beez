@@ -54,7 +54,7 @@ export default async function PublicProfilePage({
     <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
       <NavHeader />
 
-      <main className="flex-1 px-4 sm:px-6 py-8 max-w-lg mx-auto w-full pt-14">
+      <main className="flex-1 px-4 sm:px-6 py-8 max-w-lg mx-auto w-full pt-20">
         {data ? (
           <PublicProfileClient
             currentUserId={user.id}
