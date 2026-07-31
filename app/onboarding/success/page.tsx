@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import HexBadge from '@/components/ui/HexBadge'
+import FoundingMemberBadge from '@/components/ui/FoundingMemberBadge'
 import NavBrand from '@/components/ui/NavBrand'
 
 async function getProfileData() {
@@ -74,27 +75,8 @@ export default async function SuccessPage() {
 
           {isFoundingMember ? (
             <>
-              <div
-                className="inline-flex flex-col items-center mb-4 px-6 py-3"
-                style={{
-                  background: 'rgba(235,175,87,0.12)',
-                  border: '1px solid rgba(235,175,87,0.4)',
-                  borderRadius: 8,
-                }}
-              >
-                <span className="text-gold font-bold text-sm tracking-wide">✦ Founding Member</span>
-                <span
-                  style={{
-                    fontFamily: "'Syne', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 28,
-                    color: '#ebaf57',
-                    lineHeight: 1.2,
-                    letterSpacing: '0.05em',
-                  }}
-                >
-                  #{paddedNumber}
-                </span>
+              <div className="inline-flex mb-4 px-6 py-3">
+                <FoundingMemberBadge memberNumber={memberNumber as number} size="lg" />
               </div>
               <p className="text-white/50 max-w-sm mx-auto text-sm sm:text-base leading-relaxed mb-8">
                 La communauté Beez est heureuse de te compter parmi ses membres !

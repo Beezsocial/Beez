@@ -1,10 +1,13 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import ComposeBox from '@/components/messaging/ComposeBox'
 import ReportModal from '@/components/messaging/ReportModal'
 import type { MessageRow } from '@/lib/messages'
+
+const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 
 type OtherProfile = {
   user_id: string
@@ -222,9 +225,45 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
                 >
                   ←
                 </button>
-                <p className="text-white font-medium text-sm truncate">
-                  {selectedProfile ? `${selectedProfile.first_name} ${selectedProfile.last_name}` : 'Membre Beez'}
-                </p>
+                {selectedUserId && (
+                  <Link
+                    href={`/profile/${selectedUserId}`}
+                    className="flex items-center gap-2.5 min-w-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez"
+                  >
+                    <div
+                      className="shrink-0 relative transition-transform duration-150 group-hover:scale-105"
+                      style={{ width: 32, height: 32 * 0.866 }}
+                    >
+                      <div className="absolute inset-0" style={{ clipPath: HEX_CLIP, background: '#ebaf57' }} />
+                      <div
+                        className="absolute flex items-center justify-center overflow-hidden"
+                        style={{
+                          inset: 2,
+                          clipPath: HEX_CLIP,
+                          background: selectedProfile?.avatar_url ? undefined : '#0D2E4A',
+                        }}
+                      >
+                        {selectedProfile?.avatar_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={selectedProfile.avatar_url}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="font-heading font-bold text-gold text-[10px]">
+                            {selectedProfile
+                              ? `${selectedProfile.first_name?.[0] ?? ''}${selectedProfile.last_name?.[0] ?? ''}`.toUpperCase()
+                              : '?'}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-white font-medium text-sm truncate transition-opacity duration-150 group-hover:opacity-80">
+                      {selectedProfile ? `${selectedProfile.first_name} ${selectedProfile.last_name}` : 'Membre Beez'}
+                    </p>
+                  </Link>
+                )}
               </div>
               <button
                 type="button"

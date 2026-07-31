@@ -10,6 +10,7 @@ import {
   profileTypeLabels,
   seekingLabels,
 } from '@/lib/validations'
+import { ProfileIdentity, ProfileCards } from '@/components/profile/ProfileView'
 import SignOutButton from './SignOutButton'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -30,38 +31,6 @@ type Props = {
 
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const MAX_FILE_BYTES = 2 * 1024 * 1024 // 2 MB
-
-// ─── Read-only hex avatar ─────────────────────────────────────────────────────
-function HexAvatar({
-  firstName,
-  lastName,
-  avatarUrl,
-}: {
-  firstName: string
-  lastName: string
-  avatarUrl: string | null
-}) {
-  const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
-  return (
-    <div
-      className="w-24 h-[83px] relative flex items-center justify-center shrink-0"
-      style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)' }}
-      aria-hidden="true"
-    >
-      <div
-        className="absolute inset-[3px] flex items-center justify-center"
-        style={{ clipPath: HEX_CLIP, background: '#0d3459' }}
-      >
-        {avatarUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={avatarUrl} alt={`${firstName} ${lastName}`} className="w-full h-full object-cover" />
-        ) : (
-          <span className="font-heading font-bold text-2xl text-gold select-none">{initials}</span>
-        )}
-      </div>
-    </div>
-  )
-}
 
 // ─── Editable hex avatar (edit mode) ─────────────────────────────────────────
 function EditableHexAvatar({
@@ -126,15 +95,6 @@ function EditableHexAvatar({
   )
 }
 
-// ─── Read-only pill ───────────────────────────────────────────────────────────
-function Pill({ label }: { label: string }) {
-  return (
-    <span className="px-3 py-1.5 text-xs font-medium border border-gold/40 text-gold bg-gold/8 rounded-beez">
-      {label}
-    </span>
-  )
-}
-
 // ─── Interactive pill toggle (edit mode) ─────────────────────────────────────
 function PillToggle({
   label,
@@ -165,16 +125,6 @@ function PillToggle({
     >
       {label}
     </button>
-  )
-}
-
-// ─── Read-only section ────────────────────────────────────────────────────────
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <div className="border-t border-white/8 pt-5">
-      <p className="text-xs font-bold uppercase tracking-[0.15em] text-white/30 mb-3">{title}</p>
-      {children}
-    </div>
   )
 }
 
@@ -221,10 +171,6 @@ const PRIMARY_TYPE_CARDS = [
 const SECONDARY_TYPE_VALUES = profileTypeValues.filter(
   (v) => v !== 'futur_entrepreneur' && v !== 'entrepreneur_actif'
 )
-
-function padMember(n: number) {
-  return String(n).padStart(3, '0')
-}
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function ProfileClient({ profile, types, seeking }: Props) {
@@ -453,56 +399,13 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
   // ── Render ────────────────────────────────────────────────────────────────────
   return (
     <>
-      {/* Identity block */}
-      <div className="mb-6">
-        {/* Avatar + Tile row — avatar overlaps tile from left */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', minHeight: current.memberNumber != null && current.memberNumber <= 150 ? 110 : 83, marginBottom: 10 }}>
-          {/* Gold border + dark tile (absolutely positioned behind avatar) */}
-          <div style={{ position: 'absolute', left: 32, right: 0, top: 0, bottom: 0, zIndex: 1 }}>
-            {/* Gold border layer */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'rgba(235,175,87,0.4)',
-              clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
-              borderRadius: '10px 0 0 10px',
-            }} />
-            {/* Dark content layer — 1px inset creates border effect */}
-            <div style={{
-              position: 'absolute',
-              top: 1, right: 1, bottom: 1, left: 1,
-              background: '#041625',
-              clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
-              borderRadius: '10px 0 0 10px',
-              display: 'flex',
-              alignItems: 'center',
-            }}>
-              <div style={{ paddingLeft: 80, paddingRight: 48 }}>
-                <div className="flex items-baseline gap-2 flex-wrap">
-                  <h1 className="font-heading font-bold text-lg text-white leading-tight">
-                    {current.firstName} {current.lastName}
-                  </h1>
-                  {currentTypes.includes('entrepreneur_actif') && (
-                    <span className="text-sm text-white/60 font-medium">🐝 Founder</span>
-                  )}
-                  {!currentTypes.includes('entrepreneur_actif') && currentTypes.includes('futur_entrepreneur') && (
-                    <span className="text-sm text-white/60 font-medium">🌱 Starter</span>
-                  )}
-                </div>
-                {current.city && (
-                  <p className="text-white/50 text-sm mt-0.5">{current.city}</p>
-                )}
-                {current.memberNumber != null && current.memberNumber <= 150 && (
-                  <p className="text-xs font-semibold mt-0.5" style={{ color: '#ebaf57' }}>
-                    ✦ Founding Member #{padMember(current.memberNumber)}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* Avatar on top (z-index: 2) */}
-          <div style={{ position: 'relative', zIndex: 2, flexShrink: 0 }}>
-            {isEditing ? (
+      {/* Identity block — same tile for both modes, only the avatar slot swaps */}
+      <div className="mb-8">
+        <ProfileIdentity
+          profile={current}
+          types={currentTypes}
+          avatarSlot={
+            isEditing ? (
               <div className="flex flex-col items-start gap-1.5">
                 <EditableHexAvatar
                   firstName={form.firstName || current.firstName}
@@ -515,26 +418,14 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                   <p className="text-[10px] text-red-400 max-w-[96px]">{avatarError}</p>
                 )}
               </div>
-            ) : (
-              <HexAvatar
-                firstName={current.firstName}
-                lastName={current.lastName}
-                avatarUrl={current.avatarUrl}
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Spacer — preserves gap between tile and card below */}
-        <div className="h-2" />
+            ) : undefined
+          }
+        />
       </div>
 
-      {/* Card body */}
-      <div className="card p-5 sm:p-6 space-y-5">
-
-        {isEditing ? (
-          /* ── Edit mode ────────────────────────────────────────────── */
-          <>
+      {isEditing ? (
+        /* ── Edit mode ────────────────────────────────────────────── */
+        <div className="card p-5 sm:p-6 space-y-5">
             {/* Basic info */}
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
@@ -656,41 +547,11 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                 {serverError}
               </p>
             )}
-          </>
-        ) : (
-          /* ── Read mode ────────────────────────────────────────────── */
-          <>
-            {current.bio && (
-              <Section title="À propos">
-                <p className="text-white/70 text-sm leading-relaxed">{current.bio}</p>
-              </Section>
-            )}
-
-            {currentTypes.length > 0 && (
-              <Section title="Je suis">
-                <div className="flex flex-wrap gap-2">
-                  {currentTypes.map((t) => {
-                    const label = profileTypeLabels[t as keyof typeof profileTypeLabels] ?? t
-                    return <Pill key={t} label={label} />
-                  })}
-                </div>
-              </Section>
-            )}
-
-            {currentSeeking.length > 0 && (
-              <Section title="Je cherche">
-                <div className="flex flex-wrap gap-2">
-                  {currentSeeking.map((s) => {
-                    const label = seekingLabels[s as keyof typeof seekingLabels] ?? s
-                    return <Pill key={s} label={label} />
-                  })}
-                </div>
-              </Section>
-            )}
-
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        /* ── Read mode ────────────────────────────────────────────── */
+        <ProfileCards profile={current} types={currentTypes} seeking={currentSeeking} />
+      )}
 
       {/* Success banner */}
       {success && !isEditing && (
