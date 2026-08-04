@@ -472,12 +472,10 @@ function ProfileHex({
         onClick={() => onSelect(profile)}
       >
         <div
-          className="absolute flex items-center justify-center overflow-hidden"
-          style={{
-            inset: HEX_BORDER,
-            clipPath: HEX_CLIP,
-            background: profile.avatar_url ? undefined : '#0D2E4A',
-          }}
+          className={`absolute flex items-center justify-center overflow-hidden ${
+            profile.avatar_url ? '' : 'navy-gradient navy-shine'
+          }`}
+          style={{ inset: HEX_BORDER, clipPath: HEX_CLIP }}
         >
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element

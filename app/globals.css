@@ -161,6 +161,37 @@
     pointer-events: none;
   }
 
+  /* ── Navy depth treatment ────────────────────────────────────────────
+     Same glossy-shine technique as .gold-gradient/.gold-shine above, in
+     navy tones — used for surfaces (e.g. initials-only avatar hexes on
+     /ruche) that need to visually pop against a flat navy background
+     without switching to gold. Deliberately doesn't set `position` like
+     .gold-shine does: its target elements already carry Tailwind's
+     `absolute` class, and a second `position` declaration here would
+     fight that on a cascade source-order tie instead of layering on top. */
+  .navy-gradient {
+    background: linear-gradient(135deg, #0d2e4a 0%, #1a4a73 50%, #0d2e4a 100%);
+  }
+
+  .navy-shine {
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .navy-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.3) 48%,
+      rgba(255, 255, 255, 0.08) 54%,
+      transparent 65%
+    );
+    pointer-events: none;
+  }
+
   /* ── Buttons ────────────────────────────────────────────────────── */
   .btn-primary {
     @apply gold-gradient inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-7 py-3 text-base;
