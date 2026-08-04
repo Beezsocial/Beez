@@ -171,6 +171,24 @@ export default function PrivacyPage() {
               <strong className="text-white/80">Accès :</strong> seuls les deux membres d'une conversation peuvent lire leurs propres messages. Cette restriction est appliquée techniquement au niveau de la base de données via les politiques de sécurité au niveau ligne (Row Level Security) de Supabase — personne d'autre, y compris l'équipe <BeezWord />, n'a accès au contenu des conversations dans le cadre normal du service.
             </p>
             <p className="mt-3">
+              <strong className="text-white/80">Accès administrateur :</strong> l'équipe <BeezWord /> peut techniquement accéder au contenu des messages échangés entre membres via notre infrastructure technique (base de données). Cet accès est strictement limité aux cas suivants :
+            </p>
+            <ul className="list-none space-y-1.5 mt-2">
+              {[
+                "Traitement d'un signalement (harcèlement, contenu inapproprié, etc.)",
+                'Nécessité technique (débogage, maintenance, sécurité)',
+                'Obligation légale (réquisition judiciaire, par exemple)',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3">
+              Nous ne consultons jamais le contenu des messages par simple curiosité ou à des fins commerciales. Cet accès est actuellement limité au fondateur de <BeezWord /> ; toute personne supplémentaire ayant accès à l'infrastructure sera soumise à un engagement de confidentialité strict.
+            </p>
+            <p className="mt-3">
               <strong className="text-white/80">Finalité :</strong> permettre la communication directe entre membres <BeezWord />.
             </p>
             <p className="mt-3">
