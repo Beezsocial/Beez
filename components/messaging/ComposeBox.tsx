@@ -49,7 +49,11 @@ export default function ComposeBox({
       return
     }
     setContent('')
-    setCanSend(false)
+    // Re-check the real turn state instead of assuming we're now blocked —
+    // if the other person has ever replied in this thread, it's permanently
+    // unlocked and this send must not gate the next one.
+    const { canSend: stillCanSend } = await getTurnState(supabase, currentUserId, recipientUserId)
+    setCanSend(stillCanSend)
     onSent?.()
   }
 
