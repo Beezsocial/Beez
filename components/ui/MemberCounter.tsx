@@ -35,41 +35,28 @@ export default function MemberCounter() {
   useEffect(() => {
     const supabase = createClient()
 
+    // member_count() renvoie seulement le nombre de profils : le compteur
+    // fonctionne sans que les visiteurs aient le droit de lire la table.
     async function fetchCount() {
-      const { count: c, error } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true })
+      const { data } = await supabase.rpc('member_count')
 
-      console.log('[MemberCounter] fetched count:', c, error)
-
-      if (typeof c === 'number') {
-        setCount(c)
+      if (typeof data === 'number') {
+        setCount(data)
       }
     }
 
     fetchCount()
     const interval = setInterval(fetchCount, 30_000)
 
-    const channel = supabase
-      .channel('member-counter')
-      .on(
-        'postgres_changes' as any,
-        { event: 'INSERT', schema: 'public', table: 'profiles' },
-        () => {
-          setCount((prev) => (prev != null ? prev + 1 : prev))
-        }
-      )
-      .subscribe()
-
     return () => {
       clearInterval(interval)
-      supabase.removeChannel(channel)
     }
   }, [])
 
   // Trigger count-up from 0 when both in-view AND count loaded
   useEffect(() => {
     if (isInView && count != null && !hasAnimated) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- comportement existant (animation lancée une fois), à restructurer
       setHasAnimated(true)
       animateCount(0, count, count === 0 ? 0 : 1200)
     }

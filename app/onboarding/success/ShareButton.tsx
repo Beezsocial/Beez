@@ -8,7 +8,7 @@ interface ShareButtonProps {
   memberNumber?: number
 }
 
-export default function ShareButton({ firstName, memberNumber }: ShareButtonProps) {
+export default function ShareButton({ memberNumber }: ShareButtonProps) {
   const [copied, setCopied] = useState(false)
 
   const shareText = memberNumber

@@ -26,6 +26,7 @@ export default function ComposeBox({
 
   useEffect(() => {
     let active = true
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- comportement existant (remise à zéro au changement de destinataire), à restructurer
     setCanSend(null)
     const supabase = createClient()
     getTurnState(supabase, currentUserId, recipientUserId).then(({ canSend }) => {

@@ -138,7 +138,13 @@ export type Database = {
       }
     }
     Views: Record<string, never>
-    Functions: Record<string, never>
+    Functions: {
+      // Nombre de profils, appelable sans connexion (compteur de l'accueil).
+      member_count: {
+        Args: Record<string, never>
+        Returns: number
+      }
+    }
     Enums: Record<string, never>
   }
 }

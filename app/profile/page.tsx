@@ -35,8 +35,8 @@ async function getFullProfile() {
 
     return {
       profile: profileRes.data,
-      types: (typesRes.data ?? []).map((r: any) => r.type),
-      seeking: (seekingRes.data ?? []).map((r: any) => r.seeking_type),
+      types: (typesRes.data ?? []).map((r: { type: string }) => r.type),
+      seeking: (seekingRes.data ?? []).map((r: { seeking_type: string }) => r.seeking_type),
     }
   } catch {
     return null

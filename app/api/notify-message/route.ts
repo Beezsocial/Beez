@@ -1,19 +1,13 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { escapeHtml } from '@/lib/email'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { receiverId } = body as { receiverId: string }
-
-    if (!receiverId) {
-      return NextResponse.json({ error: 'Missing receiverId.' }, { status: 400 })
-    }
-
     // Verify the caller is authenticated — the sender's name is looked up
     // from THEIR OWN session below, never trusted from the request body.
     const supabase = await createClient()
@@ -22,8 +16,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })
     }
 
-    if (!process.env.RESEND_API_KEY || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      console.warn('[notify-message] RESEND_API_KEY or SUPABASE_SERVICE_ROLE_KEY not set — skipping email.')
+    const body = await request.json().catch(() => null)
+    const receiverId = body?.receiverId
+
+    if (typeof receiverId !== 'string' || !receiverId) {
+      return NextResponse.json({ error: 'Missing receiverId.' }, { status: 400 })
+    }
+
+    const admin = createAdminClient()
+    if (!process.env.RESEND_API_KEY || !admin) {
+      console.warn('[notify-message] RESEND_API_KEY or Supabase secret key not set — skipping email.')
       return NextResponse.json({ ok: true, skipped: true })
     }
 
@@ -41,11 +43,7 @@ export async function POST(request: Request) {
       : 'Un membre de la ruche'
 
     // ── Receiver's email — auth.users isn't exposed to the anon/authenticated
-    // roles, so this needs the service role (admin) client. ──────────────────
-    const admin = createAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    // roles, so this needs the admin client (secret key). ────────────────────
     const { data: receiverAuth, error: receiverError } = await admin.auth.admin.getUserById(receiverId)
 
     if (receiverError || !receiverAuth.user?.email) {
@@ -63,7 +61,7 @@ export async function POST(request: Request) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${subject}</title>
+  <title>${escapeHtml(subject)}</title>
 </head>
 <body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
@@ -85,7 +83,7 @@ export async function POST(request: Request) {
                 Nouveau message&nbsp;✦
               </p>
               <p style="margin:0 0 28px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
-                <strong style="color:#57d9eb;">${senderName}</strong> t'a envoyé un message sur Beez.
+                <strong style="color:#57d9eb;">${escapeHtml(senderName)}</strong> t'a envoyé un message sur Beez.
               </p>
               <a href="${messagesUrl}" style="display:inline-block;padding:14px 28px;background:#57d9eb;color:#082b44;font-weight:700;font-size:15px;text-decoration:none;border-radius:10px;">
                 Va y répondre →

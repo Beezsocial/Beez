@@ -93,7 +93,7 @@ export default function NavHeader() {
       channel = supabase
         .channel('nav-unread-messages')
         .on(
-          'postgres_changes' as any,
+          'postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'messages', filter: `receiver_id=eq.${userId}` },
           () => setUnreadCount((c) => c + 1)
         )

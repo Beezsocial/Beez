@@ -531,7 +531,7 @@ export default  function OnboardingPage() {
         return
       }
 
-      const { data: profile } = await (supabase as any)
+      const { data: profile } = await supabase
         .from('profiles')
         .select('user_id')
         .eq('user_id', session.user.id)
@@ -670,58 +670,45 @@ export default  function OnboardingPage() {
         avatarUrl = await uploadAvatar(user.id, data.avatarFile)
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const db = supabase as any
+
       // Insert profile
-      const { error: profileError } = await supabase.from('profiles').insert({
+      const { error: profileError } = await db.from('profiles').insert({
         user_id: user.id,
         first_name: data.firstName,
         last_name: data.lastName,
         city: data.city,
         bio: data.bio,
         avatar_url: avatarUrl,
-      } as any)
+      })
 
       if (profileError) throw profileError
 
       // Insert profile types
       if (data.types.length > 0) {
-        const { error: typesError } = await supabase.from('profile_types').insert(
-          data.types.map((type) => ({ user_id: user.id, type })) as any
+        const { error: typesError } = await db.from('profile_types').insert(
+          data.types.map((type) => ({ user_id: user.id, type }))
         )
         if (typesError) throw typesError
       }
 
       // Insert seeking
       if (data.seeking.length > 0) {
-        const { error: seekingError } = await supabase.from('seeking').insert(
+        const { error: seekingError } = await db.from('seeking').insert(
           data.seeking.map((seeking_type) => ({
             user_id: user.id,
             seeking_type,
-          })) as any
+          }))
         )
         if (seekingError) throw seekingError
       }
 
-      // Send welcome email (non-blocking — don't fail registration on email error)
+      // Send welcome email (non-blocking — don't fail registration on email error).
+      // La route lit elle-même l'adresse (session), le prénom et le numéro
+      // (base), et n'envoie qu'une fois par membre.
       try {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (session?.user.email) {
-          // Fetch member number from the profile we just inserted
-          const { data: profileRow } = await (supabase as any)
-            .from('profiles')
-            .select('member_number')
-            .eq('user_id', user.id)
-            .single()
-
-          await fetch('/api/send-welcome-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: session.user.email,
-              firstName: data.firstName,
-              memberNumber: profileRow?.member_number ?? null,
-            }),
-          })
-        }
+        await fetch('/api/send-welcome-email', { method: 'POST' })
       } catch {
         // Non-critical — swallow silently
       }

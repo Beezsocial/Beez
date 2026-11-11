@@ -295,6 +295,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
         return
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const db = supabase as any
 
       // ── 1. Upload avatar if a new file was selected ──
@@ -327,27 +328,63 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
         })
         .eq('user_id', user.id)
 
-      if (profileError) throw profileError
+      if (profileError) {
+        throw new Error(
+          profileError.code === '23514'
+            ? "Un champ est trop long ou contient un caractère non autorisé (< ou >). Ton profil n'a pas été modifié."
+            : "Ton profil n'a pas pu être enregistré. Rien n'a été modifié, réessaie."
+        )
+      }
 
-      // ── 3. Replace profile_types ──
-      await db.from('profile_types').delete().eq('user_id', user.id)
-      if (editTypes.length > 0) {
-        const { error: typesError } = await db
+      // ── 3. profile_types et seeking : différence avec ce qui est en base ──
+      // On ajoute d'abord les nouveaux choix, puis on retire seulement ceux qui
+      // ont été décochés. Si une étape échoue, rien de ce qui existait n'est
+      // perdu, et un nouvel essai reprend là où ça s'est arrêté.
+      const [savedTypesRes, savedSeekingRes] = await Promise.all([
+        db.from('profile_types').select('type').eq('user_id', user.id),
+        db.from('seeking').select('seeking_type').eq('user_id', user.id),
+      ])
+      if (savedTypesRes.error || savedSeekingRes.error) {
+        throw new Error("Tes choix « Je suis » et « Je cherche » n'ont pas pu être enregistrés. Rien n'a été effacé, réessaie.")
+      }
+
+      const savedTypes: string[] = savedTypesRes.data.map((r: { type: string }) => r.type)
+      const savedSeeking: string[] = savedSeekingRes.data.map((r: { seeking_type: string }) => r.seeking_type)
+      const typesToAdd = editTypes.filter((t) => !savedTypes.includes(t))
+      const seekingToAdd = editSeeking.filter((s) => !savedSeeking.includes(s))
+      const typesToRemove = savedTypes.filter((t) => !editTypes.includes(t))
+      const seekingToRemove = savedSeeking.filter((s) => !editSeeking.includes(s))
+
+      if (typesToAdd.length > 0) {
+        const { error } = await db
           .from('profile_types')
-          .insert(editTypes.map((type) => ({ user_id: user.id, type })))
-        if (typesError) throw typesError
+          .insert(typesToAdd.map((type) => ({ user_id: user.id, type })))
+        if (error) throw new Error("Tes nouveaux choix « Je suis » n'ont pas pu être enregistrés. Rien n'a été effacé, réessaie.")
       }
-
-      // ── 4. Replace seeking ──
-      await db.from('seeking').delete().eq('user_id', user.id)
-      if (editSeeking.length > 0) {
-        const { error: seekingError } = await db
+      if (seekingToAdd.length > 0) {
+        const { error } = await db
           .from('seeking')
-          .insert(editSeeking.map((seeking_type) => ({ user_id: user.id, seeking_type })))
-        if (seekingError) throw seekingError
+          .insert(seekingToAdd.map((seeking_type) => ({ user_id: user.id, seeking_type })))
+        if (error) throw new Error("Tes nouveaux choix « Je cherche » n'ont pas pu être enregistrés. Rien n'a été effacé, réessaie.")
+      }
+      if (typesToRemove.length > 0) {
+        const { error } = await db
+          .from('profile_types')
+          .delete()
+          .eq('user_id', user.id)
+          .in('type', typesToRemove)
+        if (error) throw new Error("Les choix « Je suis » décochés n'ont pas pu être retirés. Rien n'a été perdu, réessaie.")
+      }
+      if (seekingToRemove.length > 0) {
+        const { error } = await db
+          .from('seeking')
+          .delete()
+          .eq('user_id', user.id)
+          .in('seeking_type', seekingToRemove)
+        if (error) throw new Error("Les choix « Je cherche » décochés n'ont pas pu être retirés. Rien n'a été perdu, réessaie.")
       }
 
-      // ── 5. Update local state ──
+      // ── 4. Update local state ──
       if (avatarPreview) URL.revokeObjectURL(avatarPreview)
       setCurrent((prev) => ({
         ...prev,
@@ -378,15 +415,12 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
     setDeleting(true)
     setDeleteError('')
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('Session expirée. Recharge la page.')
-
-      const db = supabase as any
-      await db.from('first_posts').delete().eq('user_id', user.id)
-      await db.from('seeking').delete().eq('user_id', user.id)
-      await db.from('profile_types').delete().eq('user_id', user.id)
-      const { error: profileError } = await db.from('profiles').delete().eq('user_id', user.id)
-      if (profileError) throw profileError
+      // Photos, profil et compte sont supprimés côté serveur (clé secrète).
+      const res = await fetch('/api/delete-account', { method: 'POST' })
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.error ?? 'La suppression a échoué. Réessaie dans un instant.')
+      }
 
       await supabase.auth.signOut()
       router.replace('/')

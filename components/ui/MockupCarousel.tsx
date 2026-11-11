@@ -87,7 +87,7 @@ export default function MockupCarousel() {
   useEffect(() => {
     const id = setInterval(() => goTo(indexRef.current + 1), 8000)
     return () => clearInterval(id)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   function onDown(e: React.PointerEvent<HTMLDivElement>) {
     startXRef.current = e.clientX

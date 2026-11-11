@@ -23,7 +23,10 @@ export async function submitReport(
 ) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
-  const result = await db
+  // Pas de .select() après l'insertion : personne n'a le droit de relire un
+  // signalement, et demander la ligne en retour fait échouer l'insertion
+  // entière. Le succès se juge sur l'absence d'erreur.
+  const { error } = await db
     .from('reports')
     .insert({
       reporter_id: reporterId,
@@ -32,10 +35,8 @@ export async function submitReport(
       details: details.trim() || null,
       conversation_context: conversationContext || null,
     })
-    .select()
-    .single()
 
-  if (!result.error) {
+  if (!error) {
     // Best-effort — the report already saved successfully either way.
     fetch('/api/notify-report', {
       method: 'POST',
@@ -44,8 +45,5 @@ export async function submitReport(
     }).catch(() => {})
   }
 
-  return result as {
-    data: Database['public']['Tables']['reports']['Row'] | null
-    error: { message: string } | null
-  }
+  return { error: error as { message: string } | null }
 }

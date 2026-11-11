@@ -1,22 +1,15 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { escapeHtml, stripLineBreaks } from '@/lib/email'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function POST(request: Request) {
+// Rien n'est lu dans la requête : l'adresse vient de la session, le prénom et
+// le numéro de membre viennent de la base.
+export async function POST() {
   try {
-    const body = await request.json()
-    const { email, firstName, memberNumber } = body as {
-      email: string
-      firstName: string
-      memberNumber: number | null
-    }
-
-    if (!email || !firstName) {
-      return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
-    }
-
     // Verify the caller is authenticated
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -24,10 +17,41 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })
     }
 
-    if (!process.env.RESEND_API_KEY) {
-      console.warn('[send-welcome-email] RESEND_API_KEY is not set — skipping email.')
+    const admin = createAdminClient()
+    if (!process.env.RESEND_API_KEY || !admin) {
+      console.warn('[send-welcome-email] RESEND_API_KEY or Supabase secret key not set — skipping email.')
       return NextResponse.json({ ok: true, skipped: true })
     }
+
+    if (!user.email) {
+      return NextResponse.json({ ok: true, skipped: true })
+    }
+
+    // ── Un seul envoi par membre ─────────────────────────────────────────────
+    // welcome_email_sent_at n'est posé que s'il est vide, en une seule requête :
+    // deux appels simultanés (double clic, rechargement) ne peuvent pas passer
+    // tous les deux. Si Resend refuse l'envoi, la date est retirée plus bas :
+    // elle ne reste en place que si l'email est bien parti.
+    const sentAt = new Date().toISOString()
+    const { data: profile, error: claimError } = await admin
+      .from('profiles')
+      .update({ welcome_email_sent_at: sentAt })
+      .eq('user_id', user.id)
+      .is('welcome_email_sent_at', null)
+      .select('first_name, member_number')
+      .maybeSingle()
+
+    if (claimError) {
+      console.error('[send-welcome-email] Could not reserve the send:', claimError)
+      return NextResponse.json({ ok: true, warning: 'Email not sent.' })
+    }
+    if (!profile) {
+      // Pas encore de profil, ou email de bienvenue déjà envoyé.
+      return NextResponse.json({ ok: true, skipped: true })
+    }
+
+    const firstName: string = profile.first_name
+    const memberNumber: number | null = profile.member_number
 
     // ── Email content ────────────────────────────────────────────────────────
     const isFoundingMember = memberNumber != null && memberNumber <= 150
@@ -35,7 +59,7 @@ export async function POST(request: Request) {
 
     const subject = isFoundingMember
       ? `🐝 Bienvenue Founding Member #${paddedNumber} !`
-      : `Bienvenue dans la ruche, ${firstName} 🐝`
+      : `Bienvenue dans la ruche, ${stripLineBreaks(firstName)} 🐝`
 
     const memberBadgeHtml = isFoundingMember
       ? // Badge Founding Member : seul élément de l'email qui reste en or.
@@ -58,7 +82,7 @@ export async function POST(request: Request) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${subject}</title>
+  <title>${escapeHtml(subject)}</title>
 </head>
 <body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
@@ -77,7 +101,7 @@ export async function POST(request: Request) {
           <tr>
             <td style="padding:40px;">
               <p style="margin:0 0 16px;font-size:26px;font-weight:700;color:#ffffff;line-height:1.3;">
-                Bienvenue dans la ruche, ${firstName}&nbsp;✦
+                Bienvenue dans la ruche, ${escapeHtml(firstName)}&nbsp;✦
               </p>
               ${memberBadgeHtml}
               ${isFoundingMember ? `
@@ -119,16 +143,26 @@ export async function POST(request: Request) {
       : `Bienvenue dans la ruche, ${firstName} ✦\n\nBienvenue dans la ruche !\n\nL'app arrive bientôt. Tu seras notifié en premier dès que les portes s'ouvrent.\n\n— L'équipe Beez`
 
     // ── Send ─────────────────────────────────────────────────────────────────
-    const { error: sendError } = await resend.emails.send({
-      from: 'Beez <onboarding@joinbeez.com>',
-      to: [email],
-      subject,
-      html,
-      text,
-    })
+    const { error: sendError } = await resend.emails.send(
+      {
+        from: 'Beez <onboarding@joinbeez.com>',
+        to: [user.email],
+        subject,
+        html,
+        text,
+      },
+      // Second filet côté Resend : une même clé n'envoie jamais deux emails.
+      { idempotencyKey: `welcome-email/${user.id}` }
+    )
 
     if (sendError) {
       console.error('[send-welcome-email] Resend error:', sendError)
+      // Retire la date posée plus haut : un nouvel essai reste possible.
+      await admin
+        .from('profiles')
+        .update({ welcome_email_sent_at: null })
+        .eq('user_id', user.id)
+        .eq('welcome_email_sent_at', sentAt)
       // Non-fatal — registration already succeeded
       return NextResponse.json({ ok: true, warning: sendError.message })
     }

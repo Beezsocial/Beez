@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@/lib/supabase/server'
+import { escapeHtml, stripLineBreaks } from '@/lib/email'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -12,34 +13,23 @@ const REASON_LABELS: Record<string, string> = {
   autre: 'Autre',
 }
 
-function escapeHtml(input: string) {
-  return input
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { reportedUserId, reason, details } = body as {
-      reportedUserId: string
-      reason: string
-      details?: string
-    }
-
-    if (!reportedUserId || !reason) {
-      return NextResponse.json({ error: 'Missing reportedUserId or reason.' }, { status: 400 })
-    }
-
     // Verify the caller is authenticated — the reporter's identity is looked
     // up from THEIR OWN session below, never trusted from the request body.
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })
+    }
+
+    const body = await request.json().catch(() => null)
+    const reportedUserId = body?.reportedUserId
+    const reason = body?.reason
+    const details = typeof body?.details === 'string' ? body.details : ''
+
+    if (typeof reportedUserId !== 'string' || !reportedUserId || typeof reason !== 'string' || !reason) {
+      return NextResponse.json({ error: 'Missing reportedUserId or reason.' }, { status: 400 })
     }
 
     if (!process.env.RESEND_API_KEY) {
@@ -60,10 +50,11 @@ export async function POST(request: Request) {
       ? `${reporterProfile.first_name} ${reporterProfile.last_name}`
       : 'Un membre de la ruche'
 
+    // Hors liste, le motif est le texte brut envoyé par le membre.
     const reasonLabel = REASON_LABELS[reason] ?? reason
 
     // ── Email content ────────────────────────────────────────────────────────
-    const subject = `🚩 Signalement Beez — ${reasonLabel}`
+    const subject = `🚩 Signalement Beez — ${stripLineBreaks(reasonLabel)}`
 
     const html = `
 <!DOCTYPE html>
@@ -71,7 +62,7 @@ export async function POST(request: Request) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${subject}</title>
+  <title>${escapeHtml(subject)}</title>
 </head>
 <body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
@@ -96,7 +87,7 @@ export async function POST(request: Request) {
                 <strong style="color:#57d9eb;">${escapeHtml(reporterName)}</strong> (${user.id}) a signalé l'utilisateur <strong style="color:#57d9eb;">${escapeHtml(reportedUserId)}</strong>.
               </p>
               <p style="margin:0 0 8px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
-                <strong style="color:#ffffff;">Motif :</strong> ${reasonLabel}
+                <strong style="color:#ffffff;">Motif :</strong> ${escapeHtml(reasonLabel)}
               </p>
               ${details ? `<p style="margin:0 0 24px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;"><strong style="color:#ffffff;">Détails :</strong> ${escapeHtml(details)}</p>` : ''}
               <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;">

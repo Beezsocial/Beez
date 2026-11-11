@@ -9,13 +9,14 @@
 //   npx tsx scripts/notify-terms-update.ts --dry-run   (test first — no emails sent)
 //   npx tsx scripts/notify-terms-update.ts             (actually sends)
 //
-// Requires SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_SUPABASE_URL and
-// RESEND_API_KEY in .env.local.
+// Requires SUPABASE_SECRET_KEY (or the legacy SUPABASE_SERVICE_ROLE_KEY),
+// NEXT_PUBLIC_SUPABASE_URL and RESEND_API_KEY in .env.local.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { config as loadEnv } from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import { escapeHtml } from '../lib/email'
 
 // Next.js convention is .env.local (not .env), so point dotenv there explicitly.
 loadEnv({ path: '.env.local' })
@@ -27,23 +28,25 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function requireEnv(name: string): string {
-  const value = process.env[name]
-  if (!value) {
-    console.error(`Missing required env var: ${name} (check .env.local)`)
-    process.exit(1)
+// Renvoie la première variable renseignée parmi `names` : pendant la rotation
+// des clés, la nouvelle variable est lue d'abord, l'ancienne sert de repli.
+function requireEnv(...names: string[]): string {
+  for (const name of names) {
+    const value = process.env[name]
+    if (value) return value
   }
-  return value
+  console.error(`Missing required env var: ${names.join(' or ')} (check .env.local)`)
+  process.exit(1)
 }
 
 const SUPABASE_URL = requireEnv('NEXT_PUBLIC_SUPABASE_URL')
-const SERVICE_ROLE_KEY = requireEnv('SUPABASE_SERVICE_ROLE_KEY')
+const SECRET_KEY = requireEnv('SUPABASE_SECRET_KEY', 'SUPABASE_SERVICE_ROLE_KEY')
 // In --dry-run, resend.emails.send() is never called, so a real key isn't
 // needed — but the SDK's constructor throws on a falsy key regardless, so a
 // placeholder keeps dry-run usable without RESEND_API_KEY configured yet.
 const RESEND_API_KEY = DRY_RUN ? process.env.RESEND_API_KEY ?? 'dry-run-placeholder' : requireEnv('RESEND_API_KEY')
 
-const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
+const admin = createClient(SUPABASE_URL, SECRET_KEY)
 const resend = new Resend(RESEND_API_KEY)
 
 type Recipient = {
@@ -98,7 +101,7 @@ function buildEmail(firstName: string | null) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${subject}</title>
+  <title>${escapeHtml(subject)}</title>
 </head>
 <body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
@@ -117,7 +120,7 @@ function buildEmail(firstName: string | null) {
           <tr>
             <td style="padding:40px;">
               <p style="margin:0 0 20px;font-size:20px;font-weight:700;color:#ffffff;line-height:1.4;">
-                ${greeting}
+                ${escapeHtml(greeting)}
               </p>
               <p style="margin:0 0 20px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
                 Nous avons mis à jour nos Conditions d'Utilisation et notre Politique de Confidentialité, notamment pour encadrer notre nouvelle fonctionnalité de messagerie entre membres.
