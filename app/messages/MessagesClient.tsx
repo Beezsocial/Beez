@@ -149,7 +149,7 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
         ) : conversations.length === 0 ? (
           <p className="text-white/40 text-sm px-4 sm:px-6">
             Aucune conversation pour l'instant. Rends-toi sur{' '}
-            <a href="/ruche" className="text-gold hover:underline">
+            <a href="/ruche" className="text-accent hover:underline">
               La Ruche
             </a>{' '}
             pour envoyer un message.
@@ -175,13 +175,13 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
                   >
                     <div
                       className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center overflow-hidden"
-                      style={{ background: '#0D2E4A', border: '1px solid rgba(235,175,87,0.25)' }}
+                      style={{ background: '#0D2E4A', border: '1px solid rgba(87,217,235,0.25)' }}
                     >
                       {profile?.avatar_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={profile.avatar_url} alt={name} className="w-full h-full object-cover" />
                       ) : (
-                        <span className="font-heading font-bold text-gold text-sm">{initials}</span>
+                        <span className="font-heading font-bold text-accent text-sm">{initials}</span>
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -199,7 +199,7 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
                     {unreadCount > 0 && (
                       <span
                         className="shrink-0 w-2.5 h-2.5 rounded-full"
-                        style={{ background: '#ebaf57' }}
+                        style={{ background: '#57d9eb' }}
                         aria-label={`${unreadCount} message${unreadCount > 1 ? 's' : ''} non lu${unreadCount > 1 ? 's' : ''}`}
                       />
                     )}
@@ -228,13 +228,13 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
                 {selectedUserId && (
                   <Link
                     href={`/profile/${selectedUserId}`}
-                    className="flex items-center gap-2.5 min-w-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez"
+                    className="flex items-center gap-2.5 min-w-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-beez"
                   >
                     <div
                       className="shrink-0 relative transition-transform duration-150 group-hover:scale-105"
                       style={{ width: 32, height: 32 * 0.866 }}
                     >
-                      <div className="absolute inset-0" style={{ clipPath: HEX_CLIP, background: '#ebaf57' }} />
+                      <div className="absolute inset-0" style={{ clipPath: HEX_CLIP, background: '#57d9eb' }} />
                       <div
                         className="absolute flex items-center justify-center overflow-hidden"
                         style={{
@@ -251,7 +251,7 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <span className="font-heading font-bold text-gold text-[10px]">
+                          <span className="font-heading font-bold text-accent text-[10px]">
                             {selectedProfile
                               ? `${selectedProfile.first_name?.[0] ?? ''}${selectedProfile.last_name?.[0] ?? ''}`.toUpperCase()
                               : '?'}
@@ -268,7 +268,7 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
               <button
                 type="button"
                 onClick={() => setReportModalOpen(true)}
-                className="shrink-0 text-white/40 hover:text-red-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez p-1"
+                className="shrink-0 text-white/40 hover:text-red-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-beez p-1"
                 aria-label="Signaler cette conversation"
                 title="Signaler"
               >
@@ -288,7 +288,7 @@ export default function MessagesClient({ currentUserId }: { currentUserId: strin
                       className="max-w-[75%] rounded-beez px-4 py-2.5 text-sm"
                       style={
                         isMine
-                          ? { background: '#ebaf57', color: '#082b44', fontWeight: 500 }
+                          ? { background: '#57d9eb', color: '#082b44', fontWeight: 500 }
                           : { background: '#0D2E4A', color: '#ffffff', border: '1px solid rgba(255,255,255,0.08)' }
                       }
                     >

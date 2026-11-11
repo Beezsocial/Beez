@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Header */}
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
@@ -17,7 +17,7 @@ export default function ContactPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Accueil
           </Link>
@@ -31,7 +31,7 @@ export default function ContactPage() {
         <div className="w-full max-w-md">
 
           <div className="mb-8">
-            <p className="text-gold text-xs font-bold uppercase tracking-[0.15em] mb-2">
+            <p className="text-accent text-xs font-bold uppercase tracking-[0.15em] mb-2">
               Nous contacter
             </p>
             <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-white leading-tight">
@@ -46,7 +46,7 @@ export default function ContactPage() {
                 Pour toute question, suggestion ou signalement, écris-nous à{' '}
                 <a
                   href="mailto:contact@joinbeez.com"
-                  className="text-gold hover:text-gold-400 transition-colors duration-200 font-medium"
+                  className="text-accent hover:text-accent-2 transition-colors duration-200 font-medium"
                 >
                   contact@joinbeez.com
                 </a>
@@ -57,7 +57,7 @@ export default function ContactPage() {
             <div className="border-t border-white/8 pt-6">
               <a
                 href="mailto:contact@joinbeez.com"
-                className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 w-full text-navy-900 font-bold rounded-beez px-6 py-4 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
+                className="btn-accent inline-flex items-center justify-center gap-2 w-full text-navy-800 font-bold rounded-beez px-6 py-4 text-base transition-all duration-200 hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />

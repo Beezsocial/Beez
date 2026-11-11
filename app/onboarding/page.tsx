@@ -43,13 +43,13 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
         <span className="text-white/40 text-xs">
           Étape {step}/{total}
         </span>
-        <span className="text-gold text-xs font-medium">
+        <span className="text-accent text-xs font-medium">
           {Math.round((step / total) * 100)}%
         </span>
       </div>
       <div className="h-[3px] rounded-full bg-white/10 w-full overflow-hidden">
         <div
-          className="h-full rounded-full bg-gold transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-accent transition-all duration-500 ease-out"
           style={{ width: `${(step / total) * 100}%` }}
         />
       </div>
@@ -139,7 +139,7 @@ function AuthStep({ onEmailAuth }: { onEmailAuth: () => void }) {
           <button
             onClick={() => handleOAuth('google')}
             disabled={loading}
-            className="w-full flex items-center gap-3 border border-white/10 bg-navy-950 px-4 py-3.5 text-sm font-medium text-white hover:border-white/25 hover:bg-navy-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center gap-3 border border-white/10 bg-navy-950 px-4 py-3.5 text-sm font-medium text-white hover:border-white/25 hover:bg-navy-800 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -158,7 +158,7 @@ function AuthStep({ onEmailAuth }: { onEmailAuth: () => void }) {
 
           <button
             onClick={() => setMethod('email')}
-            className="w-full text-sm text-white/50 hover:text-gold transition-colors duration-200 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full text-sm text-white/50 hover:text-accent transition-colors duration-200 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             Continuer avec email et mot de passe
           </button>
@@ -220,7 +220,7 @@ function AuthStep({ onEmailAuth }: { onEmailAuth: () => void }) {
           <button
             type="button"
             onClick={() => setMethod(undefined)}
-            className="w-full text-sm text-white/40 hover:text-white/60 transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full text-sm text-white/40 hover:text-white/60 transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Retour
           </button>
@@ -288,7 +288,7 @@ function Step1({
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="w-[74px] h-16 clip-hex bg-navy-800 border border-white/10 hover:border-gold/40 transition-colors flex items-center justify-center overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="w-[74px] h-16 clip-hex bg-navy-800 border border-white/10 hover:border-accent/40 transition-colors flex items-center justify-center overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label="Changer la photo de profil"
         >
           {preview ? (
@@ -426,21 +426,21 @@ function Step2({
               onClick={() => onSetPrimary(value)}
               style={
                 isSelected
-                  ? { borderColor: '#ebaf57', background: 'rgba(235,175,87,0.06)' }
+                  ? { borderColor: '#57d9eb', background: 'rgba(87,217,235,0.06)' }
                   : { borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)' }
               }
-              className="w-full text-left p-4 rounded-beez border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="w-full text-left p-4 rounded-beez border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <div className="flex items-start gap-3">
                 <span className="text-2xl shrink-0 leading-none mt-0.5">{icon}</span>
                 <div>
-                  <p className={`font-heading font-bold text-base mb-1 ${isSelected ? 'text-gold' : 'text-white'}`}>
+                  <p className={`font-heading font-bold text-base mb-1 ${isSelected ? 'text-accent' : 'text-white'}`}>
                     {title}
                   </p>
                   <p className="text-white/50 text-sm leading-relaxed">{description}</p>
                 </div>
                 {isSelected && (
-                  <span className="ml-auto shrink-0 text-gold text-sm mt-0.5" aria-hidden="true">✦</span>
+                  <span className="ml-auto shrink-0 text-accent text-sm mt-0.5" aria-hidden="true">✦</span>
                 )}
               </div>
             </button>
@@ -750,7 +750,7 @@ export default  function OnboardingPage() {
   const stepNumber = isOnboarding ? (phase as number) : 0
 
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Logo bar */}
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
@@ -759,7 +759,7 @@ export default  function OnboardingPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Accueil
           </Link>
@@ -772,7 +772,7 @@ export default  function OnboardingPage() {
         ) : (
           <Link
             href="/signin"
-            className="text-sm text-white/40 hover:text-gold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/40 hover:text-accent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             Se connecter
           </Link>
@@ -794,8 +794,8 @@ export default  function OnboardingPage() {
             className="bg-navy-950 p-6 sm:p-8"
             style={{
               borderRadius: 10,
-              border: '1px solid rgba(235,175,87,0.3)',
-              boxShadow: '0 0 20px rgba(235,175,87,0.1), 0 0 40px rgba(235,175,87,0.05)',
+              border: '1px solid rgba(87,217,235,0.3)',
+              boxShadow: '0 0 20px rgba(87,217,235,0.1), 0 0 40px rgba(87,217,235,0.05)',
             }}
           >
             {/* Auth phase */}
@@ -893,7 +893,7 @@ export default  function OnboardingPage() {
                     onClick={() =>
                       setPhase((prev) => ((prev as number) - 1) as 1 | 2 | 3)
                     }
-                    className="text-sm text-white/30 hover:text-white/50 transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                    className="text-sm text-white/30 hover:text-white/50 transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     ← Retour
                   </button>

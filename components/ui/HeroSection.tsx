@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'motion/react'
 import CarouselHero from '@/components/ui/CarouselHero'
+import { LOGO_DARK_SRC, logoBoxStyle } from '@/components/ui/Logo'
 
 // Decorative rotating hexagon
 function RotatingHex({
@@ -25,8 +26,8 @@ function RotatingHex({
         width: size,
         height: size,
         clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-        border: '1px solid rgba(235,175,87,0.15)',
-        background: 'rgba(235,175,87,0.03)',
+        border: '1px solid rgba(87,217,235,0.15)',
+        background: 'rgba(87,217,235,0.03)',
         pointerEvents: 'none',
         ...style,
       }}
@@ -72,9 +73,10 @@ export default function HeroSection() {
         <motion.div variants={fadeUp}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/logo-dark-v2.png"
+            src={LOGO_DARK_SRC}
             alt="Beez"
-            style={{ height: 120, width: 'auto', marginBottom: 32 }}
+            className="logo-halo"
+            style={{ ...logoBoxStyle(120), marginBottom: 32 }}
           />
         </motion.div>
 
@@ -89,7 +91,7 @@ export default function HeroSection() {
           }}
         >
           <span style={{ color: '#ffffff' }}>Bee</span>
-          <span style={{ color: '#ebaf57' }}>z</span>
+          <span style={{ color: '#57d9eb' }}>z</span>
         </motion.h1>
 
         {/* Main headline */}
@@ -98,9 +100,9 @@ export default function HeroSection() {
           className="font-heading font-bold text-center leading-tight"
           style={{ fontSize: 'clamp(32px, 5vw, 52px)', marginTop: 24, marginBottom: 24 }}
         >
-          <span className="text-white">Construis. </span>
-          <span className="text-white">Partage. </span>
-          <span style={{ color: '#ebaf57' }}>Connecte.</span>
+          <span className="text-white">Construis</span><span className="text-accent">.</span>{' '}
+          <span className="text-white">Partage</span><span className="text-accent">.</span>{' '}
+          <span className="text-white">Connecte</span><span className="text-accent">.</span>
         </motion.p>
 
         {/* Carousel */}
@@ -121,7 +123,7 @@ export default function HeroSection() {
           >
             <Link
               href="#signup"
-              className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-8 py-4 text-base transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
+              className="btn-accent inline-flex items-center justify-center gap-2 text-navy-800 font-bold rounded-beez px-8 py-4 text-base transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy mb-4"
             >
               🐝 Rejoindre la ruche →
             </Link>

@@ -1,13 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --navy: #082b44;
-    --gold: #ebaf57;
+    /* ── Palette Beez — source unique des couleurs ─────────────────────
+       Canaux RGB (« R G B ») pour que Tailwind (tailwind.config.ts) puisse
+       appliquer ses modificateurs d'opacité : rgb(var(--beez-accent) / 0.15).
+       Règle : le texte posé sur du cyan est toujours navy-800, jamais blanc. */
+    --beez-navy-950: 4 22 37;      /* #041625 fond le plus profond, footer */
+    --beez-navy-900: 7 31 47;      /* #071f2f fond principal */
+    --beez-navy-800: 8 43 68;      /* #082b44 surfaces, header, texte sur cyan */
+    --beez-navy-700: 13 46 74;     /* #0d2e4a surfaces surélevées, champs */
+    --beez-navy-500: 27 67 102;    /* #1b4366 bordures sur fond sombre */
+    --beez-muted: 169 184 197;     /* #a9b8c5 texte secondaire sur fond sombre */
+    --beez-accent: 87 217 235;     /* #57d9eb accent principal */
+    --beez-accent-2: 47 181 204;   /* #2fb5cc survol / pressé, dégradés */
+    --beez-accent-deep: 21 151 173; /* #1597ad cyan sur fond blanc (jamais texte courant) */
+    --beez-gold: 235 175 87;       /* #ebaf57 réservé au badge Founding Member */
+
+    /* Fonds décoratifs */
+    --beez-page-gradient: radial-gradient(ellipse at center, #09293f 0%, #041421 100%);
+    /* Nid d'abeille flat-top, trait cyan à 7 % d'opacité (fourchette 6–9 %) */
+    --beez-honeycomb: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='55.426' viewBox='0 0 96 55.426'%3E%3Cg fill='none' stroke='%2357d9eb' stroke-opacity='0.07' stroke-width='0.6'%3E%3Cpolygon points='16,0 48,0 64,27.713 48,55.426 16,55.426 0,27.713'/%3E%3Cpolygon points='64,-27.713 96,-27.713 112,0 96,27.713 64,27.713 48,0'/%3E%3Cpolygon points='-32,-27.713 0,-27.713 16,0 0,27.713 -32,27.713 -48,0'/%3E%3Cpolygon points='64,27.713 96,27.713 112,55.426 96,83.138 64,83.138 48,55.426'/%3E%3Cpolygon points='-32,27.713 0,27.713 16,55.426 0,83.138 -32,83.138 -48,55.426'/%3E%3C/g%3E%3C/svg%3E");
+
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -51,7 +67,7 @@
 
   body {
     @apply font-sans;
-    background: #082b44;
+    background: rgb(var(--beez-navy-900));
     color: #ffffff;
   }
 
@@ -67,7 +83,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid #ebaf57;
+    outline: 2px solid rgb(var(--beez-accent));
     outline-offset: 2px;
   }
   .theme {
@@ -120,55 +136,54 @@
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   }
 
-  .card-gold {
-    border-color: rgba(235, 175, 87, 0.4);
-    box-shadow: 0 0 24px rgba(235, 175, 87, 0.08), 0 4px 24px rgba(0, 0, 0, 0.2),
+  .card-accent {
+    border-color: rgb(var(--beez-accent) / 0.4);
+    box-shadow: 0 0 24px rgb(var(--beez-accent) / 0.08), 0 4px 24px rgba(0, 0, 0, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   }
 
-  /* ── Gold depth treatment ──────────────────────────────────────────
-     Same #ebaf57 everywhere it's used as a flat reference (CSS var,
-     text color, thin borders) — this only adds gradient/shine/inset-shadow
-     on top of major *solid* gold surfaces (buttons, badges, bordered cards)
-     for a richer, more metallic feel without changing the base hue. */
-  .gold-gradient {
-    background: linear-gradient(135deg, #ebaf57 0%, #d4932a 50%, #ebaf57 100%);
-  }
-
-  .gold-shine,
+  /* ── Accent fill ───────────────────────────────────────────────────
+     Boutons et liens-boutons principaux : cyan uni, texte navy-800
+     (blanc sur cyan = contraste 1,7, illisible). Au survol / à l'appui :
+     accent-2 + lueur douce. Pas de reflet diagonal. */
+  .btn-accent,
   .btn-primary {
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    background-color: rgb(var(--beez-accent));
+    color: rgb(var(--beez-navy-800));
+    transition-property: background-color, box-shadow, transform, opacity;
   }
 
-  /* Diagonal shine streak — shared by any element with .gold-shine (or
-     .btn-primary, which bundles the same treatment) so it isn't duplicated
-     per class; @apply can't pull in a pseudo-element rule from another
-     class, so this has to stay a real selector rather than @apply. */
-  .gold-shine::after,
-  .btn-primary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      115deg,
-      transparent 35%,
-      rgba(255, 255, 255, 0.35) 48%,
-      rgba(255, 255, 255, 0.1) 54%,
-      transparent 65%
-    );
-    pointer-events: none;
+  .btn-accent:hover:not(:disabled),
+  .btn-accent:active:not(:disabled),
+  .btn-primary:hover:not(:disabled),
+  .btn-primary:active:not(:disabled) {
+    background-color: rgb(var(--beez-accent-2));
+    box-shadow: 0 0 24px rgb(var(--beez-accent) / 0.35);
+  }
+
+  /* Bouton secondaire : contour cyan 1,5 px, texte cyan */
+  .btn-secondary {
+    border: 1.5px solid rgb(var(--beez-accent));
+    color: rgb(var(--beez-accent));
+    background-color: transparent;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background-color: rgb(var(--beez-accent) / 0.1);
+  }
+
+  /* Dégradé cyan, pour les surfaces décoratives non interactives */
+  .accent-gradient {
+    background: linear-gradient(135deg, rgb(var(--beez-accent)) 0%, rgb(var(--beez-accent-2)) 50%, rgb(var(--beez-accent)) 100%);
   }
 
   /* ── Navy depth treatment ────────────────────────────────────────────
-     Same glossy-shine technique as .gold-gradient/.gold-shine above, in
-     navy tones — used for surfaces (e.g. initials-only avatar hexes on
-     /ruche) that need to visually pop against a flat navy background
-     without switching to gold. Deliberately doesn't set `position` like
-     .gold-shine does: its target elements already carry Tailwind's
-     `absolute` class, and a second `position` declaration here would
-     fight that on a cascade source-order tie instead of layering on top. */
+     Glossy-shine technique in navy tones — used for surfaces (e.g.
+     initials-only avatar hexes on /ruche) that need to visually pop
+     against a flat background. Deliberately doesn't set `position`:
+     its target elements already carry Tailwind's `absolute` class, and
+     a second `position` declaration here would fight that on a cascade
+     source-order tie instead of layering on top. */
   .navy-gradient {
     background: linear-gradient(135deg, #0d2e4a 0%, #1a4a73 50%, #0d2e4a 100%);
   }
@@ -194,37 +209,35 @@
 
   /* ── Buttons ────────────────────────────────────────────────────── */
   .btn-primary {
-    @apply gold-gradient inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-7 py-3 text-base;
-    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy;
+    @apply inline-flex items-center justify-center gap-2 font-bold rounded-beez px-7 py-3 text-base;
+    @apply duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary:hover:not(:disabled) {
-    filter: brightness(1.08);
     transform: translateY(-1px);
   }
 
   .btn-primary:active:not(:disabled) {
-    filter: brightness(0.95);
     transform: translateY(0);
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 font-medium rounded-beez px-7 py-3 text-base;
-    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
     @apply disabled:opacity-40 disabled:cursor-not-allowed;
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: rgba(255, 255, 255, 0.7);
   }
 
   .btn-ghost:hover:not(:disabled) {
-    border-color: rgba(235, 175, 87, 0.5);
+    border-color: rgb(var(--beez-accent) / 0.5);
     color: white;
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center gap-2 font-medium rounded-beez px-7 py-3 text-sm;
-    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold;
+    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
     @apply disabled:opacity-40 disabled:cursor-not-allowed;
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.4);
@@ -254,8 +267,8 @@
 
   .input-beez:focus {
     outline: none;
-    border-color: #ebaf57;
-    box-shadow: 0 0 0 3px rgba(235, 175, 87, 0.1);
+    border-color: rgb(var(--beez-accent));
+    box-shadow: 0 0 0 3px rgb(var(--beez-accent) / 0.1);
   }
 
   .input-beez.error {
@@ -269,9 +282,9 @@
   /* ── Pills ──────────────────────────────────────────────────────── */
   .pill-selected {
     @apply border font-semibold text-xs px-3 py-1.5;
-    background: rgba(235, 175, 87, 0.15);
-    border-color: rgba(235, 175, 87, 0.5);
-    color: #ebaf57;
+    background: rgb(var(--beez-accent) / 0.15);
+    border-color: rgb(var(--beez-accent) / 0.5);
+    color: rgb(var(--beez-accent));
   }
 
   .pill-unselected {
@@ -283,21 +296,38 @@
 }
 
 @layer utilities {
-  /* Honeycomb background pattern — fixed viewport-level via pseudo-element */
+  /* Honeycomb background pattern — fixed viewport-level via pseudo-element.
+     Trait cyan fin ; l'opacité (7 %) est portée par le SVG lui-même
+     (--beez-honeycomb) pour pouvoir le superposer au dégradé de .bg-page. */
   .honeycomb-bg::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='55.426' viewBox='0 0 96 55.426'%3E%3Cpolygon points='16,0 48,0 64,27.713 48,55.426 16,55.426 0,27.713' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='64,-27.713 96,-27.713 112,0 96,27.713 64,27.713 48,0' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='-32,-27.713 0,-27.713 16,0 0,27.713 -32,27.713 -48,0' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='64,27.713 96,27.713 112,55.426 96,83.138 64,83.138 48,55.426' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3Cpolygon points='-32,27.713 0,27.713 16,55.426 0,83.138 -32,83.138 -48,55.426' fill='none' stroke='%23ebaf57' stroke-width='0.6'/%3E%3C/svg%3E");
+    background-image: var(--beez-honeycomb);
     background-size: 96px 55.426px;
     background-repeat: repeat;
-    opacity: 0.07;
   }
   .honeycomb-bg > * {
     position: relative;
     z-index: 1;
+  }
+
+  /* Fond des pages sombres (à combiner avec .honeycomb-bg sur la racine de
+     page) : dégradé radial navy, fixé au viewport via le même pseudo-élément
+     que la ruche — background-attachment: fixed est ignoré sur iOS. */
+  .bg-page.honeycomb-bg::before {
+    background-image: var(--beez-honeycomb), var(--beez-page-gradient);
+    background-size: 96px 55.426px, 100% 100%;
+    background-repeat: repeat, no-repeat;
+  }
+
+  /* Halo cyan derrière le logo posé sur fond sombre. Posé en background de
+     l'<img> elle-même : le PNG v3 est transparent et carré, le halo tient
+     dans sa boîte sans élément supplémentaire. */
+  .logo-halo {
+    background-image: radial-gradient(circle closest-side, rgb(var(--beez-accent) / 0.25), transparent);
   }
 
   /* Clip hex shape — flat-top orientation */
@@ -307,7 +337,7 @@
 
   /* Gradient text */
   .text-gradient {
-    background: linear-gradient(135deg, #ebaf57 0%, #f3ca74 50%, #ebaf57 100%);
+    background: linear-gradient(135deg, rgb(var(--beez-accent)) 0%, rgb(var(--beez-accent-2)) 50%, rgb(var(--beez-accent)) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -354,12 +384,12 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #082b44;
+  background: rgb(var(--beez-navy-800));
 }
 ::-webkit-scrollbar-thumb {
-  background: #ebaf57;
+  background: rgb(var(--beez-accent));
   opacity: 0.5;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4912a;
+  background: rgb(var(--beez-accent-2));
 }

@@ -54,7 +54,7 @@ export default async function ProfilePage() {
   const { profile, types, seeking } = data
 
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       <NavHeader />
 
       {/* Main */}

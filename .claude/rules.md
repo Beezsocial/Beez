@@ -14,14 +14,18 @@
 
 ## Composants UI
 - Vérifier 21st.dev en premier
-- Adapter couleurs navy/or et border-radius 10px
+- Adapter couleurs navy/cyan (jetons de design/brand.md) et border-radius 10px
 - Documenter le composant utilisé en commentaire
 
 ## Design
 - Hexagones toujours flat-top
 - Border-radius 10px sur toutes les cards
-- Navy #082b44 dominant
-- Or #ebaf57 pour les accents uniquement
+- Navy dominant : fond navy-900 #071f2f, surfaces navy-800 #082b44 / navy-700 #0d2e4a
+- Accent cyan #57d9eb (survol #2fb5cc ; sur fond blanc #1597ad, jamais pour du texte courant)
+- Texte sur cyan : toujours navy #082b44, jamais blanc
+- Or #ebaf57 : uniquement le badge Founding Member et le futur jeton Honey
+- Fonds : dégradé radial #09293f → #041421 (bg-page), ruche cyan 6–9 %, halo cyan derrière le logo
+- Utiliser les classes de jetons (bg-accent, text-navy-800…), jamais de couleur en dur nouvelle
 - Honeycomb background sur chaque nouvelle page
 
 ## Sécurité

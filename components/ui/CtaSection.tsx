@@ -25,8 +25,8 @@ function RotatingHex({
         width: size,
         height: size,
         clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-        border: '1px solid rgba(235,175,87,0.12)',
-        background: 'rgba(235,175,87,0.02)',
+        border: '1px solid rgba(87,217,235,0.12)',
+        background: 'rgba(87,217,235,0.02)',
         pointerEvents: 'none',
         ...style,
       }}
@@ -76,11 +76,11 @@ export default function CtaSection() {
               animate={{ scale: [1, 1.12, 1], opacity: [0.4, 0, 0.4] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
               className="absolute inset-0 rounded-beez"
-              style={{ background: 'rgba(235,175,87,0.25)', pointerEvents: 'none' }}
+              style={{ background: 'rgba(87,217,235,0.25)', pointerEvents: 'none' }}
             />
             <Link
               href="/onboarding"
-              className="gold-gradient gold-shine relative inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-10 py-4 text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
+              className="btn-accent relative inline-flex items-center justify-center gap-2 text-navy-800 font-bold rounded-beez px-10 py-4 text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy w-full sm:w-auto"
               style={{ position: 'relative' }}
             >
               Créer mon profil

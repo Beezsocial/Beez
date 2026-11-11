@@ -32,7 +32,7 @@ const items: { status: Status; title: string; description: string; date?: string
 function NodeDot({ status }: { status: Status }) {
   if (status === 'done') {
     return (
-      <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#ebaf57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative', zIndex: 1 }}>
+      <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#57d9eb', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative', zIndex: 1 }}>
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
           <path d="M2 5l2.5 2.5L8 3" stroke="#082b44" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -41,8 +41,8 @@ function NodeDot({ status }: { status: Status }) {
   }
   if (status === 'progress') {
     return (
-      <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#082b44', border: '2px solid #ebaf57', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative', zIndex: 1 }}>
-        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ebaf57', animation: 'pulse 2s ease-in-out infinite' }} />
+      <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#082b44', border: '2px solid #57d9eb', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative', zIndex: 1 }}>
+        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#57d9eb', animation: 'pulse 2s ease-in-out infinite' }} />
       </div>
     )
   }
@@ -56,14 +56,14 @@ function StatusBadge({ status }: { status: Status }) {
     return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(52,211,153,0.15)', border: '1px solid rgba(52,211,153,0.4)', color: '#34d399', borderRadius: 5 }}>Terminé</span>
   }
   if (status === 'progress') {
-    return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(235,175,87,0.15)', border: '1px solid rgba(235,175,87,0.4)', color: '#ebaf57', borderRadius: 5, animation: 'pulse 2s ease-in-out infinite' }}>En cours</span>
+    return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(87,217,235,0.15)', border: '1px solid rgba(87,217,235,0.4)', color: '#57d9eb', borderRadius: 5, animation: 'pulse 2s ease-in-out infinite' }}>En cours</span>
   }
   return <span className="text-xs font-bold px-2 py-0.5" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.4)', borderRadius: 5 }}>À venir</span>
 }
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       <NavHeader />
 
       {/* Main */}
@@ -71,7 +71,7 @@ export default function RoadmapPage() {
 
         {/* Page title */}
         <div className="mb-10">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.15em] mb-2">
+          <p className="text-accent text-xs font-bold uppercase tracking-[0.15em] mb-2">
             Roadmap
           </p>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-white leading-tight">
@@ -127,7 +127,7 @@ export default function RoadmapPage() {
           </p>
           <a
             href="mailto:contact@joinbeez.com"
-            className="inline-flex items-center gap-2 text-gold text-sm font-semibold hover:text-gold/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="inline-flex items-center gap-2 text-accent text-sm font-semibold hover:text-accent/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             contact@joinbeez.com →
           </a>

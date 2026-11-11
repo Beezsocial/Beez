@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { LOGO_DARK_SRC, logoBoxStyle } from '@/components/ui/Logo'
 
 export default function NavBrand({ height = 36 }: { height?: number }) {
   const [imgFailed, setImgFailed] = useState(false)
@@ -10,15 +11,16 @@ export default function NavBrand({ height = 36 }: { height?: number }) {
   return (
     <Link
       href="/"
-      className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+      className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       aria-label="Beez — accueil"
     >
       {!imgFailed && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/images/logo-dark-v2.png"
+          src={LOGO_DARK_SRC}
           alt=""
-          style={{ height, width: 'auto', display: 'block' }}
+          className="logo-halo"
+          style={logoBoxStyle(height)}
           onError={() => setImgFailed(true)}
         />
       )}
@@ -28,7 +30,7 @@ export default function NavBrand({ height = 36 }: { height?: number }) {
         aria-hidden="true"
       >
         <span style={{ color: '#ffffff' }}>Bee</span>
-        <span style={{ color: '#ebaf57' }}>z</span>
+        <span style={{ color: '#57d9eb' }}>z</span>
       </span>
     </Link>
   )

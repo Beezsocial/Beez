@@ -77,7 +77,7 @@ export default function ComposeBox({
       />
       <div className="flex items-center justify-between mt-2 gap-3">
         {waiting ? (
-          <p className="text-gold/70 text-xs">En attente de sa réponse...</p>
+          <p className="text-accent/70 text-xs">En attente de sa réponse...</p>
         ) : error ? (
           <p className="text-red-400 text-xs">{error}</p>
         ) : (
@@ -87,7 +87,7 @@ export default function ComposeBox({
           type="button"
           onClick={handleSend}
           disabled={disabled || !content.trim()}
-          className="gold-gradient gold-shine shrink-0 inline-flex items-center gap-2 text-navy-900 font-bold rounded-beez px-5 py-2 text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:brightness-110"
+          className="btn-accent shrink-0 inline-flex items-center gap-2 text-navy-800 font-bold rounded-beez px-5 py-2 text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
         >
           {sending ? 'Envoi...' : 'Envoyer'}
         </button>

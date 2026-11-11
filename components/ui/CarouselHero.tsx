@@ -159,11 +159,11 @@ export default function CarouselHero() {
               justifyContent: 'center',
               color: '#ffffff',
               textTransform: 'uppercase',
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-outfit), sans-serif',
               fontWeight: 700,
               fontSize: 'clamp(24px, 4vw, 36px)',
               textShadow:
-                '0 0 8px rgba(255,224,178,0.6), 0 0 20px rgba(235,175,87,0.5), 0 0 40px rgba(235,175,87,0.2)',
+                '0 0 8px rgba(204,244,250,0.6), 0 0 20px rgba(87,217,235,0.5), 0 0 40px rgba(87,217,235,0.2)',
               lineHeight: 1.2,
             }}
           >
@@ -182,7 +182,7 @@ export default function CarouselHero() {
               swarm.map((h) => (
                 <motion.div
                   key={h.id}
-                  className="absolute gold-gradient gold-shine"
+                  className="absolute accent-gradient"
                   style={{
                     left: h.x - h.size / 2,
                     top: h.y - (h.size * 0.866) / 2,

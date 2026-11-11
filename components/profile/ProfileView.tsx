@@ -19,7 +19,7 @@ type Props = {
   seeking: string[]
 }
 
-// ─── Read-only hex avatar — same layered gold-hex technique used across
+// ─── Read-only hex avatar — same layered accent-hex technique used across
 // the app (profile, ruche grid, compose previews) ──────────────────────────
 function HexAvatar({
   firstName,
@@ -34,7 +34,7 @@ function HexAvatar({
   return (
     <div
       className="w-24 h-[83px] relative flex items-center justify-center shrink-0"
-      style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)' }}
+      style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, #57d9eb 0%, #2fb5cc 100%)' }}
       aria-hidden="true"
     >
       <div
@@ -45,7 +45,7 @@ function HexAvatar({
           // eslint-disable-next-line @next/next/no-img-element
           <img src={avatarUrl} alt={`${firstName} ${lastName}`} className="w-full h-full object-cover" />
         ) : (
-          <span className="font-heading font-bold text-2xl text-gold select-none">{initials}</span>
+          <span className="font-heading font-bold text-2xl text-accent select-none">{initials}</span>
         )}
       </div>
     </div>
@@ -81,7 +81,7 @@ export function ProfileIdentity({
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'rgba(235,175,87,0.4)',
+            background: 'rgba(87,217,235,0.4)',
             clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)',
             borderRadius: '10px 0 0 10px',
           }}
@@ -128,15 +128,15 @@ export function ProfileIdentity({
 function SectionLabel({ icon, children }: { icon: ReactNode; children: ReactNode }) {
   return (
     <div className="flex items-center gap-1.5 mb-2.5 px-1">
-      <span className="text-gold" aria-hidden="true">{icon}</span>
-      <p className="text-xs font-bold uppercase tracking-[0.15em] text-gold">{children}</p>
+      <span className="text-accent" aria-hidden="true">{icon}</span>
+      <p className="text-xs font-bold uppercase tracking-[0.15em] text-accent">{children}</p>
     </div>
   )
 }
 
 function Pill({ label }: { label: string }) {
   return (
-    <span className="px-3 py-1.5 text-xs font-medium border border-gold/40 text-gold bg-gold/8 rounded-beez">
+    <span className="px-3 py-1.5 text-xs font-medium border border-accent/40 text-accent bg-accent/8 rounded-beez">
       {label}
     </span>
   )

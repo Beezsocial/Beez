@@ -22,7 +22,7 @@ export default function PublicProfileClient({ currentUserId, targetUserId, profi
       <div className="mt-8">
         {composeOpen ? (
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.15em] text-gold mb-2.5 px-1">Contacter</p>
+            <p className="text-xs font-bold uppercase tracking-[0.15em] text-accent mb-2.5 px-1">Contacter</p>
             <div className="card p-6">
               <ComposeBox
                 currentUserId={currentUserId}
@@ -36,7 +36,7 @@ export default function PublicProfileClient({ currentUserId, targetUserId, profi
           <button
             type="button"
             onClick={() => setComposeOpen(true)}
-            className="w-full gold-gradient gold-shine font-bold text-navy-900 rounded-beez py-3.5 text-sm transition-all duration-200 hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full btn-accent font-bold text-navy-800 rounded-beez py-3.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             Contacter {profile.firstName}
           </button>

@@ -65,16 +65,16 @@ export async function POST(request: Request) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:#0d3459;font-family:sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d3459;padding:40px 20px;">
+<body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#0a2540;border:1px solid rgba(255,255,255,0.08);">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#082b44;border:1px solid rgba(255,255,255,0.08);">
 
           <!-- Header -->
           <tr>
             <td style="padding:32px 40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ebaf57;">z</span>
+              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#57d9eb;">z</span>
             </td>
           </tr>
 
@@ -85,9 +85,9 @@ export async function POST(request: Request) {
                 Nouveau message&nbsp;✦
               </p>
               <p style="margin:0 0 28px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
-                <strong style="color:#ebaf57;">${senderName}</strong> t'a envoyé un message sur Beez.
+                <strong style="color:#57d9eb;">${senderName}</strong> t'a envoyé un message sur Beez.
               </p>
-              <a href="${messagesUrl}" style="display:inline-block;padding:14px 28px;background:#ebaf57;color:#082b44;font-weight:700;font-size:15px;text-decoration:none;border-radius:10px;">
+              <a href="${messagesUrl}" style="display:inline-block;padding:14px 28px;background:#57d9eb;color:#082b44;font-weight:700;font-size:15px;text-decoration:none;border-radius:10px;">
                 Va y répondre →
               </a>
             </td>
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
             <td style="padding:24px 40px;border-top:1px solid rgba(255,255,255,0.06);">
               <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.3);line-height:1.5;">
                 L'équipe Beez 🐝<br />
-                <a href="mailto:contact@joinbeez.com" style="color:#ebaf57;text-decoration:none;">contact@joinbeez.com</a>
+                <a href="mailto:contact@joinbeez.com" style="color:#57d9eb;text-decoration:none;">contact@joinbeez.com</a>
               </p>
             </td>
           </tr>

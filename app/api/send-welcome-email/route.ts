@@ -38,7 +38,8 @@ export async function POST(request: Request) {
       : `Bienvenue dans la ruche, ${firstName} 🐝`
 
     const memberBadgeHtml = isFoundingMember
-      ? `<div style="display:inline-block;margin:0 0 24px;padding:8px 16px;background:rgba(235,175,87,0.12);border:1px solid rgba(235,175,87,0.4);border-radius:6px;">
+      ? // Badge Founding Member : seul élément de l'email qui reste en or.
+        `<div style="display:inline-block;margin:0 0 24px;padding:8px 16px;background:rgba(235,175,87,0.12);border:1px solid rgba(235,175,87,0.4);border-radius:6px;">
           <span style="color:#ebaf57;font-weight:700;font-size:14px;">✦ Founding Member #${paddedNumber}</span>
         </div>`
       : memberNumber != null
@@ -59,16 +60,16 @@ export async function POST(request: Request) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:#0d3459;font-family:sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d3459;padding:40px 20px;">
+<body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#0a2540;border:1px solid rgba(255,255,255,0.08);">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#082b44;border:1px solid rgba(255,255,255,0.08);">
 
           <!-- Header -->
           <tr>
             <td style="padding:32px 40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ebaf57;">z</span>
+              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#57d9eb;">z</span>
             </td>
           </tr>
 
@@ -80,8 +81,8 @@ export async function POST(request: Request) {
               </p>
               ${memberBadgeHtml}
               ${isFoundingMember ? `
-              <p style="margin:24px 0;padding:20px;background:rgba(235,175,87,0.1);border-left:3px solid #ebaf57;border-radius:8px;font-size:15px;color:#cccccc;line-height:1.7;">
-                🎉 <strong style="color:#ebaf57;">Félicitations !</strong> Tu fais partie des 150 premiers membres fondateurs de Beez et ton badge porte le numéro <strong style="color:#ebaf57;">#${paddedNumber}</strong>.<br/><br/>
+              <p style="margin:24px 0;padding:20px;background:rgba(87,217,235,0.1);border-left:3px solid #57d9eb;border-radius:8px;font-size:15px;color:#cccccc;line-height:1.7;">
+                🎉 <strong style="color:#57d9eb;">Félicitations !</strong> Tu fais partie des 150 premiers membres fondateurs de Beez et ton badge porte le numéro <strong style="color:#57d9eb;">#${paddedNumber}</strong>.<br/><br/>
                 Beez Pro sera <strong style="color:#ffffff;">gratuit à vie</strong> pour toi !<br/>
                 Merci de ta confiance. 🐝
               </p>
@@ -100,7 +101,7 @@ export async function POST(request: Request) {
             <td style="padding:24px 40px;border-top:1px solid rgba(255,255,255,0.06);">
               <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.3);line-height:1.5;">
                 L'équipe Beez 🐝<br />
-                <a href="mailto:contact@joinbeez.com" style="color:#ebaf57;text-decoration:none;">contact@joinbeez.com</a>
+                <a href="mailto:contact@joinbeez.com" style="color:#57d9eb;text-decoration:none;">contact@joinbeez.com</a>
               </p>
             </td>
           </tr>

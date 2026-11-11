@@ -21,7 +21,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Header */}
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Accueil
           </Link>
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
 
         {/* Page title */}
         <div className="mb-8">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.15em] mb-2">
+          <p className="text-accent text-xs font-bold uppercase tracking-[0.15em] mb-2">
             Politique de confidentialité
           </p>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-white leading-tight">
@@ -63,7 +63,7 @@ export default function PrivacyPage() {
               <BeezWord /> est un réseau social français dédié aux entrepreneurs. Le responsable du traitement des données est l'équipe <BeezWord />, joignable à{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
                 'Ton premier message à la communauté (optionnel)',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
                 "Améliorer l'expérience de la plateforme",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -140,7 +140,7 @@ export default function PrivacyPage() {
                 'Ton statut de Founding Member, le cas échéant',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -162,7 +162,7 @@ export default function PrivacyPage() {
                 'Le statut de lecture du message',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
                 'Obligation légale (réquisition judiciaire, par exemple)',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -198,7 +198,7 @@ export default function PrivacyPage() {
               <strong className="text-white/80">Ton contrôle :</strong> tu peux demander la suppression d'une conversation spécifique en nous contactant à{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>
@@ -223,7 +223,7 @@ export default function PrivacyPage() {
                 "Droit d'opposition : t'opposer à un traitement basé sur notre intérêt légitime",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+                  <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -232,7 +232,7 @@ export default function PrivacyPage() {
               Pour exercer ces droits, contacte-nous à{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>
@@ -251,7 +251,7 @@ export default function PrivacyPage() {
               Pour toute question relative à la protection de tes données personnelles :{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>

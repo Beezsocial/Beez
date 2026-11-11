@@ -12,7 +12,7 @@ function Section({ number, title, children }: { number: string; title: string; c
   return (
     <section className="border-t border-white/8 pt-6">
       <h2 className="font-heading font-bold text-base text-white mb-3">
-        <span className="text-gold mr-2">{number}.</span>{title}
+        <span className="text-accent mr-2">{number}.</span>{title}
       </h2>
       <div className="space-y-3 text-sm text-white/60 leading-relaxed">
         {children}
@@ -24,7 +24,7 @@ function Section({ number, title, children }: { number: string; title: string; c
 function Bullet({ children }: { children: ReactNode }) {
   return (
     <li className="flex items-start gap-2">
-      <span className="text-gold mt-0.5 shrink-0" aria-hidden="true">✦</span>
+      <span className="text-accent mt-0.5 shrink-0" aria-hidden="true">✦</span>
       <span>{children}</span>
     </li>
   )
@@ -32,7 +32,7 @@ function Bullet({ children }: { children: ReactNode }) {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Header */}
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
@@ -41,7 +41,7 @@ export default function TermsPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Accueil
           </Link>
@@ -55,7 +55,7 @@ export default function TermsPage() {
 
         {/* Page title */}
         <div className="mb-8">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.15em] mb-2">
+          <p className="text-accent text-xs font-bold uppercase tracking-[0.15em] mb-2">
             Conditions générales d'utilisation
           </p>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-white leading-tight">
@@ -121,7 +121,7 @@ export default function TermsPage() {
               Tu peux signaler un comportement abusif directement via la fonction de signalement intégrée à la messagerie, ou en contactant{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>
@@ -152,7 +152,7 @@ export default function TermsPage() {
               Tu peux à tout moment demander la suppression de ton compte en contactant{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>
@@ -192,7 +192,7 @@ export default function TermsPage() {
               Pour toute question relative aux présentes CGU ou à l'utilisation de la plateforme :{' '}
               <a
                 href="mailto:contact@joinbeez.com"
-                className="text-gold hover:text-gold-400 transition-colors duration-200"
+                className="text-accent hover:text-accent-2 transition-colors duration-200"
               >
                 contact@joinbeez.com
               </a>

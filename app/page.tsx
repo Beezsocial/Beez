@@ -9,7 +9,7 @@ import EarlyAccessBanner from '@/components/ui/EarlyAccessBanner'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg overflow-x-hidden">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg overflow-x-hidden">
 
       {/* ── NAV ── */}
       <NavHeader />

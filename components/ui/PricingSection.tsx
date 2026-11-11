@@ -38,7 +38,7 @@ export default function PricingSection() {
     >
       <div className="max-w-3xl mx-auto">
         <RevealSection className="mb-12 text-center">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">Tarifs</p>
+          <p className="text-accent text-xs font-bold uppercase tracking-[0.2em] mb-3">Tarifs</p>
           <h2
             id="pricing-heading"
             className="font-heading font-bold text-3xl sm:text-4xl text-white mb-3"
@@ -80,10 +80,10 @@ export default function PricingSection() {
                 <div
                   key={label}
                   style={{
-                    border: '1px solid rgba(235,175,87,0.2)',
+                    border: '1px solid rgba(87,217,235,0.2)',
                     borderRadius: 8,
                     padding: '10px 12px',
-                    background: 'rgba(235,175,87,0.04)',
+                    background: 'rgba(87,217,235,0.04)',
                   }}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -99,7 +99,7 @@ export default function PricingSection() {
               {FREE_FEATURES.map(({ text, ok }) => (
                 <li key={text} className="flex items-start gap-2 text-sm">
                   <span
-                    className={`shrink-0 mt-0.5 ${ok ? 'text-gold' : 'text-white/20'}`}
+                    className={`shrink-0 mt-0.5 ${ok ? 'text-accent' : 'text-white/20'}`}
                     aria-hidden="true"
                   >
                     {ok ? '✦' : '✗'}
@@ -112,7 +112,7 @@ export default function PricingSection() {
             <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.15 }}>
               <Link
                 href="/onboarding"
-                className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 w-full text-navy-900 font-bold rounded-beez px-6 py-3.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="btn-accent inline-flex items-center justify-center gap-2 w-full text-navy-800 font-bold rounded-beez px-6 py-3.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 Créer mon profil gratuit →
               </Link>
@@ -127,15 +127,15 @@ export default function PricingSection() {
             viewport={{ once: true, margin: '-60px' }}
             whileHover={{
               boxShadow:
-                '0 0 40px rgba(235,175,87,0.15), 0 0 80px rgba(235,175,87,0.06), 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                '0 0 40px rgba(87,217,235,0.15), 0 0 80px rgba(87,217,235,0.06), 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
             }}
-            className="card card-gold p-6 space-y-5 relative"
+            className="card card-accent p-6 space-y-5 relative"
           >
             <div
-              className="absolute -top-3 left-6 text-gold text-xs font-bold px-3 py-1 uppercase tracking-wider"
+              className="absolute -top-3 left-6 text-accent text-xs font-bold px-3 py-1 uppercase tracking-wider"
               style={{
                 background: '#082b44',
-                border: '1px solid rgba(235,175,87,0.4)',
+                border: '1px solid rgba(87,217,235,0.4)',
                 borderRadius: 6,
               }}
             >
@@ -147,7 +147,7 @@ export default function PricingSection() {
                 <h3 className="font-heading font-bold text-white text-xl">Pro</h3>
                 <span
                   className="font-heading font-black"
-                  style={{ fontSize: 28, color: '#ebaf57', letterSpacing: '-1px' }}
+                  style={{ fontSize: 28, color: '#57d9eb', letterSpacing: '-1px' }}
                 >
                   4,99€
                 </span>
@@ -159,7 +159,7 @@ export default function PricingSection() {
             <ul className="space-y-2.5">
               {PRO_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
-                  <span className="text-gold shrink-0 mt-0.5" aria-hidden="true">
+                  <span className="text-accent shrink-0 mt-0.5" aria-hidden="true">
                     ✦
                   </span>
                   <span className="text-white/70">{f}</span>
@@ -171,9 +171,9 @@ export default function PricingSection() {
               disabled
               className="w-full inline-flex items-center justify-center font-bold rounded-beez px-6 py-3.5 text-sm cursor-not-allowed opacity-40"
               style={{
-                background: 'rgba(235,175,87,0.12)',
-                color: '#ebaf57',
-                border: '1px solid rgba(235,175,87,0.3)',
+                background: 'rgba(87,217,235,0.12)',
+                color: '#57d9eb',
+                border: '1px solid rgba(87,217,235,0.3)',
               }}
             >
               Bientôt disponible
