@@ -22,18 +22,18 @@ function InstagramIcon() {
 function MobileNavLink({
   href,
   onClick,
-  gold,
+  accent,
   external,
   children,
 }: {
   href: string
   onClick: () => void
-  gold?: boolean
+  accent?: boolean
   external?: boolean
   children: React.ReactNode
 }) {
   const className = `flex items-center justify-between gap-3 px-4 py-4 text-base font-medium transition-colors duration-150 hover:bg-white/5 active:bg-white/10 ${
-    gold ? 'text-gold' : 'text-white/80 hover:text-gold'
+    accent ? 'text-accent' : 'text-white/80 hover:text-accent'
   }`
 
   if (external) {
@@ -132,7 +132,7 @@ export default function NavHeader() {
           {showBackLink && (
             <Link
               href="/"
-              className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               ← Accueil
             </Link>
@@ -147,7 +147,7 @@ export default function NavHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Beez sur Instagram"
-            className="text-white/60 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-white/60 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <InstagramIcon />
           </a>
@@ -155,24 +155,24 @@ export default function NavHeader() {
             <>
               <Link
                 href="/roadmap"
-                className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+                className="text-sm font-medium text-white/70 hover:text-accent transition-colors duration-200"
               >
                 Roadmap
               </Link>
               <Link
                 href="/ruche"
-                className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+                className="text-sm font-medium text-white/70 hover:text-accent transition-colors duration-200"
               >
                 La Ruche
               </Link>
               <Link
                 href="/messages"
-                className="relative text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+                className="relative text-sm font-medium text-white/70 hover:text-accent transition-colors duration-200"
               >
                 Messages
                 {unreadCount > 0 && (
                   <span
-                    className="gold-gradient absolute -top-2 -right-3 min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center text-[10px] font-bold text-navy-900"
+                    className="bg-accent absolute -top-2 -right-3 min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center text-[10px] font-bold text-navy-800"
                     aria-label={`${unreadCount} message${unreadCount > 1 ? 's' : ''} non lu${unreadCount > 1 ? 's' : ''}`}
                   >
                     {unreadCount > 9 ? '9+' : unreadCount}
@@ -181,7 +181,7 @@ export default function NavHeader() {
               </Link>
               <Link
                 href="/profile"
-                className="text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200"
+                className="text-sm font-medium text-accent hover:text-accent/80 transition-colors duration-200"
               >
                 Mon profil
               </Link>
@@ -196,7 +196,7 @@ export default function NavHeader() {
               </Link>
               <Link
                 href="#signup"
-                className="text-sm font-medium text-white/70 hover:text-gold transition-colors duration-200"
+                className="text-sm font-medium text-white/70 hover:text-accent transition-colors duration-200"
               >
                 Rejoindre →
               </Link>
@@ -207,7 +207,7 @@ export default function NavHeader() {
         {/* Mobile hamburger toggle — visible only below md */}
         <button
           type="button"
-          className="md:hidden relative text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez p-1.5"
+          className="md:hidden relative text-white/70 hover:text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-beez p-1.5"
           aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
           aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen((open) => !open)}
@@ -227,7 +227,7 @@ export default function NavHeader() {
           {!mobileMenuOpen && hasSession && unreadCount > 0 && (
             <span
               className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full"
-              style={{ background: '#ebaf57' }}
+              style={{ background: '#57d9eb' }}
               aria-hidden="true"
             />
           )}
@@ -291,14 +291,14 @@ export default function NavHeader() {
                       <span>Messages</span>
                       {unreadCount > 0 && (
                         <span
-                          className="gold-gradient min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-[11px] font-bold text-navy-900"
+                          className="bg-accent min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-[11px] font-bold text-navy-800"
                           aria-label={`${unreadCount} message${unreadCount > 1 ? 's' : ''} non lu${unreadCount > 1 ? 's' : ''}`}
                         >
                           {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                       )}
                     </MobileNavLink>
-                    <MobileNavLink href="/profile" onClick={closeMenu} gold>
+                    <MobileNavLink href="/profile" onClick={closeMenu} accent>
                       Mon profil
                     </MobileNavLink>
                   </>

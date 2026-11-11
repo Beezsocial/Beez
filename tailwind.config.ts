@@ -9,38 +9,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Palette Beez — valeurs définies une seule fois dans les variables
+        // CSS de app/globals.css (:root, canaux RGB) ; ici on ne fait que les
+        // nommer pour Tailwind, ce qui garde les modificateurs d'opacité (/10…).
         navy: {
-          DEFAULT: '#082b44',
-          50: '#e8f0f7',
-          100: '#c5d9ea',
-          200: '#9bbdda',
-          300: '#6f9fc9',
-          400: '#4d87bc',
-          500: '#2b6faf',
-          600: '#1d5a94',
-          700: '#134776',
-          800: '#0d3459',
-          900: '#082b44',
-          950: '#041624',
+          DEFAULT: 'rgb(var(--beez-navy-900) / <alpha-value>)', // fond principal
+          950: 'rgb(var(--beez-navy-950) / <alpha-value>)', // fond le plus profond
+          900: 'rgb(var(--beez-navy-900) / <alpha-value>)', // fond principal
+          800: 'rgb(var(--beez-navy-800) / <alpha-value>)', // surfaces + texte sur cyan
+          700: 'rgb(var(--beez-navy-700) / <alpha-value>)', // surfaces surélevées, champs
+          500: 'rgb(var(--beez-navy-500) / <alpha-value>)', // bordures, séparateurs
         },
-        gold: {
-          DEFAULT: '#ebaf57',
-          50: '#fef9ee',
-          100: '#fdf0d5',
-          200: '#fbe0aa',
-          300: '#f7ca74',
-          400: '#f3b24b',
-          500: '#ebaf57',
-          600: '#d4912a',
-          700: '#b07322',
-          800: '#8d5b21',
-          900: '#744c1f',
-          950: '#40270e',
+        muted: 'rgb(var(--beez-muted) / <alpha-value>)', // texte secondaire sur fond sombre
+        accent: {
+          DEFAULT: 'rgb(var(--beez-accent) / <alpha-value>)', // cyan principal
+          2: 'rgb(var(--beez-accent-2) / <alpha-value>)', // survol / pressé, dégradés
+          deep: 'rgb(var(--beez-accent-deep) / <alpha-value>)', // cyan sur fond blanc (bordures, icônes)
         },
+        // Or : réservé au badge Founding Member (et au futur jeton Honey).
+        gold: 'rgb(var(--beez-gold) / <alpha-value>)',
       },
       fontFamily: {
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        heading: ['Outfit', 'system-ui', 'sans-serif'],
+        // Outfit, unique police du site : chargée par next/font (app/layout.tsx),
+        // exposée via --font-outfit. `heading` reste un alias pour les classes existantes.
+        sans: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out forwards',
@@ -65,7 +58,7 @@ const config: Config = {
       },
       boxShadow: {
         card: '0 4px 24px rgba(0,0,0,0.2)',
-        'card-gold': '0 0 24px rgba(235,175,87,0.08)',
+        'card-accent': '0 0 24px rgb(var(--beez-accent) / 0.08)',
       },
     },
   },

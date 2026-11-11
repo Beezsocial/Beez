@@ -1,6 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
+
+export const LOGO_DARK_SRC = '/images/logo-dark-v3.svg'
+
+// Le logo v3 sort de Canva en carré, avec plus de marge que le v2
+// (1080×1350, abeille = 40 % de la hauteur, contre 53,9 % en v3). Pour garder
+// la même abeille à l'écran ET la même boîte (donc la même mise en page),
+// on conserve la boîte du v2 (hauteur h, largeur 0,8 h) et on ramène l'image
+// à 74,2 % de h (0,4 / 0,539) par un padding vertical + object-fit.
+export function logoBoxStyle(height: number): CSSProperties {
+  return {
+    display: 'block',
+    height,
+    width: height * 0.8,
+    padding: `${height * 0.129}px 0`,
+    boxSizing: 'border-box',
+    objectFit: 'contain',
+  }
+}
 
 interface LogoProps {
   height?: number
@@ -17,7 +35,7 @@ export default function Logo({ height = 36, className = '' }: LogoProps) {
         style={{ fontSize: Math.round(height * 0.56) + 'px' }}
       >
         <span className="text-white">Bee</span>
-        <span className="text-gold">z</span>
+        <span className="text-accent">z</span>
       </span>
     )
   }
@@ -25,12 +43,12 @@ export default function Logo({ height = 36, className = '' }: LogoProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/images/logo-dark-v2.png"
+      src={LOGO_DARK_SRC}
       alt="Beez"
       height={height}
-      style={{ height: `${height}px`, width: 'auto', display: 'block' }}
+      style={logoBoxStyle(height)}
       onError={() => setFailed(true)}
-      className={className}
+      className={`logo-halo ${className}`.trim()}
     />
   )
 }

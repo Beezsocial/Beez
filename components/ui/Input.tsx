@@ -19,7 +19,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 const baseInputClasses = [
   'w-full rounded-beez border text-white placeholder-white/30',
   'px-4 py-3 text-base transition-all duration-200',
-  'focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)]',
+  'focus:outline-none focus:border-accent focus:[box-shadow:0_0_0_3px_rgba(87,217,235,0.1)]',
   'disabled:opacity-40 disabled:cursor-not-allowed',
 ].join(' ')
 
@@ -38,7 +38,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           >
             {label}
             {props.required && (
-              <span className="text-gold ml-1" aria-hidden="true">
+              <span className="text-accent ml-1" aria-hidden="true">
                 *
               </span>
             )}
@@ -121,7 +121,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 charCount > maxChars * 0.9
                   ? charCount >= maxChars
                     ? 'text-red-400'
-                    : 'text-gold'
+                    : 'text-accent'
                   : 'text-white/30',
               ].join(' ')}
               aria-live="polite"

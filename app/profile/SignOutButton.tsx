@@ -20,7 +20,7 @@ export default function SignOutButton() {
       type="button"
       onClick={handleSignOut}
       disabled={loading}
-      className="w-full inline-flex items-center justify-center gap-2 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+      className="w-full inline-flex items-center justify-center gap-2 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40 disabled:cursor-not-allowed"
       style={{
         border: '1px solid rgba(220,50,50,0.5)',
         color: 'rgba(220,50,50,0.8)',

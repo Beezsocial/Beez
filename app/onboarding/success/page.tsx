@@ -37,7 +37,7 @@ export default async function SuccessPage() {
   const paddedNumber = memberNumber != null ? String(memberNumber).padStart(3, '0') : null
 
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Gradient overlay */}
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-navy/80 via-transparent to-navy/90" />
 
@@ -48,7 +48,7 @@ export default async function SuccessPage() {
       >
         <Link
           href="/"
-          className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           ← Accueil
         </Link>
@@ -59,12 +59,12 @@ export default async function SuccessPage() {
       <main className="relative flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-16 z-10 text-center">
         {/* Hex badge */}
         <div className="mb-10 animate-fade-in">
-          <HexBadge number={isFoundingMember ? memberNumber : undefined} size="lg" />
+          <HexBadge founding={isFoundingMember} number={isFoundingMember ? memberNumber : undefined} size="lg" />
         </div>
 
         {/* Welcome message */}
         <div className="animate-slide-up">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-3">
+          <p className="text-accent text-xs font-bold uppercase tracking-[0.2em] mb-3">
             Tu es dans la ruche
           </p>
           <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-white mb-4 leading-tight">
@@ -107,7 +107,7 @@ export default async function SuccessPage() {
         <div className="animate-slide-up delay-200 w-full max-w-xs space-y-3">
           <Link
             href="/profile"
-            className="gold-gradient gold-shine inline-flex items-center justify-center gap-2 w-full text-navy-900 font-bold px-8 py-4 text-base hover:brightness-110 active:brightness-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            className="btn-accent inline-flex items-center justify-center gap-2 w-full text-navy-800 font-bold px-8 py-4 text-base transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
             style={{ borderRadius: 10 }}
           >
             Consulter mon profil
@@ -118,16 +118,16 @@ export default async function SuccessPage() {
 
           <Link
             href="/"
-            className="block text-sm text-center text-white/30 hover:text-white/50 transition-colors py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="block text-sm text-center text-white/30 hover:text-white/50 transition-colors py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Retour à l'accueil
           </Link>
         </div>
 
         {/* Decorative hexes */}
-        <div className="pointer-events-none absolute left-4 top-24 w-10 h-[46px] clip-hex bg-gold/8 hidden md:block" aria-hidden="true" />
-        <div className="pointer-events-none absolute right-10 top-32 w-14 h-[64px] clip-hex bg-gold/6 hidden md:block" aria-hidden="true" />
-        <div className="pointer-events-none absolute right-6 bottom-24 w-8 h-[37px] clip-hex bg-gold/5 hidden md:block" aria-hidden="true" />
+        <div className="pointer-events-none absolute left-4 top-24 w-10 h-[46px] clip-hex bg-accent/8 hidden md:block" aria-hidden="true" />
+        <div className="pointer-events-none absolute right-10 top-32 w-14 h-[64px] clip-hex bg-accent/6 hidden md:block" aria-hidden="true" />
+        <div className="pointer-events-none absolute right-6 bottom-24 w-8 h-[37px] clip-hex bg-accent/5 hidden md:block" aria-hidden="true" />
       </main>
     </div>
   )

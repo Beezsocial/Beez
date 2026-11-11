@@ -51,7 +51,7 @@ export default async function PublicProfilePage({
   const data = await getTargetProfile(userId)
 
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       <NavHeader />
 
       <main className="flex-1 px-4 sm:px-6 py-8 max-w-lg mx-auto w-full pt-20">
@@ -79,7 +79,7 @@ export default async function PublicProfilePage({
             </p>
             <Link
               href="/ruche"
-              className="inline-block border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez px-5 py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="inline-block border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez px-5 py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               Retour à La Ruche
             </Link>

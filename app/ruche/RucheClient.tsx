@@ -9,11 +9,14 @@ import ComposeBox from '@/components/messaging/ComposeBox'
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
 const LIFT_TRANSITION = { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const }
 const HOVER_SHADOW = 'drop-shadow(0 12px 20px rgba(0,0,0,0.45))'
-const GOLD = '#ebaf57'
-// Visual border thickness for the layered "gold hex behind, content hex
+// Accent cyan on the dark profile panel; the deeper accent on the white
+// honeycomb, where #57d9eb washes out against the page background.
+const ACCENT = '#57d9eb'
+const ACCENT_DEEP = '#1597ad'
+// Visual border thickness for the layered "accent hex behind, content hex
 // inset in front" technique — a plain CSS `border` on a clip-path hexagon
 // renders unevenly thick along the slanted edges, so instead every cell is
-// two nested hexagons: a solid gold one, with a smaller one on top inset by
+// two nested hexagons: a solid accent one, with a smaller one on top inset by
 // this many pixels showing the actual fill (same trick as HexBadge.tsx).
 const HEX_BORDER = 2.5
 // Breathing room around the scroll container so the bio tooltip (which
@@ -232,10 +235,10 @@ export default function RucheClient() {
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative z-10">
       <div className="px-4 sm:px-6 pt-6 pb-3 shrink-0">
-        <h1 className="font-heading font-bold text-2xl sm:text-3xl text-navy tracking-tight">
+        <h1 className="font-heading font-bold text-2xl sm:text-3xl text-navy-800 tracking-tight">
           La Ruche
         </h1>
-        <p className="text-navy text-sm mt-1">
+        <p className="text-navy-800 text-sm mt-1">
           {loading
             ? '...'
             : `${profiles.length} entrepreneur${profiles.length === 1 ? '' : 's'} dans la ruche`}
@@ -298,12 +301,12 @@ export default function RucheClient() {
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="fixed bottom-0 inset-x-0 z-50 px-4 sm:px-6 pb-4 sm:pb-6 pt-4 flex justify-center"
             >
-              <div className="card card-gold w-full max-w-lg p-5 sm:p-6 relative">
+              <div className="card card-accent w-full max-w-lg p-5 sm:p-6 relative">
                 <button
                   type="button"
                   onClick={handleClose}
                   aria-label="Fermer"
-                  className="absolute top-3 right-3 text-white/40 hover:text-white transition-colors duration-200 text-xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-beez"
+                  className="absolute top-3 right-3 text-white/40 hover:text-white transition-colors duration-200 text-xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-beez"
                 >
                   ×
                 </button>
@@ -353,7 +356,7 @@ function ProfilePreview({
         >
           <div
             className="absolute inset-0"
-            style={{ clipPath: HEX_CLIP, background: GOLD }}
+            style={{ clipPath: HEX_CLIP, background: ACCENT }}
           />
           <div
             className="absolute flex items-center justify-center overflow-hidden"
@@ -367,7 +370,7 @@ function ProfilePreview({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={profile.avatar_url} alt={fullName} className="w-full h-full object-cover" />
             ) : (
-              <span className="font-heading font-bold text-gold text-sm">{initials}</span>
+              <span className="font-heading font-bold text-accent text-sm">{initials}</span>
             )}
           </div>
         </div>
@@ -381,14 +384,14 @@ function ProfilePreview({
       <div className="flex gap-3 mt-4">
         <Link
           href={`/profile/${profile.user_id}`}
-          className="flex-1 text-center border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="flex-1 text-center border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Voir le profil
         </Link>
         <button
           type="button"
           onClick={onContact}
-          className="flex-1 gold-gradient gold-shine font-bold text-navy-900 rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold hover:brightness-110"
+          className="flex-1 btn-accent font-bold text-navy-800 rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Contacter
         </button>
@@ -418,7 +421,7 @@ function EmptyHex({
         height,
         zIndex: 1,
         clipPath: HEX_CLIP,
-        background: GOLD,
+        background: ACCENT_DEEP,
       }}
       whileHover={{ scale: 1.25, zIndex: 10, filter: HOVER_SHADOW }}
       transition={LIFT_TRANSITION}
@@ -463,7 +466,7 @@ function ProfileHex({
           width: '100%',
           height: '100%',
           clipPath: HEX_CLIP,
-          background: GOLD,
+          background: ACCENT_DEEP,
         }}
         whileHover={{ scale: 1.25, zIndex: 10, filter: HOVER_SHADOW }}
         transition={LIFT_TRANSITION}
@@ -481,7 +484,7 @@ function ProfileHex({
             // eslint-disable-next-line @next/next/no-img-element
             <img src={profile.avatar_url} alt={fullName} className="w-full h-full object-cover" />
           ) : (
-            <span className="font-heading font-bold text-gold text-lg">{initials}</span>
+            <span className="font-heading font-bold text-accent text-lg">{initials}</span>
           )}
         </div>
       </motion.div>
@@ -500,7 +503,7 @@ function ProfileHex({
               width: 220,
               maxWidth: 220,
               background: '#041625',
-              border: '1px solid rgba(235,175,87,0.3)',
+              border: '1px solid rgba(87,217,235,0.3)',
               padding: 12,
               zIndex: 20,
             }}

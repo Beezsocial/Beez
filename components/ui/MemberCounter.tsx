@@ -97,12 +97,12 @@ export default function MemberCounter() {
     <div ref={ref} className="text-center mt-6" style={{ opacity: count == null ? 0 : 1, transition: 'opacity 0.3s' }}>
       <p
         style={{
-          fontFamily: 'Outfit, sans-serif',
+          fontFamily: 'var(--font-outfit), sans-serif',
           fontSize: 'clamp(48px, 8vw, 72px)',
           fontWeight: 800,
-          color: '#ebaf57',
+          color: '#57d9eb',
           lineHeight: 1,
-          textShadow: '0 0 8px rgba(255,224,178,0.5), 0 0 20px rgba(235,175,87,0.4)',
+          textShadow: '0 0 8px rgba(204,244,250,0.5), 0 0 20px rgba(87,217,235,0.4)',
           margin: 0,
         }}
       >

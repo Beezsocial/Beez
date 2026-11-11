@@ -56,12 +56,12 @@ function EditableHexAvatar({
         aria-label="Changer la photo de profil"
         disabled={disabled}
         onClick={() => fileRef.current?.click()}
-        className="w-24 h-[83px] relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy disabled:cursor-not-allowed"
+        className="w-24 h-[83px] relative group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy disabled:cursor-not-allowed"
       >
-        {/* Gold border hex */}
+        {/* Accent border hex */}
         <div
           className="absolute inset-0"
-          style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, #ebaf57 0%, #d4912a 100%)' }}
+          style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, #57d9eb 0%, #2fb5cc 100%)' }}
         >
           {/* Navy inner */}
           <div
@@ -72,7 +72,7 @@ function EditableHexAvatar({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={displayUrl} alt="" className="w-full h-full object-cover" />
             ) : (
-              <span className="font-heading font-bold text-2xl text-gold select-none">{initials}</span>
+              <span className="font-heading font-bold text-2xl text-accent select-none">{initials}</span>
             )}
           </div>
           {/* Camera overlay — clipped to hex by parent clip-path */}
@@ -114,12 +114,12 @@ function PillToggle({
       disabled={disabled}
       style={
         selected
-          ? { background: 'rgba(235,175,87,0.15)', borderColor: 'rgba(235,175,87,0.5)', color: '#ebaf57' }
+          ? { background: 'rgba(87,217,235,0.15)', borderColor: 'rgba(87,217,235,0.5)', color: '#57d9eb' }
           : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }
       }
       className={[
-        'px-3 py-1.5 text-xs font-medium border rounded-[10px] transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold',
-        !selected && !disabled ? 'hover:border-gold/40 hover:text-white/80' : '',
+        'px-3 py-1.5 text-xs font-medium border rounded-[10px] transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+        !selected && !disabled ? 'hover:border-accent/40 hover:text-white/80' : '',
         disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
       ].join(' ')}
     >
@@ -151,7 +151,7 @@ function EditSection({ title, children }: { title: string; children: ReactNode }
 
 const inputBg = { background: 'rgba(255,255,255,0.04)' } as const
 const inputClass =
-  'w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/25 px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)]'
+  'w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/25 px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:border-accent focus:[box-shadow:0_0_0_3px_rgba(87,217,235,0.1)]'
 
 const PRIMARY_TYPE_CARDS = [
   {
@@ -492,21 +492,21 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                       disabled={saving}
                       style={
                         isSelected
-                          ? { borderColor: '#ebaf57', background: 'rgba(235,175,87,0.06)' }
+                          ? { borderColor: '#57d9eb', background: 'rgba(87,217,235,0.06)' }
                           : { borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)' }
                       }
-                      className="w-full text-left p-3 rounded-beez border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-full text-left p-3 rounded-beez border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <div className="flex items-start gap-3">
                         <span className="text-xl shrink-0 leading-none mt-0.5">{icon}</span>
                         <div>
-                          <p className={`font-heading font-bold text-sm mb-0.5 ${isSelected ? 'text-gold' : 'text-white'}`}>
+                          <p className={`font-heading font-bold text-sm mb-0.5 ${isSelected ? 'text-accent' : 'text-white'}`}>
                             {title}
                           </p>
                           <p className="text-white/40 text-xs leading-relaxed">{description}</p>
                         </div>
                         {isSelected && (
-                          <span className="ml-auto shrink-0 text-gold text-sm mt-0.5" aria-hidden="true">✦</span>
+                          <span className="ml-auto shrink-0 text-accent text-sm mt-0.5" aria-hidden="true">✦</span>
                         )}
                       </div>
                     </button>
@@ -555,9 +555,9 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
 
       {/* Success banner */}
       {success && !isEditing && (
-        <div className="mt-4 flex items-center gap-2 border border-gold/30 bg-gold/8 px-4 py-3" style={{ borderRadius: 10 }} role="status">
-          <span className="text-gold text-xs" aria-hidden="true">✦</span>
-          <span className="text-gold text-sm font-medium">Profil mis à jour ✓</span>
+        <div className="mt-4 flex items-center gap-2 border border-accent/30 bg-accent/8 px-4 py-3" style={{ borderRadius: 10 }} role="status">
+          <span className="text-accent text-xs" aria-hidden="true">✦</span>
+          <span className="text-accent text-sm font-medium">Profil mis à jour ✓</span>
         </div>
       )}
 
@@ -569,7 +569,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
               type="button"
               onClick={handleSave}
               disabled={saving}
-              className="gold-gradient gold-shine w-full inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez py-3 text-sm transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-accent w-full inline-flex items-center justify-center gap-2 text-navy-800 font-bold rounded-beez py-3 text-sm transition-all duration-200 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving && (
                 <svg className="animate-spin h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -583,7 +583,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
               type="button"
               onClick={handleCancel}
               disabled={saving}
-              className="w-full border border-white/15 text-white/50 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full border border-white/15 text-white/50 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Annuler
             </button>
@@ -593,18 +593,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
             <button
               type="button"
               onClick={handleEdit}
-              className="w-full font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-              style={{
-                border: '1px solid #ebaf57',
-                color: '#ebaf57',
-                background: 'transparent',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(235,175,87,0.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent'
-              }}
+              className="btn-secondary w-full font-medium rounded-beez py-3 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               Modifier mon profil
             </button>
@@ -612,7 +601,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
             <button
               type="button"
               onClick={() => { setShowDeleteModal(true); setDeleteError('') }}
-              className="w-full text-xs rounded-beez py-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="w-full text-xs rounded-beez py-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               style={{
                 border: '1px solid rgba(255,255,255,0.15)',
                 color: 'rgba(255,255,255,0.25)',
@@ -668,7 +657,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                 type="button"
                 onClick={() => setShowDeleteModal(false)}
                 disabled={deleting}
-                className="flex-1 border border-white/15 text-white/60 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40"
+                className="flex-1 border border-white/15 text-white/60 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
               >
                 Annuler
               </button>
@@ -676,7 +665,7 @@ export default function ProfileClient({ profile, types, seeking }: Props) {
                 type="button"
                 onClick={handleDeleteAccount}
                 disabled={deleting}
-                className="flex-1 font-bold rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+                className="flex-1 font-bold rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
                 style={{
                   background: 'rgba(220,50,50,0.15)',
                   border: '1px solid rgba(220,50,50,0.5)',

@@ -12,7 +12,7 @@ export default async function MessagesPage() {
   }
 
   return (
-    <div className="h-screen bg-navy honeycomb-bg flex flex-col overflow-hidden">
+    <div className="h-screen bg-navy bg-page honeycomb-bg flex flex-col overflow-hidden">
       <NavHeader />
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-14">
         <MessagesClient currentUserId={data.user.id} />

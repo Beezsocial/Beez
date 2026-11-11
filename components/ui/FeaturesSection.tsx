@@ -17,7 +17,7 @@ function FeatureCard({ icon, title, description, delay = 0 }: FeatureCardProps) 
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true, margin: '-60px' }}
-      whileHover={{ y: -4, boxShadow: '0 8px 32px rgba(235,175,87,0.12), 0 4px 24px rgba(0,0,0,0.25)' }}
+      whileHover={{ y: -4, boxShadow: '0 8px 32px rgba(87,217,235,0.12), 0 4px 24px rgba(0,0,0,0.25)' }}
       className="card p-6 space-y-3"
       style={{ borderColor: 'rgba(255,255,255,0.08)', cursor: 'default' }}
     >
@@ -25,7 +25,7 @@ function FeatureCard({ icon, title, description, delay = 0 }: FeatureCardProps) 
         whileHover={{ scale: 1.1, rotate: 8 }}
         transition={{ duration: 0.2 }}
         className="w-10 h-10 flex items-center justify-center text-xl"
-        style={{ background: 'rgba(235,175,87,0.1)', borderRadius: 8 }}
+        style={{ background: 'rgba(87,217,235,0.1)', borderRadius: 8 }}
       >
         {icon}
       </motion.div>
@@ -51,7 +51,7 @@ export default function FeaturesSection() {
           className="font-heading font-black"
           style={{
             fontSize: 'clamp(120px, 20vw, 200px)',
-            color: 'rgba(235,175,87,0.03)',
+            color: 'rgba(87,217,235,0.03)',
             letterSpacing: '-0.05em',
             userSelect: 'none',
           }}
@@ -68,9 +68,9 @@ export default function FeaturesSection() {
         viewport={{ once: true, margin: '-60px' }}
       >
         <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3">
-          <span style={{ color: '#ebaf57' }}>Pourquoi </span>
+          <span style={{ color: '#57d9eb' }}>Pourquoi </span>
           <span style={{ color: '#ffffff' }}>Bee</span>
-          <span style={{ color: '#ebaf57' }}>z</span>
+          <span style={{ color: '#57d9eb' }}>z</span>
         </p>
         <h2
           id="features-heading"

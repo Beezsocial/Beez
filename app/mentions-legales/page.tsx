@@ -11,7 +11,7 @@ function Section({ number, title, children }: { number: string; title: string; c
   return (
     <section className="border-t border-white/8 pt-6">
       <h2 className="font-heading font-bold text-base text-white mb-3">
-        <span className="text-gold mr-2">{number}.</span>{title}
+        <span className="text-accent mr-2">{number}.</span>{title}
       </h2>
       <div className="space-y-3 text-sm text-white/60 leading-relaxed">
         {children}
@@ -22,7 +22,7 @@ function Section({ number, title, children }: { number: string; title: string; c
 
 export default function MentionsLegalesPage() {
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Header */}
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
@@ -31,7 +31,7 @@ export default function MentionsLegalesPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Accueil
           </Link>
@@ -44,7 +44,7 @@ export default function MentionsLegalesPage() {
       <main className="flex-1 px-4 sm:px-6 py-10 max-w-2xl mx-auto w-full">
 
         <div className="mb-8">
-          <p className="text-gold text-xs font-bold uppercase tracking-[0.15em] mb-2">
+          <p className="text-accent text-xs font-bold uppercase tracking-[0.15em] mb-2">
             Mentions légales
           </p>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-white leading-tight">
@@ -64,7 +64,7 @@ export default function MentionsLegalesPage() {
             <ul className="mt-2 space-y-1">
               <li><span className="text-white/40">Nom :</span> David Durand</li>
               <li><span className="text-white/40">Email :</span>{' '}
-                <a href="mailto:contact@joinbeez.com" className="text-gold hover:text-gold-400 transition-colors duration-200">
+                <a href="mailto:contact@joinbeez.com" className="text-accent hover:text-accent-2 transition-colors duration-200">
                   contact@joinbeez.com
                 </a>
               </li>
@@ -93,7 +93,7 @@ export default function MentionsLegalesPage() {
           <Section number="4" title="Données personnelles">
             <p>
               Le traitement des données personnelles collectées sur joinbeez.com est décrit dans notre{' '}
-              <Link href="/privacy" className="text-gold hover:text-gold-400 transition-colors duration-200">
+              <Link href="/privacy" className="text-accent hover:text-accent-2 transition-colors duration-200">
                 Politique de confidentialité
               </Link>
               .
@@ -103,7 +103,7 @@ export default function MentionsLegalesPage() {
           <Section number="5" title="Contact">
             <p>
               Pour toute question relative au site :{' '}
-              <a href="mailto:contact@joinbeez.com" className="text-gold hover:text-gold-400 transition-colors duration-200">
+              <a href="mailto:contact@joinbeez.com" className="text-accent hover:text-accent-2 transition-colors duration-200">
                 contact@joinbeez.com
               </a>
             </p>

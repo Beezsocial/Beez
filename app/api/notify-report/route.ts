@@ -73,16 +73,16 @@ export async function POST(request: Request) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:#0d3459;font-family:sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d3459;padding:40px 20px;">
+<body style="margin:0;padding:0;background:#041625;font-family:Outfit,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#041625;padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#0a2540;border:1px solid rgba(255,255,255,0.08);">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#082b44;border:1px solid rgba(255,255,255,0.08);">
 
           <!-- Header -->
           <tr>
             <td style="padding:32px 40px 24px;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ebaf57;">z</span>
+              <span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#ffffff;">Bee</span><span style="font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#57d9eb;">z</span>
             </td>
           </tr>
 
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
                 Nouveau signalement&nbsp;🚩
               </p>
               <p style="margin:0 0 8px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
-                <strong style="color:#ebaf57;">${escapeHtml(reporterName)}</strong> (${user.id}) a signalé l'utilisateur <strong style="color:#ebaf57;">${escapeHtml(reportedUserId)}</strong>.
+                <strong style="color:#57d9eb;">${escapeHtml(reporterName)}</strong> (${user.id}) a signalé l'utilisateur <strong style="color:#57d9eb;">${escapeHtml(reportedUserId)}</strong>.
               </p>
               <p style="margin:0 0 8px;font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;">
                 <strong style="color:#ffffff;">Motif :</strong> ${reasonLabel}

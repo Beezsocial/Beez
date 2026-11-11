@@ -105,7 +105,7 @@ export default function SignInPage() {
   const anyLoading = oauthLoading || emailLoading
 
   return (
-    <div className="min-h-screen bg-navy honeycomb-bg flex flex-col">
+    <div className="min-h-screen bg-navy bg-page honeycomb-bg flex flex-col">
       {/* Header */}
       <header
         className="shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/6 backdrop-blur-md"
@@ -114,7 +114,7 @@ export default function SignInPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="text-sm text-white/50 hover:text-white/80 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             ← Accueil
           </Link>
@@ -122,7 +122,7 @@ export default function SignInPage() {
         </div>
         <Link
           href="/onboarding"
-          className="text-sm text-white/40 hover:text-gold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="text-sm text-white/40 hover:text-accent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Créer un compte
         </Link>
@@ -147,8 +147,8 @@ export default function SignInPage() {
             className="card p-6 sm:p-8 space-y-4"
             style={{
               borderRadius: 10,
-              border: '1px solid rgba(235,175,87,0.3)',
-              boxShadow: '0 0 20px rgba(235,175,87,0.1), 0 0 40px rgba(235,175,87,0.05)',
+              border: '1px solid rgba(87,217,235,0.3)',
+              boxShadow: '0 0 20px rgba(87,217,235,0.1), 0 0 40px rgba(87,217,235,0.05)',
             }}
           >
 
@@ -157,7 +157,7 @@ export default function SignInPage() {
               type="button"
               onClick={handleGoogle}
               disabled={anyLoading}
-              className="w-full flex items-center gap-3 rounded-beez border border-white/10 px-4 py-3.5 text-sm font-medium text-white hover:border-white/25 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center gap-3 rounded-beez border border-white/10 px-4 py-3.5 text-sm font-medium text-white hover:border-white/25 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ background: 'rgba(255,255,255,0.04)' }}
             >
               {oauthLoading ? (
@@ -193,7 +193,7 @@ export default function SignInPage() {
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   disabled={anyLoading}
                   style={{ background: 'rgba(255,255,255,0.04)' }}
-                  className="w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)] disabled:opacity-40"
+                  className="w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-all duration-200 focus:outline-none focus:border-accent focus:[box-shadow:0_0_0_3px_rgba(87,217,235,0.1)] disabled:opacity-40"
                 />
               </div>
 
@@ -210,7 +210,7 @@ export default function SignInPage() {
                   onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
                   disabled={anyLoading}
                   style={{ background: 'rgba(255,255,255,0.04)' }}
-                  className="w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-all duration-200 focus:outline-none focus:border-gold focus:[box-shadow:0_0_0_3px_rgba(235,175,87,0.1)] disabled:opacity-40"
+                  className="w-full rounded-beez border border-white/10 hover:border-white/20 text-white placeholder-white/30 px-4 py-3 text-base transition-all duration-200 focus:outline-none focus:border-accent focus:[box-shadow:0_0_0_3px_rgba(87,217,235,0.1)] disabled:opacity-40"
                 />
               </div>
 
@@ -224,7 +224,7 @@ export default function SignInPage() {
               <button
                 type="submit"
                 disabled={anyLoading}
-                className="gold-gradient gold-shine w-full inline-flex items-center justify-center gap-2 text-navy-900 font-bold rounded-beez px-6 py-3.5 text-base transition-all duration-200 hover:brightness-110 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+                className="btn-accent w-full inline-flex items-center justify-center gap-2 text-navy-800 font-bold rounded-beez px-6 py-3.5 text-base transition-all duration-200 hover:-translate-y-px active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 disabled:opacity-50 disabled:cursor-not-allowed mt-1"
               >
                 {emailLoading ? (
                   <svg className="animate-spin h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -242,7 +242,7 @@ export default function SignInPage() {
             Pas encore de compte ?{' '}
             <Link
               href="/onboarding"
-              className="text-gold hover:text-gold-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="text-accent hover:text-accent-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               Rejoindre la ruche →
             </Link>

@@ -109,7 +109,7 @@ export default function ReportModal({
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="w-full border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  className="w-full border border-white/15 text-white/70 hover:text-white hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
                   Fermer
                 </button>
@@ -166,7 +166,7 @@ export default function ReportModal({
                     type="button"
                     onClick={handleClose}
                     disabled={submitting}
-                    className="flex-1 border border-white/15 text-white/60 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40"
+                    className="flex-1 border border-white/15 text-white/60 hover:text-white/80 hover:border-white/25 font-medium rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
                   >
                     Annuler
                   </button>
@@ -174,7 +174,7 @@ export default function ReportModal({
                     type="button"
                     onClick={handleSubmit}
                     disabled={!reason || submitting}
-                    className="flex-1 gold-gradient gold-shine font-bold text-navy-900 rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-110"
+                    className="flex-1 btn-accent font-bold text-navy-800 rounded-beez py-2.5 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {submitting ? 'Envoi...' : 'Envoyer le signalement'}
                   </button>
